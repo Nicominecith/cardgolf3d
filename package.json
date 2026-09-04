@@ -1,0 +1,15 @@
+{
+  "name": "cardgolf3d-android",
+  "version": "1.0.0",
+  "description": "CardGolf 3D - Android APK Build (Capacitor)",
+  "scripts": {
+    "sync": "cap sync android"
+  },
+  "dependencies": {
+    "@capacitor/core": "^6.1.2",
+    "@capacitor/android": "^6.1.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.1.2"
+  }
+}
