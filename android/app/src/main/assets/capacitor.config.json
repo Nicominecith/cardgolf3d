@@ -1,8 +1,0 @@
-{
-	"appId": "com.nicominecit.cardgolf3d",
-	"appName": "CardGolf 3D",
-	"webDir": "www",
-	"android": {
-		"allowMixedContent": true
-	}
-}
