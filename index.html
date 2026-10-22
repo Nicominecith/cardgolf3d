@@ -2715,6 +2715,10 @@
 
         const levels = [];
         function generateLevels(seed) {
+            generateLevelsRaw(seed);
+            levels.forEach(l => { l.obs = l.obs.filter(o => ![l.start, l.hole].some(pt => Math.abs(o[0] - pt.x) < o[2] / 2 + 3 && Math.abs(o[1] - pt.z) < (o[4] > 0 ? 10 : 0) + o[3] / 2 + 3)); });
+        }
+        function generateLevelsRaw(seed) {
             const rng = (seed !== undefined) ? mulberry32(seed) : Math.random;
             levels.length = 0;
             for(let i=0; i<500; i++) {
@@ -3260,6 +3264,8 @@
             ballPhys.moving = false;
             strokes = 0;
             bouncesInLevel = 0;
+            if (typeof ensureRemoteVisuals === 'function') ensureRemoteVisuals();
+            cgTimer.active = !!mpState.hasJoinedMultiplayer; cgTimer.end = Date.now() + 180000;
             cameraOrbit.theta = 0; 
             
             updatePowerBar(0);
@@ -4168,7 +4174,8 @@
                 if (parVal) { parVal.style.display = ''; parVal.innerText = levels[currentLevelIdx] ? levels[currentLevelIdx].par : '-'; }
                 if (strokeLimit) strokeLimit.style.display = '';
             }
-            strokesDisplay.innerText = strokes; // Wird im HUD als X/15 angezeigt
+            strokesDisplay.innerText = strokes;
+            { const lim = cgStrokeLimit(); const el = document.getElementById('hud-stroke-limit'); if (el) el.innerText = lim === Infinity ? '' : '/' + lim; }
             document.getElementById('coinCount').innerText = savePath.coins;
             document.getElementById('shopCoins').innerText = savePath.coins;
             updateMpLiveScoreboard();
@@ -4855,7 +4862,7 @@
                 }
 
                 // Regelprüfung: Maximal 15 Schläge (nicht in Open World)
-                if (strokes >= 15 && !ballPhys.moving && gameState !== 'openworld') {
+                if (cgStrokeLimit() !== Infinity && strokes >= cgStrokeLimit() && !ballPhys.moving) {
                     showToast(T('tooManyStrokes'));
                     initLevel(currentLevelIdx);
                 }
@@ -4952,7 +4959,7 @@
                         ballPhys.moving = false;
 
                         // Regelprüfung: Reset erst, wenn der 15. Schlag ausgeführt wurde und der Ball ruhig liegt
-                        if (strokes >= 15 && gameState !== 'openworld') {
+                        if (cgStrokeLimit() !== Infinity && strokes >= cgStrokeLimit()) {
                             showToast(T('tooManyStrokes'));
                             initLevel(currentLevelIdx);
                         }
@@ -5054,13 +5061,17 @@
         }
 
         let lastFrameTime = performance.now();
+        let _acc = 0;
+        document.addEventListener('visibilitychange', () => { lastFrameTime = performance.now(); _acc = 0; });
         function animate() {
             renderer.render(scene, camera);
             requestAnimationFrame(() => {
                 const now = performance.now();
                 const dt = Math.min(0.1, (now - lastFrameTime) / 1000);
                 lastFrameTime = now;
-                update();
+                _acc += dt; let _n = 0;
+                while (_acc >= 1 / 60 && _n < 6) { update(); _acc -= 1 / 60; _n++; }
+                if (_n === 6) _acc = 0;
                 if (confettiParticles.length) updateConfetti(dt);
                 animate();
             });
@@ -5490,6 +5501,7 @@
         }
 
         function initVotingUI(options, chaosEvent) {
+            if (typeof showScoreboard === 'function') showScoreboard(3500);
             // Multiplayer-Screen aktivieren ohne showMenu zu nutzen (würde alles zurücksetzen)
             document.querySelectorAll('.menu-screen').forEach(m => m.classList.remove('active'));
             document.getElementById('menu-multiplayer').classList.add('active');
@@ -5711,6 +5723,7 @@
                         ballPhys.vz += data.impulse.z;
                         ballPhys.moving = true;
                     }
+                } else if (data.type === 'chat') { cgOnChat(data, conn);
                 } else if (data.type === 'finishLevel') {
                     if (isHosting) {
                         // Host leitet Status an alle anderen Clients weiter
@@ -5760,8 +5773,8 @@
             const c = document.createElement('canvas'); const ctx = c.getContext('2d');
             c.width = 256; c.height = 64;
             ctx.fillStyle = 'rgba(0,0,0,0.5)'; ctx.fillRect(0,0,256,64);
-            ctx.font = 'bold 32px Segoe UI'; ctx.fillStyle = 'white'; ctx.textAlign = 'center'; ctx.fillText(text, 128, 45);
-            const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c) }));
+            ctx.font = 'bold 32px "Segoe UI", Arial, sans-serif'; ctx.fillStyle = 'white'; ctx.textAlign = 'center'; ctx.fillText(text, 128, 45);
+            const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), depthTest: false, transparent: true }));
             sprite.scale.set(4, 1, 1); return sprite;
         }
 
@@ -6872,6 +6885,161 @@
 
         // Jetzt sind alle Variablen (u.a. mpState, peer, remotePlayers) deklariert ->
         // gespeicherten Spielstand sicher auf die UI anwenden.
+        // ===== Remote-Spieler, Punktestand, Tutorial, Chat, Twitch =====
+        function ensureRemoteVisuals() {
+            if (!mpState.hasJoinedMultiplayer) return;
+            const l = levels[currentLevelIdx]; if (!l) return;
+            Object.values(remotePlayers).forEach(rp => {
+                const skin = ballSkins.find(s => s.id === rp.skinId) || ballSkins[0];
+                if (!rp.mesh) {
+                    rp.mesh = new THREE.Mesh(new THREE.SphereGeometry(0.6, 16, 16), new THREE.MeshStandardMaterial({ color: skin.color, emissive: skin.glow ? skin.color : 0, emissiveIntensity: skin.glow ? 0.8 : 0.2 }));
+                    rp.mesh.castShadow = true; scene.add(rp.mesh); rp.serverPos = null;
+                }
+                if (!rp.label) { rp.label = createNameLabel(rp.name || T('settingsPlayer')); scene.add(rp.label); }
+                rp.mesh.position.set(l.start.x, 0.6 + getTerrainHeight(l.start.x, l.start.z), l.start.z);
+                rp.label.position.set(rp.mesh.position.x, rp.mesh.position.y + 2, rp.mesh.position.z);
+            });
+        }
+        const _cgEsc = t => String(t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        const TW_CID = 's0ksdxmpxljqt3ij8cpxs5c0awvtpy';
+        (function () {
+            const st = document.createElement('style');
+            st.textContent = `#cg-scoreboard{position:fixed;top:max(12px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:900;display:none;flex-direction:column;min-width:min(320px,92vw);max-width:92vw;background:rgba(20,14,10,.9);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:6px 0;color:#f3e9e0;font:14px/1.2 system-ui,sans-serif;font-variant-numeric:tabular-nums;pointer-events:none}
+            #cg-scoreboard .sb-h{display:flex;justify-content:space-between;padding:6px 14px 8px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.6;border-bottom:1px solid rgba(255,255,255,.1)}
+            #cg-scoreboard .sb-r{display:flex;align-items:center;gap:10px;padding:7px 14px}#cg-scoreboard .sb-r.me{background:rgba(255,204,128,.12)}
+            #cg-scoreboard .sb-p{width:18px;opacity:.5}#cg-scoreboard .sb-n{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#cg-scoreboard .sb-s{font-weight:700}#cg-scoreboard .sb-d{width:14px;color:#7bd88f}
+            .cg-fab{position:fixed;bottom:max(12px,env(safe-area-inset-bottom));z-index:850;display:none;padding:9px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:rgba(20,14,10,.82);color:#f3e9e0;font:600 13px system-ui,sans-serif;cursor:pointer}
+            #cg-sb-btn{left:max(12px,env(safe-area-inset-left))}#cg-chat-btn{right:max(12px,env(safe-area-inset-right))}
+            #cg-chat{position:fixed;right:max(12px,env(safe-area-inset-right));bottom:calc(58px + env(safe-area-inset-bottom));z-index:860;display:none;flex-direction:column;gap:6px;width:min(300px,86vw);padding:10px;border-radius:12px;background:rgba(20,14,10,.9);border:1px solid rgba(255,255,255,.14);color:#f3e9e0;font:13px/1.35 system-ui,sans-serif}
+            #cg-chat-log{max-height:140px;overflow-y:auto;display:flex;flex-direction:column;gap:3px}#cg-chat-log b{color:#ffcc80}
+            #cg-chat input{padding:8px;border-radius:8px;border:1px solid #4a3a2e;background:#120d09;color:#f3e9e0;font-size:14px}
+            #cg-tut{position:fixed;inset:0;z-index:950;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6)}
+            #cg-tut div{max-width:min(380px,90vw);background:#2a1d15;border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:20px;color:#f3e9e0;font:15px/1.5 system-ui,sans-serif}
+            #cg-tut h3{margin:0 0 10px;font-size:18px}#cg-tut p{margin:6px 0}#cg-tut button{margin-top:14px;width:100%;padding:11px;border:0;border-radius:10px;background:#ffcc80;color:#3e2a1a;font-weight:700;font-size:15px}
+            #tw-btn{position:fixed;top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));z-index:1001;display:none;padding:9px 14px;border:0;border-radius:8px;background:#9146FF;color:#fff;font:600 14px system-ui,sans-serif;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.35)}
+            #tw-modal{position:fixed;inset:0;z-index:1002;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.65)}
+            #tw-modal .tw-card{width:min(400px,92vw);background:#18181b;border-radius:12px;overflow:hidden;color:#efeff1;font:14px/1.45 system-ui,sans-serif}
+            #tw-modal .tw-top{background:#9146FF;padding:14px 18px;font-weight:700;font-size:16px}#tw-modal .tw-body{padding:18px;display:flex;flex-direction:column;gap:10px}
+            #tw-modal button{padding:11px;border:0;border-radius:6px;font-weight:700;font-size:14px;cursor:pointer}#tw-modal .tw-go{background:#9146FF;color:#fff}#tw-modal .tw-x{background:#2f2f35;color:#efeff1}`;
+            document.head.appendChild(st);
+            const mk = (tag, id, cls, html) => { const e = document.createElement(tag); e.id = id; if (cls) e.className = cls; if (html) e.innerHTML = html; document.body.appendChild(e); return e; };
+            const sbBtn = mk('button', 'cg-sb-btn', 'cg-fab', 'Punktestand'); sbBtn.onclick = () => showScoreboard(4000);
+            const chatBtn = mk('button', 'cg-chat-btn', 'cg-fab', 'Chat');
+            const chat = mk('div', 'cg-chat', '', '<div id="cg-chat-log"></div><input id="cg-chat-in" maxlength="140" placeholder="Nachricht…" autocomplete="off">');
+            chatBtn.onclick = () => { chat.style.display = chat.style.display === 'flex' ? 'none' : 'flex'; if (chat.style.display === 'flex') document.getElementById('cg-chat-in').focus(); };
+            document.getElementById('cg-chat-in').addEventListener('keydown', e => {
+                e.stopPropagation();
+                if (e.key !== 'Enter') return;
+                const t = e.target.value.trim(); if (!t) return; e.target.value = '';
+                const msg = { type: 'chat', name: savePath.playerName, text: t.slice(0, 140) };
+                addChat(msg); broadcastData(msg);
+            });
+            window.addChat = m => { const log = document.getElementById('cg-chat-log'); const d = document.createElement('div'); d.innerHTML = '<b>' + _cgEsc(m.name || '?') + ':</b> ' + _cgEsc(m.text); log.appendChild(d); log.scrollTop = log.scrollHeight; while (log.children.length > 40) log.removeChild(log.firstChild); };
+            window.cgOnChat = (m, conn) => { addChat(m); if (isHosting) connections.forEach(c => { if (c.open && c.peer !== conn.peer) c.send(m); }); };
+            const tut = mk('div', 'cg-tut', '', `<div><h3>So spielst du</h3><p><b>Schlagen:</b> Ball antippen, nach hinten ziehen, loslassen.</p><p><b>Kamera:</b> Rechte Maustaste oder freie Fläche ziehen.</p><p><b>Zoom:</b> Mausrad oder zwei Finger.</p><p><b>Online:</b> Tab oder der Knopf „Punktestand“ zeigt die Wertung, „Chat“ öffnet den Chat.</p><button id="cg-tut-ok">Los geht's</button></div>`);
+            document.getElementById('cg-tut-ok').onclick = () => { tut.style.display = 'none'; savePath.tutorialDone = true; saveProgress(); };
+
+            // Twitch: fester Platz oben rechts, nur im Online-Menü
+            const REDIR = location.origin + '/';
+            const inp = document.getElementById('mp-name');
+            const btn = mk('button', 'tw-btn'); const modal = mk('div', 'tw-modal');
+            function refresh() { const n = savePath.twitchName; btn.textContent = n ? 'Twitch: ' + n : 'Mit Twitch verbinden'; if (inp) { inp.readOnly = !!n; if (n) inp.value = n; } }
+            function render() {
+                const n = savePath.twitchName;
+                modal.innerHTML = `<div class="tw-card"><div class="tw-top">Twitch</div><div class="tw-body">` + (n
+                    ? `<div>Verbunden als <b>${_cgEsc(n)}</b>. Dieser Name wird im Online-Modus angezeigt.</div><button class="tw-x" id="tw-off">Trennen</button><button class="tw-x" id="tw-close">Schließen</button>`
+                    : `<div>Melde dich bei Twitch an, damit dein Twitch-Name im Online-Modus erscheint.</div><small>Redirect-URL in der Twitch-App: <b>${_cgEsc(REDIR)}</b></small><button class="tw-go" id="tw-go">Mit Twitch verbinden</button><button class="tw-x" id="tw-close">Abbrechen</button>`) + `</div></div>`;
+                const $ = id => document.getElementById(id);
+                $('tw-close').onclick = () => { modal.style.display = 'none'; };
+                if ($('tw-off')) $('tw-off').onclick = () => { delete savePath.twitchName; saveProgress(); refresh(); modal.style.display = 'none'; showToast('Twitch getrennt'); };
+                if ($('tw-go')) $('tw-go').onclick = () => {
+                    if (!/^https?:$/.test(location.protocol)) return showToast('Twitch-Login geht nur in der Webseite oder App, nicht in der PC-Datei');
+                    saveProgress();
+                    location.href = 'https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=' + TW_CID + '&redirect_uri=' + encodeURIComponent(REDIR);
+                };
+            }
+            btn.onclick = () => { render(); modal.style.display = 'flex'; };
+            refresh();
+            if (location.hash.includes('access_token=')) {
+                const token = new URLSearchParams(location.hash.slice(1)).get('access_token');
+                history.replaceState(null, '', location.pathname + location.search);
+                fetch('https://api.twitch.tv/helix/users', { headers: { Authorization: 'Bearer ' + token, 'Client-Id': TW_CID } })
+                    .then(r => r.json()).then(d => {
+                        const u = d.data && d.data[0]; if (!u) return showToast('Twitch-Verbindung fehlgeschlagen');
+                        savePath.twitchName = u.display_name; savePath.playerName = u.display_name; saveProgress();
+                        refresh(); showMenu('multiplayer'); showToast('Mit Twitch verbunden: ' + u.display_name);
+                    }).catch(() => showToast('Twitch-Verbindung fehlgeschlagen'));
+            }
+            setInterval(() => {
+                const mp = mpState.hasJoinedMultiplayer;
+                const inGame = mp && (gameState === 'playing' || gameState === 'mp-waiting');
+                sbBtn.style.display = inGame ? 'block' : 'none';
+                chatBtn.style.display = (mp && (inGame || gameState === 'multiplayer')) ? 'block' : 'none';
+                if (!chatBtn.style.display || chatBtn.style.display === 'none') chat.style.display = 'none';
+                btn.style.display = gameState === 'multiplayer' ? 'block' : 'none';
+                if (gameState !== 'multiplayer') modal.style.display = 'none';
+                if (gameState === 'playing' && !mp && !savePath.tutorialDone && tut.style.display !== 'flex') tut.style.display = 'flex';
+            }, 600);
+        })();
+        function showScoreboard(autoHideMs) {
+            if (!mpState.hasJoinedMultiplayer) return;
+            const rows = [{ id: peer ? peer.id : 'local', name: savePath.playerName, me: true }];
+            Object.values(remotePlayers).forEach(p => rows.push({ id: p.id, name: p.name || T('settingsPlayer') }));
+            rows.forEach(r => { r.score = mpState.playerScores[r.id] || 0; r.done = !!mpState.playerFinished[r.id]; });
+            if (autoHideMs && rows.every(r => !r.score)) return;
+            rows.sort((a, b) => a.score - b.score);
+            let el = document.getElementById('cg-scoreboard');
+            if (!el) { el = document.createElement('div'); el.id = 'cg-scoreboard'; document.body.appendChild(el); }
+            el.innerHTML = `<div class="sb-h"><span>Punktestand (Schläge)</span><span>${mpState.currentRound ? 'Runde ' + mpState.currentRound + '/' + mpState.maxRounds : ''}</span></div>` +
+                rows.map((r, i) => `<div class="sb-r${r.me ? ' me' : ''}"><span class="sb-p">${i + 1}</span><span class="sb-n">${_cgEsc(r.name)}</span><span class="sb-s">${r.score}</span><span class="sb-d">${r.done ? '✓' : ''}</span></div>`).join('');
+            el.style.display = 'flex'; clearTimeout(el._t);
+            if (autoHideMs) el._t = setTimeout(hideScoreboard, autoHideMs);
+        }
+        function hideScoreboard() { const el = document.getElementById('cg-scoreboard'); if (el) el.style.display = 'none'; }
+        window.addEventListener('keydown', e => { if (e.key === 'Tab' && mpState.hasJoinedMultiplayer && document.activeElement.tagName !== 'INPUT') { e.preventDefault(); if (!e.repeat) showScoreboard(0); } });
+        window.addEventListener('keyup', e => { if (e.key === 'Tab') hideScoreboard(); });
+
+        // ===== Schlag-Limit (Einzelspieler) und 3-Minuten-Zeit pro Level (Online) =====
+        function cgStrokeLimit() {
+            if (mpState.hasJoinedMultiplayer || gameState === 'openworld') return Infinity;
+            const l = levels[currentLevelIdx];
+            return l ? Math.min(15, l.par + 6) : Infinity;
+        }
+        const CG_LEVEL_TIME_MS = 180000, CG_TIME_PENALTY = 5;
+        var cgTimer = { active: false, end: 0 };
+        (function () {
+            const el = document.createElement('div'); el.id = 'cg-timer';
+            el.style.cssText = 'position:fixed;top:calc(58px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:800;display:none;padding:6px 14px;border-radius:10px;background:rgba(20,14,10,.82);border:1px solid rgba(255,255,255,.15);color:#f3e9e0;font:700 18px system-ui,sans-serif;font-variant-numeric:tabular-nums;pointer-events:none';
+            document.body.appendChild(el);
+            setInterval(() => {
+                const on = cgTimer.active && mpState.hasJoinedMultiplayer && gameState === 'playing' && ballMesh;
+                el.style.display = on ? 'block' : 'none';
+                if (!on) return;
+                const left = Math.max(0, cgTimer.end - Date.now());
+                const sec = Math.ceil(left / 1000);
+                el.textContent = Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0');
+                el.style.color = sec <= 30 ? '#ff8a80' : '#f3e9e0';
+                if (left <= 0) cgTimeUp();
+            }, 250);
+        })();
+        function cgTimeUp() {
+            cgTimer.active = false;
+            isDragging = false; clubAnimation.active = false;
+            if (clubGroup) clubGroup.visible = false;
+            if (aimLine) aimLine.visible = false;
+            if (powerBar3D) powerBar3D.visible = false;
+            const total = strokes + CG_TIME_PENALTY;
+            showToast('Zeit abgelaufen! ' + strokes + ' Schläge + ' + CG_TIME_PENALTY + ' Strafe');
+            mpState.playerFinished[peer.id] = true;
+            mpState.playerScores[peer.id] = (mpState.playerScores[peer.id] || 0) + total;
+            ballPhys.moving = false; ballPhys.vx = 0; ballPhys.vz = 0;
+            if (ballMesh) { scene.remove(ballMesh); ballMesh = null; }
+            broadcastData({ type: 'finishLevel', id: peer.id, strokes: total });
+            showMenu('mp-waiting');
+            updateMpWaitingList();
+            if (isHosting) checkRoundEnd();
+        }
+
         applyLoadedProgressToUI();
 
         animate();
