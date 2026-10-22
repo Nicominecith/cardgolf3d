@@ -1,0 +1,50 @@
+{
+  "name": "card-golf-3d",
+  "version": "2.0.0",
+  "description": "CardGolf 3D: Dein ultimatives Mini-Golf-Abenteuer! Tauche ein in die charmante Welt von CardGolf 3D, einem einzigartigen Mini-Golf-Erlebnis mit handgemachtem Look.",
+  "author": "Nicominecit",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "build": {
+    "appId": "com.nicominecit.cardgolf3d",
+    "productName": "CardGolf 3D",
+    "copyright": "Copyright © 2026 Nicominecit",
+    "files": [
+      "applogoremoved.png",
+      "applogo.png",
+      "index.html",
+      "main.js",
+      "icon.ico",
+      "three.min.js",
+      "Sounds/**/*",
+      "build/**/*"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "icon.ico",
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "icon.ico",
+      "uninstallerIcon": "icon.ico",
+      "createDesktopShortcut": "always",
+      "shortcutName": "CardGolf 3D"
+    },
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    }
+  },
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3"
+  }
+}
