@@ -1143,7 +1143,7 @@
                 <div style="white-space: nowrap; text-align: center; padding: 20px;">
                     <div style="font-size: clamp(1.6rem, 7vw, 3.2rem); margin-bottom: 8px;">🏌️</div>
                     <h2 style="color: #f1f8e9; letter-spacing: clamp(0.5px, 0.4vw, 2px); text-shadow: 0 2px 12px rgba(0,0,0,0.5); margin-bottom: clamp(10px, 3vh, 22px); font-size: clamp(0.6rem, 2.8vw, 1.15rem); white-space: nowrap;" id="t-panel-level">LEVEL</h2>
-                    <button class="btn" id="btn-levels-nav" style="background: linear-gradient(145deg,rgba(165,214,167,0.5),rgba(102,187,106,0.4)); border-color: rgba(200,255,200,0.5); color: #1b5e20; width: min(29vw, 170px); font-size: clamp(0.5rem, 2.3vw, 0.95rem); padding: clamp(7px,1.8vw,13px) clamp(4px,2vw,20px); letter-spacing: 0.5px;" onclick="showMenu('levels')">Levelauswahl</button>
+                    <button class="btn" id="btn-levels-nav" style="background: linear-gradient(145deg,rgba(165,214,167,0.5),rgba(102,187,106,0.4)); border-color: rgba(200,255,200,0.5); color: #1b5e20; width: min(29vw, 170px); font-size: clamp(0.5rem, 2.3vw, 0.95rem); padding: clamp(7px,1.8vw,13px) clamp(4px,2vw,20px); letter-spacing: 0.5px;" onclick="showMenu('singleplayer')">Einzelspieler-Modi</button>
                 </div>
             </div>
 
@@ -1208,6 +1208,41 @@
              style="position: fixed; cursor: pointer; z-index: 9999; transition: opacity 0.2s, width 0.2s; pointer-events: auto;"
              onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity=''">
 
+        <div id="menu-singleplayer" class="menu-screen" style="gap:14px; padding:calc(24px + var(--safe-t)) 16px calc(24px + var(--safe-b)); overflow:auto;">
+            <h2 style="color:#fbe9e7; letter-spacing:2px;">⛳ Einzelspieler</h2>
+            <p style="max-width:620px;color:#efebe9;text-align:center;">Wähle den klassischen Fortschritt, eine zufällige Karte oder deine gespeicherten Workshop-Maps.</p>
+            <button class="btn" style="width:min(420px,92vw);background:linear-gradient(145deg,#a5d6a7,#66bb6a);color:#1b5e20" onclick="showMenu('levels')">🏆 Kampagne · Level auswählen</button>
+            <button class="btn" style="width:min(420px,92vw);background:linear-gradient(145deg,#ffcc80,#ffa726);color:#3e2723" onclick="startRandomSingleplayer()">🎲 Random-Level spielen</button>
+            <button class="btn" style="width:min(420px,92vw);background:linear-gradient(145deg,#ffe082,#ffd54f);color:#3e2723" onclick="showSavedMaps()">🗺️ Saved Levels · Workshop-Maps</button>
+            <button class="btn" style="width:min(420px,92vw);background:rgba(255,255,255,.14)" onclick="showMenu('map-editor');mapEditorInit()">🧱 Karten-Editor öffnen</button>
+            <div id="saved-map-list" style="width:min(620px,94vw);display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px"></div>
+            <button class="btn btn-red" onclick="showMenu('main')">Zurück</button>
+        </div>
+
+        <div id="menu-map-editor" class="menu-screen" style="justify-content:flex-start;gap:12px;padding:calc(18px + var(--safe-t)) 12px calc(20px + var(--safe-b));overflow:auto;">
+            <h2 style="color:#fbe9e7;letter-spacing:2px;margin:0;">🧱 Workshop Map-Editor</h2>
+            <p style="color:#efebe9;text-align:center;max-width:760px;margin:0;">Erstelle kostenlos eigene Golfkarten. Bis zu 3 Hügel, platzierbare Hindernisse und bewegliche Assets. Loch und Fahne sind immer Pflicht.</p>
+            <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:100%;">
+                <label class="ws-lbl" style="align-self:center">Map-Name <input id="map-name" class="ws-input" maxlength="32" value="Meine Golfkarte" style="width:180px"></label>
+                <button class="btn" onclick="setMapTool('hill')">⛰️ Hügel (<span id="map-hill-count">0</span>/3)</button>
+                <button class="btn" onclick="setMapTool('tree')">🌲 Baum</button>
+                <button class="btn" onclick="setMapTool('rock')">🪨 Fels</button>
+                <button class="btn" onclick="setMapTool('crate')">📦 Kiste</button>
+                <button class="btn" onclick="setMapTool('moving')">↔️ Bewegliches Asset</button>
+                <button class="btn" onclick="setMapTool('erase')">🧽 Entfernen</button>
+            </div>
+            <div style="width:min(900px,96vw);position:relative;background:#5c8a46;border:4px solid #8d6e63;border-radius:16px;overflow:hidden;box-shadow:0 12px 30px #0005;">
+                <canvas id="map-editor-canvas" width="900" height="540" style="display:block;width:100%;height:auto;touch-action:manipulation;cursor:crosshair"></canvas>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;">
+                <button class="btn" onclick="saveWorkshopMap()">💾 Map speichern</button>
+                <button class="btn" onclick="uploadWorkshopMap()">🌐 Kostenlos veröffentlichen</button>
+                <button class="btn" onclick="exportWorkshopMap()">⬇️ Map exportieren</button>
+                <button class="btn btn-red" onclick="showMenu('singleplayer')">Zurück</button>
+            </div>
+            <p id="map-editor-status" role="status" style="color:#ffecb3;text-align:center;max-width:700px;margin:0;"></p>
+        </div>
+
         <div id="menu-levels" class="menu-screen">
             <h2 id="t-levels-title" style="margin-bottom: 20px;">Wähle dein Level</h2>
             <div class="level-grid" id="levelGrid"></div>
@@ -1249,6 +1284,7 @@
         <!-- WORKSHOP -->
         <div id="menu-workshop" class="menu-screen" style="justify-content: flex-start; padding-top: calc(24px + var(--safe-t)); padding-bottom: calc(24px + var(--safe-b)); overflow-y: auto;">
             <h2 style="margin-bottom: 12px; color: #fbe9e7; letter-spacing: 3px;">🛠️ <span data-lb="wsTitle">Workshop</span></h2>
+            <button class="btn" style="width:min(420px,92vw);background:linear-gradient(145deg,#ffcc80,#ffa726);color:#3e2723" onclick="showMenu('map-editor');mapEditorInit()">🧱 Karten-Editor · eigene Level bauen</button>
             <div class="ws-wrap">
                 <div id="ws-lock" class="ac-lock" style="display:none;">
                     <div class="ac-ico">🔐</div>
@@ -3432,7 +3468,10 @@
             if(localPlayerLabel) { scene.remove(localPlayerLabel); localPlayerLabel = null; }
 
             let l;
-            if (idx === 'openworld') {
+            if (idx && typeof idx === 'object') {
+                l = idx;
+                currentLevelIdx = -1; // Benutzerdefinierte Workshop-Map
+            } else if (idx === 'openworld') {
                 l = openWorldLevel;
                 currentLevelIdx = -1; // Kein echter Kampagnen-Index
             } else if (idx === 'lobbyarena') {
@@ -4718,6 +4757,51 @@
             // die Stärke wird jetzt über powerBar3D angezeigt.
             return;
         }
+
+        // Workshop-Maps: lokale Speicherung, Kartenbau und kostenloser JSON-Export.
+        let mapEditorTool = 'hill';
+        let mapEditorData = { version:1, name:'Meine Golfkarte', par:3, start:{x:90,y:270}, hole:{x:810,y:270}, hills:[], assets:[] };
+        function mapEditorInit() {
+            try { const savedDraft = localStorage.getItem('cgMapEditorDraft'); if (savedDraft) mapEditorData = JSON.parse(savedDraft); } catch(e) {}
+            if (!mapEditorData.hills) mapEditorData.hills=[]; if (!mapEditorData.assets) mapEditorData.assets=[];
+            const name=document.getElementById('map-name'); if(name) name.value=mapEditorData.name||'Meine Golfkarte';
+            const canvas=document.getElementById('map-editor-canvas'); if(canvas && !canvas.dataset.bound){ canvas.dataset.bound='1'; canvas.addEventListener('pointerdown', mapEditorPlace); }
+            mapEditorDraw();
+        }
+        function setMapTool(tool){ mapEditorTool=tool; const el=document.getElementById('map-editor-status'); if(el) el.textContent='Aktives Werkzeug: '+({hill:'Hügel',tree:'Baum',rock:'Fels',crate:'Kiste',moving:'Bewegliches Asset',erase:'Entfernen'}[tool]||tool); }
+        function mapEditorPlace(ev){
+            const canvas=document.getElementById('map-editor-canvas'), r=canvas.getBoundingClientRect();
+            const x=Math.max(30,Math.min(870,(ev.clientX-r.left)/r.width*900)), y=Math.max(30,Math.min(510,(ev.clientY-r.top)/r.height*540));
+            if(Math.hypot(x-mapEditorData.start.x,y-mapEditorData.start.y)<48 || Math.hypot(x-mapEditorData.hole.x,y-mapEditorData.hole.y)<55){ document.getElementById('map-editor-status').textContent='Start und Loch/Fahne müssen frei bleiben.'; return; }
+            if(mapEditorTool==='hill'){ if(mapEditorData.hills.length>=3){ document.getElementById('map-editor-status').textContent='Maximal 3 Hügel pro Karte.'; return; } mapEditorData.hills.push({x,y,r:38+Math.random()*18}); }
+            else if(mapEditorTool==='erase'){ let nearest=-1,dist=42; mapEditorData.assets.forEach((a,i)=>{const d=Math.hypot(a.x-x,a.y-y);if(d<dist){dist=d;nearest=i;}}); if(nearest>=0)mapEditorData.assets.splice(nearest,1); else if(mapEditorData.hills.length) mapEditorData.hills.pop(); }
+            else mapEditorData.assets.push({type:mapEditorTool,x,y,moving:mapEditorTool==='moving',size:mapEditorTool==='tree'?28:mapEditorTool==='rock'?24:22});
+            mapEditorData.name=(document.getElementById('map-name')||{}).value||'Meine Golfkarte'; mapEditorDraw();
+        }
+        function mapEditorDraw(){
+            const c=document.getElementById('map-editor-canvas'); if(!c)return; const ctx=c.getContext('2d');
+            ctx.clearRect(0,0,c.width,c.height); ctx.fillStyle='#67934c';ctx.fillRect(0,0,900,540);
+            ctx.strokeStyle='rgba(255,255,255,.12)';ctx.lineWidth=1; for(let x=0;x<900;x+=30){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,540);ctx.stroke()} for(let y=0;y<540;y+=30){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(900,y);ctx.stroke()}
+            ctx.fillStyle='#8dbb65';ctx.beginPath();if(ctx.roundRect)ctx.roundRect(24,24,852,492,28);else ctx.rect(24,24,852,492);ctx.fill();
+            mapEditorData.hills.forEach(h=>{ctx.fillStyle='#537c3d';ctx.beginPath();ctx.ellipse(h.x,h.y,h.r*1.2,h.r*.8,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#719d50';ctx.beginPath();ctx.ellipse(h.x-7,h.y-7,h.r*.8,h.r*.55,-.2,0,Math.PI*2);ctx.fill();});
+            mapEditorData.assets.forEach(a=>{ctx.save();ctx.translate(a.x,a.y);if(a.type==='tree'){ctx.fillStyle='#62452d';ctx.fillRect(-4,0,8,19);ctx.fillStyle='#245b36';ctx.beginPath();ctx.arc(0,-5,17,0,Math.PI*2);ctx.fill();}else if(a.type==='rock'){ctx.fillStyle='#9e9e9e';ctx.beginPath();ctx.ellipse(0,0,20,14,-.2,0,Math.PI*2);ctx.fill();}else if(a.type==='crate'){ctx.fillStyle='#9b6335';ctx.fillRect(-13,-13,26,26);ctx.strokeStyle='#e1b47a';ctx.strokeRect(-13,-13,26,26);ctx.beginPath();ctx.moveTo(-12,-12);ctx.lineTo(12,12);ctx.moveTo(12,-12);ctx.lineTo(-12,12);ctx.stroke();}else{ctx.fillStyle='#ef6c00';ctx.beginPath();ctx.arc(0,0,16,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#fff';ctx.beginPath();ctx.moveTo(-24,0);ctx.lineTo(24,0);ctx.stroke();}ctx.restore();});
+            ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(mapEditorData.start.x,mapEditorData.start.y,13,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#222';ctx.stroke();ctx.fillStyle='#222';ctx.font='bold 12px sans-serif';ctx.fillText('START',mapEditorData.start.x-20,mapEditorData.start.y+29);
+            ctx.fillStyle='#252525';ctx.beginPath();ctx.arc(mapEditorData.hole.x,mapEditorData.hole.y,13,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(mapEditorData.hole.x,mapEditorData.hole.y,7,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#f5f5f5';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(mapEditorData.hole.x,mapEditorData.hole.y-4);ctx.lineTo(mapEditorData.hole.x,mapEditorData.hole.y-46);ctx.stroke();ctx.fillStyle='#e53935';ctx.beginPath();ctx.moveTo(mapEditorData.hole.x,mapEditorData.hole.y-45);ctx.lineTo(mapEditorData.hole.x+25,mapEditorData.hole.y-38);ctx.lineTo(mapEditorData.hole.x,mapEditorData.hole.y-30);ctx.fill();
+            const hc=document.getElementById('map-hill-count');if(hc)hc.textContent=mapEditorData.hills.length;
+        }
+        function getSavedWorkshopMaps(){try{return JSON.parse(localStorage.getItem('cgSavedWorkshopMaps')||'[]')}catch(e){return []}}
+        function saveWorkshopMap(){
+            mapEditorData.name=((document.getElementById('map-name')||{}).value||'Meine Golfkarte').trim().slice(0,32)||'Meine Golfkarte';
+            if(!mapEditorData.hole || !mapEditorData.start){document.getElementById('map-editor-status').textContent='Karte benötigt Start, Loch und Fahne.';return;}
+            const maps=getSavedWorkshopMaps(); const id='map-'+Date.now(); mapEditorData.id=id; mapEditorData.createdAt=new Date().toISOString(); maps.unshift(JSON.parse(JSON.stringify(mapEditorData))); localStorage.setItem('cgSavedWorkshopMaps',JSON.stringify(maps.slice(0,100))); localStorage.setItem('cgMapEditorDraft',JSON.stringify(mapEditorData));
+            document.getElementById('map-editor-status').textContent='Karte gespeichert! Sie ist kostenlos unter „Saved Levels“ verfügbar.'; showToast('Workshop-Map gespeichert');
+        }
+        function uploadWorkshopMap(){ saveWorkshopMap(); document.getElementById('map-editor-status').textContent='Map lokal gespeichert und uploadbereit. Ein globaler Upload für alle Spieler benötigt einen verbundenen Server/API-Endpunkt; ohne Backend wird nichts öffentlich veröffentlicht.'; }
+        function exportWorkshopMap(){mapEditorData.name=((document.getElementById('map-name')||{}).value||'Meine Golfkarte').trim();const blob=new Blob([JSON.stringify(mapEditorData,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(mapEditorData.name.replace(/[^a-z0-9_-]/gi,'_')||'golf-map')+'.json';a.click();URL.revokeObjectURL(a.href);}
+        function showSavedMaps(){const box=document.getElementById('saved-map-list'); if(!box)return; const maps=getSavedWorkshopMaps();box.innerHTML='';if(!maps.length){box.innerHTML='<p style="grid-column:1/-1;color:#efebe9">Noch keine gespeicherten Maps. Erstelle zuerst eine im Karten-Editor.</p>';return;}maps.forEach(m=>{const b=document.createElement('button');b.className='btn';b.style.cssText='min-width:0;background:rgba(255,204,128,.2);';b.textContent='🗺️ '+m.name+' · '+(m.assets||[]).length+' Assets';b.onclick=()=>playWorkshopMap(m);box.appendChild(b);});}
+        function playWorkshopMap(m){const cv=(x)=>({x:(x-450)/10,z:(yMap=> (yMap-270)/10)(x)}); const start={x:(m.start.x-450)/10,z:(m.start.y-270)/10}; const hole={x:(m.hole.x-450)/10,z:(m.hole.y-270)/10}; const obs=(m.assets||[]).map(a=>[(a.x-450)/10,(a.y-270)/10, a.size/8,a.size/8,a.moving?1:0]); const hills=(m.hills||[]).map(h=>({x:(h.x-450)/10,z:(h.y-270)/10,r:h.r/10,h:1.5})); const level={par:m.par||3,start,hole,obs,coinPos:[],hills,customMapId:m.id}; initLevel(level); }
+
+        function startRandomSingleplayer(){ AudioEngine.init(); MusicEngine.init(); const seed=Math.floor(Math.random()*2147483647); const tmp=[]; generateLevelsRaw(seed); const picked=levels[Math.floor(Math.random()*levels.length)]; const copy=JSON.parse(JSON.stringify(picked)); generateLevels(); initLevel(copy); showToast('Zufällige Karte gestartet'); }
 
         function renderLevelGrid() {
             const grid = document.getElementById('levelGrid');
