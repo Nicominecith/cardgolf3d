@@ -7,6 +7,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#2b1914">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="applogoremoved.png">
+    <link rel="apple-touch-icon" href="applogoremoved.png">
     <title>CardGolf 3D - Professional Edition</title>
     <script src="./three.min.js"></script>
     <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
@@ -896,6 +899,45 @@
 
 </style>
 
+<style id="cg-ui-upgrade">
+/* ===== CardGolf UI 2.1: schönere Knöpfe + Handy/Tablet/PC ===== */
+.menu-screen .btn{white-space:normal;line-height:1.2;text-wrap:balance;max-width:100%}
+.btn{border-radius:16px;letter-spacing:1.2px;transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .25s ease,background .25s ease,filter .2s}
+.btn:focus-visible{outline:3px solid #ffe082;outline-offset:2px}
+.btn-green{background:linear-gradient(145deg,#a5d6a7,#43a047)!important;color:#0d3b12!important;border-color:rgba(220,255,220,.7)!important;text-shadow:0 1px 0 rgba(255,255,255,.35)!important}
+.btn-gold{background:linear-gradient(145deg,#ffe082,#ffa726)!important;color:#3e2723!important;border-color:rgba(255,236,179,.8)!important;text-shadow:0 1px 0 rgba(255,255,255,.35)!important}
+.btn-ghost{background:linear-gradient(145deg,rgba(255,255,255,.18),rgba(255,255,255,.05))!important}
+.btn-green:hover,.btn-gold:hover{filter:brightness(1.07)}
+.btn-red{background:linear-gradient(145deg,#ef9a9a,#e53935)!important;border-color:rgba(255,205,200,.7)!important}
+.btn-red:hover{filter:brightness(1.08)}
+.ws-tool.active{outline:3px solid #ffe082;background:linear-gradient(145deg,#ffe082,#ffb300)!important;color:#3e2723!important;transform:translateY(-2px)}
+.cg-scroll{justify-content:flex-start!important;overflow-y:auto;gap:12px;padding:calc(24px + var(--safe-t)) 14px calc(28px + var(--safe-b));box-sizing:border-box}
+.cg-h2{color:#fbe9e7;letter-spacing:2px;margin:6px 0 0;text-align:center}
+.cg-h3{color:#ffcc80;letter-spacing:1.5px;margin:10px 0 0;text-align:center}
+.cg-lead,.cg-note{color:#efebe9;text-align:center;max-width:620px;margin:0;font-size:.95rem}
+.cg-note{color:#ffecb3;font-size:.88rem}
+.cg-col{display:flex;flex-direction:column;align-items:stretch;gap:4px;width:min(440px,92vw)}
+.cg-col .btn{width:100%;margin:4px 0}
+.cg-toolbar{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px;max-width:100%}
+.cg-toolbar .btn{margin:3px;padding:11px 16px}
+.cg-section{width:min(960px,96vw);display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:12px}
+.cg-editor{display:none;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:1000px;padding:12px;box-sizing:border-box}
+.cg-canvas-wrap{width:min(900px,96vw);background:#5c8a46;border:4px solid #8d6e63;border-radius:18px;overflow:hidden;box-shadow:0 14px 34px #0006}
+.cg-canvas-wrap canvas{display:block;width:100%;height:auto;touch-action:manipulation;cursor:crosshair}
+.cg-map-grid{width:min(960px,96vw);display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.cg-map-card{display:flex;flex-direction:column;gap:6px;padding:12px;border-radius:16px;background:linear-gradient(160deg,rgba(255,204,128,.18),rgba(255,255,255,.05));border:1px solid rgba(255,224,178,.28);box-shadow:0 6px 18px rgba(0,0,0,.28);min-width:0}
+.cg-map-title{font-weight:800;color:#fff3e0;overflow-wrap:anywhere}
+.cg-map-meta{font-size:.78rem;color:#d7ccc8}
+.cg-map-actions{display:flex;gap:6px;flex-wrap:wrap}
+.cg-map-actions .btn{flex:1 1 auto;margin:0;padding:10px 12px;font-size:.85rem;letter-spacing:.5px}
+#menu-main .btn{width:min(280px,84vw)!important}
+@media(pointer:coarse){.btn{min-height:48px}}
+@media(max-width:600px){.cg-toolbar .btn{padding:10px 12px;font-size:.8rem}.cg-map-grid{grid-template-columns:1fr 1fr;gap:8px}.cg-map-card{padding:9px}.cg-h2{font-size:1.4rem}}
+@media(max-width:380px){.cg-map-grid{grid-template-columns:1fr}}
+@media(min-width:601px) and (max-width:1100px){.cg-map-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}}
+@media(prefers-reduced-motion:reduce){.btn,.btn::before{transition:none!important}}
+
+</style>
 <style id="cg-map-editor-responsive-upgrade">
 #menu-map-editor{box-sizing:border-box;width:100%;max-width:100vw;min-height:100dvh;}
 #menu-map-editor .btn{min-height:42px;max-width:100%;white-space:normal;touch-action:manipulation;}
@@ -1152,7 +1194,7 @@
                 <div style="white-space: nowrap; text-align: center; padding: 20px;">
                     <div style="font-size: clamp(1.6rem, 7vw, 3.2rem); margin-bottom: 8px;">🏌️</div>
                     <h2 style="color: #f1f8e9; letter-spacing: clamp(0.5px, 0.4vw, 2px); text-shadow: 0 2px 12px rgba(0,0,0,0.5); margin-bottom: clamp(10px, 3vh, 22px); font-size: clamp(0.6rem, 2.8vw, 1.15rem); white-space: nowrap;" id="t-panel-level">LEVEL</h2>
-                    <button class="btn" id="btn-levels-nav" style="background: linear-gradient(145deg,rgba(165,214,167,0.5),rgba(102,187,106,0.4)); border-color: rgba(200,255,200,0.5); color: #1b5e20; width: min(29vw, 170px); font-size: clamp(0.5rem, 2.3vw, 0.95rem); padding: clamp(7px,1.8vw,13px) clamp(4px,2vw,20px); letter-spacing: 0.5px;" onclick="showMenu('singleplayer')">Einzelspieler-Modi</button>
+                    <button class="btn" id="btn-levels-nav" style="background: linear-gradient(145deg,rgba(165,214,167,0.5),rgba(102,187,106,0.4)); border-color: rgba(200,255,200,0.5); color: #1b5e20; width: min(29vw, 170px); font-size: clamp(0.5rem, 2.3vw, 0.95rem); padding: clamp(7px,1.8vw,13px) clamp(4px,2vw,20px); letter-spacing: 0.5px;" onclick="showMenu('singleplayer')">Level</button>
                 </div>
             </div>
 
@@ -1217,14 +1259,17 @@
              style="position: fixed; cursor: pointer; z-index: 9999; transition: opacity 0.2s, width 0.2s; pointer-events: auto;"
              onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity=''">
 
-        <div id="menu-singleplayer" class="menu-screen" style="gap:14px; padding:calc(24px + var(--safe-t)) 16px calc(24px + var(--safe-b)); overflow:auto;">
-            <h2 style="color:#fbe9e7; letter-spacing:2px;">⛳ Einzelspieler</h2>
-            <p style="max-width:620px;color:#efebe9;text-align:center;">Wähle den klassischen Fortschritt, eine zufällige Karte oder deine gespeicherten Workshop-Maps.</p>
-            <button class="btn" style="width:min(420px,92vw);background:linear-gradient(145deg,#a5d6a7,#66bb6a);color:#1b5e20" onclick="showMenu('levels')">🏆 Kampagne · Level auswählen</button>
-            <button class="btn" style="width:min(420px,92vw);background:linear-gradient(145deg,#ffcc80,#ffa726);color:#3e2723" onclick="startRandomSingleplayer()">🎲 Random-Level spielen</button>
-            <button class="btn" style="width:min(420px,92vw);background:linear-gradient(145deg,#ffe082,#ffd54f);color:#3e2723" onclick="showSavedMaps()">🗺️ Saved Levels · Workshop-Maps</button>
-            <button class="btn" style="width:min(420px,92vw);background:rgba(255,255,255,.14)" onclick="showMenu('workshop');toggleWorkshopMapEditor(true)">🧱 Karten-Editor öffnen</button>
-            <div id="saved-map-list" style="width:min(620px,94vw);display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px"></div>
+        <div id="menu-singleplayer" class="menu-screen cg-scroll">
+            <h2 class="cg-h2">⛳ Level</h2>
+            <p class="cg-lead">Kampagne, zufällige Level oder deine Workshop-Maps – nach jedem Loch geht es automatisch weiter.</p>
+            <div class="cg-col">
+                <button class="btn btn-green" onclick="showMenu('levels')">🏆 Kampagne · Level auswählen</button>
+                <button class="btn btn-gold" onclick="startRandomSingleplayer()">🎲 Zufälliges Level</button>
+                <button class="btn btn-gold" onclick="startAllWorkshopMaps()">▶ Alle Workshop-Maps nacheinander</button>
+                <button class="btn btn-ghost" onclick="showMenu('workshop')">🛠️ Workshop &amp; Map-Editor</button>
+            </div>
+            <h3 class="cg-h3">🗺️ Meine Workshop-Maps</h3>
+            <div id="saved-map-list" class="cg-map-grid"></div>
             <button class="btn btn-red" onclick="showMenu('main')">Zurück</button>
         </div>
 
@@ -1269,30 +1314,47 @@
         <!-- WORKSHOP -->
         <div id="menu-workshop" class="menu-screen" style="justify-content: flex-start; padding-top: calc(24px + var(--safe-t)); padding-bottom: calc(24px + var(--safe-b)); overflow-y: auto;">
             <h2 style="margin-bottom: 12px; color: #fbe9e7; letter-spacing: 3px;">🛠️ <span data-lb="wsTitle">Workshop</span></h2>
-            <div id="ws-saved-maps" style="width:min(900px,96vw);display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:12px;"></div>
-        <div id="ws-map-editor-inline" style="display:none;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:1000px;padding:12px;box-sizing:border-box;">
-            <h2 style="color:#fbe9e7;letter-spacing:2px;margin:0;">🧱 Workshop Map-Editor</h2>
-            <p style="color:#efebe9;text-align:center;max-width:760px;margin:0;">Erstelle kostenlos eigene Golfkarten. Bis zu 3 Hügel, platzierbare Hindernisse und bewegliche Assets. Loch und Fahne sind immer Pflicht.</p>
-            <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:100%;">
-                <label class="ws-lbl" style="align-self:center">Map-Name <input id="map-name" class="ws-input" maxlength="32" placeholder="Mapname erforderlich" value="" required style="width:min(260px,70vw)"></label>
-                <button class="btn" onclick="setMapTool('hill')">⛰️ Hügel (<span id="map-hill-count">0</span>/3)</button>
-                <button class="btn" onclick="setMapTool('tree')">🌲 Baum</button>
-                <button class="btn" onclick="setMapTool('rock')">🪨 Fels</button>
-                <button class="btn" onclick="setMapTool('crate')">📦 Kiste</button>
-                <button class="btn" onclick="setMapTool('moving')">↔️ Bewegliches Asset</button>
-                <button class="btn" onclick="setMapTool('erase')">🧽 Entfernen</button>
+            <div id="ws-maps-section" class="cg-section">
+                <h3 class="cg-h3">🗺️ Maps &amp; Level</h3>
+                <div class="cg-toolbar">
+                    <button class="btn btn-gold" onclick="mapEditorNew();toggleWorkshopMapEditor(true)">＋ Neue Map bauen</button>
+                    <button class="btn btn-green" onclick="startAllWorkshopMaps()">▶ Alle spielen</button>
+                </div>
+                <div id="ws-saved-maps" class="cg-map-grid"></div>
+                <h3 class="cg-h3">🌍 Community-Maps</h3>
+                <p id="ws-community-note" class="cg-note"></p>
+                <div id="ws-community-maps" class="cg-map-grid"></div>
             </div>
-            <div style="width:min(900px,96vw);position:relative;background:#5c8a46;border:4px solid #8d6e63;border-radius:16px;overflow:hidden;box-shadow:0 12px 30px #0005;">
-                <canvas id="map-editor-canvas" width="900" height="540" style="display:block;width:100%;height:auto;touch-action:manipulation;cursor:crosshair"></canvas>
+            <div id="ws-map-editor-inline" class="cg-editor" style="display:none;">
+                <h2 class="cg-h2">🧱 Map-Editor</h2>
+                <p class="cg-lead">Tippe auf die Fläche, um Objekte zu setzen. Bis zu 3 Hügel, 40 Objekte. Start und Loch sind Pflicht.</p>
+                <div class="cg-toolbar">
+                    <label class="ws-lbl">Name <input id="map-name" class="ws-input" maxlength="32" placeholder="Mapname" style="width:min(240px,60vw)"></label>
+                    <label class="ws-lbl">Par <input id="map-par" class="ws-input" type="number" min="1" max="9" value="3" style="width:70px"></label>
+                </div>
+                <div class="cg-toolbar" id="map-tools">
+                    <button class="btn ws-tool" data-tool="hill" onclick="setMapTool('hill')">⛰️ Hügel (<span id="map-hill-count">0</span>/3)</button>
+                    <button class="btn ws-tool" data-tool="tree" onclick="setMapTool('tree')">🌲 Baum</button>
+                    <button class="btn ws-tool" data-tool="rock" onclick="setMapTool('rock')">🪨 Fels</button>
+                    <button class="btn ws-tool" data-tool="crate" onclick="setMapTool('crate')">📦 Kiste</button>
+                    <button class="btn ws-tool" data-tool="moving" onclick="setMapTool('moving')">↔️ Beweglich</button>
+                    <button class="btn ws-tool" data-tool="start" onclick="setMapTool('start')">📍 Start</button>
+                    <button class="btn ws-tool" data-tool="hole" onclick="setMapTool('hole')">🏁 Loch</button>
+                    <button class="btn ws-tool" data-tool="erase" onclick="setMapTool('erase')">🧽 Löschen</button>
+                </div>
+                <div class="cg-canvas-wrap">
+                    <canvas id="map-editor-canvas" width="900" height="540"></canvas>
+                </div>
+                <div class="cg-toolbar">
+                    <button class="btn btn-ghost" onclick="mapEditorUndo()">↩️ Zurück</button>
+                    <button class="btn btn-ghost" onclick="mapEditorClear()">🗑️ Leeren</button>
+                    <button class="btn btn-green" onclick="saveWorkshopMap()">💾 Speichern</button>
+                    <button class="btn btn-gold" onclick="testWorkshopMap()">▶ Testen</button>
+                    <button class="btn btn-gold" onclick="uploadWorkshopMap()">🌍 Veröffentlichen</button>
+                    <button class="btn btn-red" onclick="toggleWorkshopMapEditor(false)">Fertig</button>
+                </div>
+                <p id="map-editor-status" role="status" class="cg-note"></p>
             </div>
-            <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;">
-                <button class="btn" onclick="saveWorkshopMap()">💾 Map speichern</button>
-                <button class="btn" onclick="uploadWorkshopMap()">🌐 Kostenlos veröffentlichen</button>
-                <button class="btn btn-red" onclick="toggleWorkshopMapEditor(false)">Zurück zum Workshop</button>
-            </div>
-            <p id="map-editor-status" role="status" style="color:#ffecb3;text-align:center;max-width:700px;margin:0;"></p>
-        </div>
-            <button class="btn" style="width:min(420px,92vw);background:linear-gradient(145deg,#ffcc80,#ffa726);color:#3e2723" onclick="toggleWorkshopMapEditor(true)">🧱 Karten-Editor · eigene Level bauen</button>
             <div class="ws-wrap">
                 <div id="ws-lock" class="ac-lock" style="display:none;">
                     <div class="ac-ico">🔐</div>
@@ -1724,6 +1786,7 @@
             isElectron = true;
         } catch (e) {
             console.log("Nicht in Electron Umgebung");
+            document.addEventListener('DOMContentLoaded', () => { const q = document.getElementById('btn-quit'); if (q) q.style.display = 'none'; });
         }
 
         // ===== ACHIEVEMENT SYSTEM =====
@@ -2801,7 +2864,7 @@
             if (isElectron) {
                 window.ipcRenderer.send('quit-game');
             } else {
-                window.close();
+                showToast('Du kannst den Tab einfach schließen.'); try { window.close(); } catch (e) {}
             }
         }
 
@@ -3224,6 +3287,7 @@
                 });
             }
         }
+        var spSession = null;
         let lastSaveJson = null;
         generateLevels();
         loadSaveDataOnly(); // Nur Rohdaten aus localStorage laden (sicher, ganz am Anfang möglich).
@@ -3478,14 +3542,16 @@
             let l;
             if (idx && typeof idx === 'object') {
                 l = idx;
-                currentLevelIdx = -1; // Benutzerdefinierte Workshop-Map
+                currentLevelIdx = -1; // Benutzerdefinierte Workshop-Map / Session-Level
             } else if (idx === 'openworld') {
+                spSession = null;
                 l = openWorldLevel;
                 currentLevelIdx = -1; // Kein echter Kampagnen-Index
             } else if (idx === 'lobbyarena') {
                 l = lobbyArenaLevel; // Multiplayer-Warteraum: leere Map ohne Loch/Fahne
                 currentLevelIdx = -1;
             } else {
+                spSession = null;
                 if (idx < 0) idx = 0;
                 if (idx >= levels.length) idx = levels.length - 1;
                 l = levels[idx];
@@ -4772,21 +4838,47 @@
         let mapEditorTool = 'hill';
         let mapEditorData = { version:1, name:'Meine Golfkarte', par:3, start:{x:90,y:270}, hole:{x:810,y:270}, hills:[], assets:[] };
         function persistMapEditorDraft(){ try { const f=document.getElementById('map-name'); if(f) mapEditorData.name=f.value.trim().slice(0,32); localStorage.setItem('cgMapEditorDraft',JSON.stringify(mapEditorData)); } catch(e) {} }
+        let mapHistory = [];
+        function mapEditorMsg(t){ const el=document.getElementById('map-editor-status'); if(el) el.textContent=t; }
+        function mapPushHistory(){ try { mapHistory.push(JSON.stringify(mapEditorData)); if(mapHistory.length>40) mapHistory.shift(); } catch(e) {} }
+        function mapEditorUndo(){ const s=mapHistory.pop(); if(!s){ mapEditorMsg('Nichts zum Rückgängigmachen.'); return; } try { mapEditorData=JSON.parse(s); } catch(e) {} const n=document.getElementById('map-name'); if(n) n.value=mapEditorData.name||''; mapEditorDraw(); persistMapEditorDraft(); }
+        function mapEditorClear(){ if(!confirm('Alle Hügel und Objekte entfernen?')) return; mapPushHistory(); mapEditorData.hills=[]; mapEditorData.assets=[]; mapEditorDraw(); persistMapEditorDraft(); }
+        function mapEditorNew(){ mapHistory=[]; mapEditorData={ version:1, name:'', par:3, start:{x:90,y:270}, hole:{x:810,y:270}, hills:[], assets:[] }; try { localStorage.setItem('cgMapEditorDraft', JSON.stringify(mapEditorData)); } catch(e) {} mapEditorInit(); mapEditorMsg('Neue leere Map.'); }
         function mapEditorInit() {
             try { const savedDraft = localStorage.getItem('cgMapEditorDraft'); if (savedDraft) mapEditorData = JSON.parse(savedDraft); } catch(e) {}
             if (!mapEditorData.hills) mapEditorData.hills=[]; if (!mapEditorData.assets) mapEditorData.assets=[];
-            const name=document.getElementById('map-name'); if(name){ name.value=mapEditorData.name||''; if(!name.dataset.bound){name.dataset.bound='1';name.addEventListener('input',()=>{mapEditorData.name=name.value.slice(0,32);persistMapEditorDraft();});}}
+            if (!mapEditorData.start) mapEditorData.start={x:90,y:270}; if (!mapEditorData.hole) mapEditorData.hole={x:810,y:270};
+            mapEditorData.par=Math.max(1,Math.min(9,parseInt(mapEditorData.par,10)||3));
+            const name=document.getElementById('map-name'); if(name){ name.value=mapEditorData.name||''; if(!name.dataset.bound){ name.dataset.bound='1'; name.addEventListener('input',()=>{ mapEditorData.name=name.value.slice(0,32); persistMapEditorDraft(); }); } }
+            const par=document.getElementById('map-par'); if(par){ par.value=mapEditorData.par; if(!par.dataset.bound){ par.dataset.bound='1'; par.addEventListener('input',()=>{ mapEditorData.par=Math.max(1,Math.min(9,parseInt(par.value,10)||3)); persistMapEditorDraft(); }); } }
             const canvas=document.getElementById('map-editor-canvas'); if(canvas && !canvas.dataset.bound){ canvas.dataset.bound='1'; canvas.addEventListener('pointerdown', mapEditorPlace); }
+            setMapTool(mapEditorTool, true);
             mapEditorDraw();
         }
-        function setMapTool(tool){ mapEditorTool=tool; const el=document.getElementById('map-editor-status'); if(el) el.textContent='Aktives Werkzeug: '+({hill:'Hügel',tree:'Baum',rock:'Fels',crate:'Kiste',moving:'Bewegliches Asset',erase:'Entfernen'}[tool]||tool); }
+        function setMapTool(tool, silent){
+            mapEditorTool=tool;
+            document.querySelectorAll('#map-tools .ws-tool').forEach(b=>b.classList.toggle('active', b.dataset.tool===tool));
+            if(!silent) mapEditorMsg('Werkzeug: '+({hill:'Hügel',tree:'Baum',rock:'Fels',crate:'Kiste',moving:'Bewegliches Objekt',start:'Start setzen',hole:'Loch setzen',erase:'Löschen'}[tool]||tool));
+        }
         function mapEditorPlace(ev){
             const canvas=document.getElementById('map-editor-canvas'), r=canvas.getBoundingClientRect();
             const x=Math.max(30,Math.min(870,(ev.clientX-r.left)/r.width*900)), y=Math.max(30,Math.min(510,(ev.clientY-r.top)/r.height*540));
-            if(Math.hypot(x-mapEditorData.start.x,y-mapEditorData.start.y)<48 || Math.hypot(x-mapEditorData.hole.x,y-mapEditorData.hole.y)<55){ document.getElementById('map-editor-status').textContent='Start und Loch/Fahne müssen frei bleiben.'; return; }
-            if(mapEditorTool==='hill'){ if(mapEditorData.hills.length>=3){ document.getElementById('map-editor-status').textContent='Maximal 3 Hügel pro Karte.'; return; } mapEditorData.hills.push({x,y,r:38+Math.random()*18}); }
-            else if(mapEditorTool==='erase'){ let nearest=-1,dist=42; mapEditorData.assets.forEach((a,i)=>{const d=Math.hypot(a.x-x,a.y-y);if(d<dist){dist=d;nearest=i;}}); if(nearest>=0)mapEditorData.assets.splice(nearest,1); else if(mapEditorData.hills.length) mapEditorData.hills.pop(); }
-            else mapEditorData.assets.push({type:mapEditorTool,x,y,moving:mapEditorTool==='moving',size:mapEditorTool==='tree'?28:mapEditorTool==='rock'?24:22});
+            const S=mapEditorData.start, H=mapEditorData.hole;
+            if(mapEditorTool==='erase'){
+                let nearest=-1,dist=42; mapEditorData.assets.forEach((a,i)=>{const d=Math.hypot(a.x-x,a.y-y);if(d<dist){dist=d;nearest=i;}});
+                let nh=-1,hd=60; mapEditorData.hills.forEach((h,i)=>{const d=Math.hypot(h.x-x,h.y-y);if(d<hd){hd=d;nh=i;}});
+                if(nearest>=0){ mapPushHistory(); mapEditorData.assets.splice(nearest,1); } else if(nh>=0){ mapPushHistory(); mapEditorData.hills.splice(nh,1); } else { mapEditorMsg('Hier ist nichts zum Löschen.'); return; }
+            } else if(mapEditorTool==='start'){
+                if(Math.hypot(x-H.x,y-H.y)<150){ mapEditorMsg('Start und Loch brauchen mehr Abstand.'); return; }
+                mapPushHistory(); S.x=x; S.y=y; mapEditorData.assets=mapEditorData.assets.filter(a=>Math.hypot(a.x-x,a.y-y)>=48); mapEditorData.hills=mapEditorData.hills.filter(h=>Math.hypot(h.x-x,h.y-y)>=h.r);
+            } else if(mapEditorTool==='hole'){
+                if(Math.hypot(x-S.x,y-S.y)<150){ mapEditorMsg('Start und Loch brauchen mehr Abstand.'); return; }
+                mapPushHistory(); H.x=x; H.y=y; mapEditorData.assets=mapEditorData.assets.filter(a=>Math.hypot(a.x-x,a.y-y)>=55); mapEditorData.hills=mapEditorData.hills.filter(h=>Math.hypot(h.x-x,h.y-y)>=h.r);
+            } else {
+                if(Math.hypot(x-S.x,y-S.y)<48 || Math.hypot(x-H.x,y-H.y)<55){ mapEditorMsg('Start und Loch/Fahne müssen frei bleiben.'); return; }
+                if(mapEditorTool==='hill'){ if(mapEditorData.hills.length>=3){ mapEditorMsg('Maximal 3 Hügel pro Karte.'); return; } mapPushHistory(); mapEditorData.hills.push({x,y,r:38+Math.random()*18}); }
+                else { if(mapEditorData.assets.length>=40){ mapEditorMsg('Maximal 40 Objekte pro Karte.'); return; } mapPushHistory(); mapEditorData.assets.push({type:mapEditorTool,x,y,moving:mapEditorTool==='moving',size:mapEditorTool==='tree'?28:mapEditorTool==='rock'?24:22}); }
+            }
             mapEditorData.name=((document.getElementById('map-name')||{}).value||'').trim(); mapEditorDraw(); persistMapEditorDraft();
         }
         function mapEditorDraw(){
@@ -4800,28 +4892,137 @@
             ctx.fillStyle='#252525';ctx.beginPath();ctx.arc(mapEditorData.hole.x,mapEditorData.hole.y,13,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(mapEditorData.hole.x,mapEditorData.hole.y,7,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#f5f5f5';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(mapEditorData.hole.x,mapEditorData.hole.y-4);ctx.lineTo(mapEditorData.hole.x,mapEditorData.hole.y-46);ctx.stroke();ctx.fillStyle='#e53935';ctx.beginPath();ctx.moveTo(mapEditorData.hole.x,mapEditorData.hole.y-45);ctx.lineTo(mapEditorData.hole.x+25,mapEditorData.hole.y-38);ctx.lineTo(mapEditorData.hole.x,mapEditorData.hole.y-30);ctx.fill();
             const hc=document.getElementById('map-hill-count');if(hc)hc.textContent=mapEditorData.hills.length;
         }
-        function toggleWorkshopMapEditor(open){const editor=document.getElementById('ws-map-editor-inline');const wrap=document.querySelector('#menu-workshop .ws-wrap');if(!editor)return;if(!open)persistMapEditorDraft();editor.style.display=open?'flex':'none';if(wrap)wrap.style.display=open?'none':'';if(open)mapEditorInit();}
-        function getSavedWorkshopMaps(){try{return JSON.parse(localStorage.getItem('cgSavedWorkshopMaps')||'[]')}catch(e){return []}}
+        function toggleWorkshopMapEditor(open){
+            const editor=document.getElementById('ws-map-editor-inline'); const wrap=document.querySelector('#menu-workshop .ws-wrap'); const maps=document.getElementById('ws-maps-section');
+            if(!editor) return;
+            if(!open) persistMapEditorDraft();
+            editor.style.display=open?'flex':'none';
+            if(wrap) wrap.style.display=open?'none':'';
+            if(maps) maps.style.display=open?'none':'';
+            if(open) mapEditorInit(); else renderWorkshopMaps();
+            const m=document.getElementById('menu-workshop'); if(m) m.scrollTop=0;
+        }
+        function getSavedWorkshopMaps(){ try { return JSON.parse(localStorage.getItem('cgSavedWorkshopMaps')||'[]'); } catch(e) { return []; } }
         function saveWorkshopMap(){
-            const status=document.getElementById('map-editor-status');
             const field=document.getElementById('map-name');
             const name=(field&&field.value||'').trim().slice(0,32);
-            if(!name){if(status)status.textContent='Bitte zuerst einen Mapnamen eingeben. Ohne Namen kann die Karte nicht gespeichert werden.';if(field){field.focus();field.setAttribute('aria-invalid','true');}return false;}
-            if(field)field.removeAttribute('aria-invalid');
-            if(!mapEditorData.hole || !mapEditorData.start){if(status)status.textContent='Karte benötigt Start, Loch und Fahne.';return false;}
-            if((mapEditorData.hills||[]).length>3){if(status)status.textContent='Maximal 3 Hügel pro Karte.';return false;}
+            if(!name){ mapEditorMsg('Bitte zuerst einen Mapnamen eingeben.'); if(field){ field.focus(); field.setAttribute('aria-invalid','true'); } return false; }
+            if(field) field.removeAttribute('aria-invalid');
+            if(!mapEditorData.hole || !mapEditorData.start){ mapEditorMsg('Karte benötigt Start, Loch und Fahne.'); return false; }
+            if((mapEditorData.hills||[]).length>3){ mapEditorMsg('Maximal 3 Hügel pro Karte.'); return false; }
             mapEditorData.name=name;
-            const maps=getSavedWorkshopMaps(); const existing=maps.findIndex(m=>m.id===mapEditorData.id);mapEditorData.id=mapEditorData.id||'map-'+Date.now();mapEditorData.createdAt=mapEditorData.createdAt||new Date().toISOString();
-            const copy=JSON.parse(JSON.stringify(mapEditorData));if(existing>=0)maps[existing]=copy;else maps.unshift(copy);
-            localStorage.setItem('cgSavedWorkshopMaps',JSON.stringify(maps.slice(0,100)));localStorage.setItem('cgMapEditorDraft',JSON.stringify(mapEditorData));
-            if(status)status.textContent='„'+name+'“ gespeichert. Die Karte ist kostenlos unter Saved Levels verfügbar.';showToast('Workshop-Map gespeichert');showSavedMaps();renderWorkshopMaps();return true;
+            mapEditorData.par=Math.max(1,Math.min(9,parseInt(mapEditorData.par,10)||3));
+            mapEditorData.id=mapEditorData.id||'map-'+Date.now();
+            mapEditorData.createdAt=mapEditorData.createdAt||new Date().toISOString();
+            const maps=getSavedWorkshopMaps(); const existing=maps.findIndex(m=>m.id===mapEditorData.id);
+            const copy=JSON.parse(JSON.stringify(mapEditorData)); if(existing>=0) maps[existing]=copy; else maps.unshift(copy);
+            try { localStorage.setItem('cgSavedWorkshopMaps',JSON.stringify(maps.slice(0,100))); localStorage.setItem('cgMapEditorDraft',JSON.stringify(mapEditorData)); } catch(e) { mapEditorMsg('Speichern nicht möglich (Speicher voll?).'); return false; }
+            mapEditorMsg('„'+name+'“ gespeichert. Du findest sie unter Level und im Workshop.'); showToast('Map gespeichert'); showSavedMaps(); renderWorkshopMaps(); return true;
         }
-        function uploadWorkshopMap(){if(!saveWorkshopMap())return;const status=document.getElementById('map-editor-status');if(status)status.textContent='Karte lokal gespeichert. Eine öffentliche Veröffentlichung für alle Spieler benötigt einen verbundenen Server/API-Endpunkt.';}
-        function deleteWorkshopMap(id){const maps=getSavedWorkshopMaps();const map=maps.find(m=>m.id===id);if(!map)return;if(!confirm('Map „'+map.name+'“ wirklich löschen?'))return;localStorage.setItem('cgSavedWorkshopMaps',JSON.stringify(maps.filter(m=>m.id!==id)));if(mapEditorData&&mapEditorData.id===id){mapEditorData={version:1,name:'',par:3,start:{x:90,y:270},hole:{x:810,y:270},hills:[],assets:[]};localStorage.setItem('cgMapEditorDraft',JSON.stringify(mapEditorData));}showSavedMaps();renderWorkshopMaps();showToast('Map gelöscht');}
-        function showSavedMaps(){const box=document.getElementById('saved-map-list'); if(!box)return; const maps=getSavedWorkshopMaps();box.innerHTML='';if(!maps.length){box.innerHTML='<p style="grid-column:1/-1;color:#efebe9">Noch keine gespeicherten Maps. Erstelle zuerst eine im Karten-Editor.</p>';return;}maps.forEach(m=>{const card=document.createElement('div');card.style.cssText='display:flex;flex-direction:column;gap:7px;padding:10px;border-radius:12px;background:rgba(255,204,128,.12);min-width:0';const b=document.createElement('button');b.className='btn';b.style.cssText='min-width:0;background:rgba(255,204,128,.2);';b.textContent='🗺️ '+m.name+' · '+(m.assets||[]).length+' Assets';b.onclick=()=>playWorkshopMap(m);const del=document.createElement('button');del.className='btn btn-red';del.textContent='🗑️ Map löschen';del.onclick=()=>deleteWorkshopMap(m.id);card.append(b,del);box.appendChild(card);});}
-        function playWorkshopMap(m){const cv=(x)=>({x:(x-450)/10,z:(yMap=> (yMap-270)/10)(x)}); const start={x:(m.start.x-450)/10,z:(m.start.y-270)/10}; const hole={x:(m.hole.x-450)/10,z:(m.hole.y-270)/10}; const obs=(m.assets||[]).map(a=>[(a.x-450)/10,(a.y-270)/10, a.size/8,a.size/8,a.moving?1:0]); const hills=(m.hills||[]).map(h=>({x:(h.x-450)/10,z:(h.y-270)/10,r:h.r/10,h:1.5})); const level={par:m.par||3,start,hole,obs,coinPos:[],hills,customMapId:m.id}; initLevel(level); }
+        function editWorkshopMap(id){ const m=getSavedWorkshopMaps().find(x=>x.id===id); if(!m) return; mapHistory=[]; mapEditorData=JSON.parse(JSON.stringify(m)); try { localStorage.setItem('cgMapEditorDraft',JSON.stringify(mapEditorData)); } catch(e) {} toggleWorkshopMapEditor(true); }
+        function deleteWorkshopMap(id){
+            const maps=getSavedWorkshopMaps(); const map=maps.find(m=>m.id===id); if(!map) return;
+            if(!confirm('Map „'+map.name+'“ wirklich löschen?')) return;
+            try { localStorage.setItem('cgSavedWorkshopMaps',JSON.stringify(maps.filter(m=>m.id!==id))); } catch(e) {}
+            if(mapEditorData&&mapEditorData.id===id){ mapEditorData={version:1,name:'',par:3,start:{x:90,y:270},hole:{x:810,y:270},hills:[],assets:[]}; try { localStorage.setItem('cgMapEditorDraft',JSON.stringify(mapEditorData)); } catch(e) {} }
+            showSavedMaps(); renderWorkshopMaps(); showToast('Map gelöscht');
+        }
+        // ---- Karten-Karten (gemeinsam für Level-Menü und Workshop) ----
+        function cgMapCard(m, opts){
+            const card=document.createElement('div'); card.className='cg-map-card';
+            const t=document.createElement('div'); t.className='cg-map-title'; t.textContent='🗺️ '+m.name;
+            const meta=document.createElement('div'); meta.className='cg-map-meta'; meta.textContent='Par '+(m.par||3)+' · '+(m.assets||[]).length+' Objekte · '+(m.hills||[]).length+' Hügel'+(m.creatorName?' · von '+m.creatorName:'');
+            const row=document.createElement('div'); row.className='cg-map-actions';
+            (opts.actions||[]).forEach(a=>{ const b=document.createElement('button'); b.className='btn '+(a.cls||''); b.textContent=a.label; b.onclick=a.fn; row.appendChild(b); });
+            card.append(t,meta,row); return card;
+        }
+        function showSavedMaps(){
+            const box=document.getElementById('saved-map-list'); if(!box) return; const maps=getSavedWorkshopMaps(); box.innerHTML='';
+            if(!maps.length){ const p=document.createElement('p'); p.className='cg-note'; p.style.gridColumn='1/-1'; p.textContent='Noch keine Maps. Baue im Workshop deine erste Map.'; box.appendChild(p); return; }
+            maps.forEach((m,i)=>box.appendChild(cgMapCard(m,{actions:[{label:'▶ Spielen',cls:'btn-green',fn:()=>cgStartSession('workshop',maps,i)}]})));
+        }
+        function renderWorkshopMaps(){
+            const box=document.getElementById('ws-saved-maps'); if(!box) return; const maps=getSavedWorkshopMaps(); box.innerHTML='';
+            if(!maps.length){ const p=document.createElement('p'); p.className='cg-note'; p.style.gridColumn='1/-1'; p.textContent='Noch keine eigenen Maps. Tippe auf „Neue Map bauen“.'; box.appendChild(p); }
+            maps.forEach((m,i)=>box.appendChild(cgMapCard(m,{actions:[
+                {label:'▶',cls:'btn-green',fn:()=>cgStartSession('workshop',maps,i)},
+                {label:'✏️',cls:'btn-gold',fn:()=>editWorkshopMap(m.id)},
+                {label:'🗑️',cls:'btn-red',fn:()=>deleteWorkshopMap(m.id)}]})));
+            cgLoadCommunityMaps();
+        }
+        // ---- Community-Maps über die Netlify-Funktion ----
+        const CG_WS_API='/.netlify/functions/workshop';
+        let cgCommunityMaps=[];
+        async function cgLoadCommunityMaps(){
+            const box=document.getElementById('ws-community-maps'), note=document.getElementById('ws-community-note'); if(!box) return;
+            box.innerHTML=''; if(note) note.textContent='Lade …';
+            try {
+                if(!/^https?:/.test(location.protocol)) throw new Error('offline');
+                const r=await fetch(CG_WS_API,{cache:'no-store'}); const d=await r.json();
+                cgCommunityMaps=(d&&d.maps)||[];
+                if(note) note.textContent=cgCommunityMaps.length?'':'Noch keine Community-Maps. Veröffentliche deine erste!';
+                cgCommunityMaps.forEach((m,i)=>box.appendChild(cgMapCard(m,{actions:[
+                    {label:'▶',cls:'btn-green',fn:()=>cgStartSession('workshop',cgCommunityMaps,i)},
+                    {label:'⬇️ Speichern',cls:'btn-gold',fn:()=>cgSaveCommunityMap(m)}]})));
+            } catch(e) { if(note) note.textContent='Community-Maps sind nur auf der Netlify-Webseite verfügbar.'; }
+        }
+        function cgSaveCommunityMap(m){
+            const maps=getSavedWorkshopMaps(); const copy=JSON.parse(JSON.stringify(m)); copy.id='map-'+Date.now(); copy.name=String(m.name).slice(0,32);
+            maps.unshift(copy); try { localStorage.setItem('cgSavedWorkshopMaps',JSON.stringify(maps.slice(0,100))); } catch(e) {}
+            showToast('Map gespeichert'); renderWorkshopMaps(); showSavedMaps();
+        }
+        async function uploadWorkshopMap(){
+            if(!saveWorkshopMap()) return;
+            let tok=null; try { tok=localStorage.getItem('cgTwTok'); } catch(e) {}
+            if(!tok){ mapEditorMsg('Gespeichert. Zum Veröffentlichen melde dich in den Einstellungen mit Twitch an.'); return; }
+            if(!/^https?:/.test(location.protocol)){ mapEditorMsg('Gespeichert. Veröffentlichen geht nur auf der Netlify-Webseite.'); return; }
+            try {
+                const r=await fetch(CG_WS_API,{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify({action:'publishMap',map:mapEditorData})});
+                const d=await r.json();
+                if(d.ok){ mapEditorMsg('🌍 Veröffentlicht! Alle Spieler sehen die Map jetzt im Workshop.'); showToast('Map veröffentlicht'); }
+                else mapEditorMsg(d.error||'Veröffentlichen fehlgeschlagen.');
+            } catch(e) { mapEditorMsg('Server nicht erreichbar. Die Map ist lokal gespeichert.'); }
+        }
+        // ---- Level-Ablauf: Workshop-Maps nacheinander, danach zufällige Level ----
+        function cgMapToLevel(m){
+            const cx=x=>(x-450)/10, cz=y=>(y-270)/10;
+            const nTypes=(typeof OBSTACLE_TYPES!=='undefined'&&OBSTACLE_TYPES.length)||1;
+            const obs=(m.assets||[]).map((a,i)=>{ const s=(a.size||22)/8; return [cx(a.x),cz(a.y),s,s,a.moving?0.3:0,(i*7+3)%nTypes]; });
+            const hills=(m.hills||[]).map(h=>({x:cx(h.x),z:cz(h.y),r:(h.r/10)*2.2,h:0.7}));
+            return { par:Math.max(1,Math.min(9,parseInt(m.par,10)||3)), start:{x:cx(m.start.x),z:cz(m.start.y)}, hole:{x:cx(m.hole.x),z:cz(m.hole.y)}, obs, coinPos:[], hills, customMapId:m.id, customName:m.name };
+        }
+        function cgRandomLevel(){
+            const backup=levels.slice(); let pick;
+            try { generateLevelsRaw(Math.floor(Math.random()*2147483647)); pick=levels[Math.floor(Math.random()*levels.length)]; }
+            finally { levels.length=0; backup.forEach(l=>levels.push(l)); }
+            const c=JSON.parse(JSON.stringify(pick));
+            c.obs=c.obs.filter(o=>![c.start,c.hole].some(pt=>Math.abs(o[0]-pt.x)<o[2]/2+3&&Math.abs(o[1]-pt.z)<(o[4]>0?10:0)+o[3]/2+3));
+            c.customName='Zufälliges Level'; c.randomLevel=true; return c;
+        }
+        function cgPlaySessionLevel(){
+            let lvl;
+            if(spSession.mode!=='random' && spSession.pos<spSession.queue.length){ lvl=cgMapToLevel(spSession.queue[spSession.pos]); }
+            else { spSession.mode='random'; lvl=cgRandomLevel(); }
+            spSession.current=lvl; initLevel(lvl);
+            showToast((lvl.randomLevel?'🎲 ':'🗺️ ')+lvl.customName);
+        }
+        function cgStartSession(mode,queue,pos){ AudioEngine.init(); MusicEngine.init(); spSession={mode,queue:queue||[],pos:pos||0,current:null}; cgPlaySessionLevel(); }
+        function startRandomSingleplayer(){ cgStartSession('random',[],0); }
+        function startAllWorkshopMaps(){ const maps=getSavedWorkshopMaps(); if(!maps.length){ showToast('Noch keine Maps – baue zuerst eine im Workshop.'); return; } cgStartSession('workshop',maps,0); }
+        function testWorkshopMap(){ if(!saveWorkshopMap()) return; const m=getSavedWorkshopMaps().find(x=>x.id===mapEditorData.id); if(m) cgStartSession('test',[m],0); }
+        function playWorkshopMap(m){ cgStartSession('workshop',[m],0); }
+        function cgSessionRestart(){ if(spSession&&spSession.current) initLevel(spSession.current); else initLevel(Math.max(0,currentLevelIdx)); }
+        function cgSessionLevelDone(){
+            const s=spSession; AudioEngine.success();
+            if(s.mode==='test'){ showToast('✅ Test geschafft!'); spSession=null; endGameAndReturnToMain(); showMenu('workshop'); toggleWorkshopMapEditor(true); return; }
+            if(s.current&&s.current.randomLevel){ savePath.coins+=20; savePath.totalCoins+=20; showRewardPopup('+20 🪙'); saveProgress(); updateUI(); }
+            else showToast('✅ Geschafft in '+strokes+' Schlägen');
+            if(s.mode==='workshop') s.pos++;
+            cgPlaySessionLevel();
+        }
+        function cgLevelLabel(){ return (spSession&&activeLevelRef&&activeLevelRef.customName)?activeLevelRef.customName:('Level '+(currentLevelIdx+1)); }
+        function cgCurrentPar(){ const l=spSession?activeLevelRef:levels[currentLevelIdx]; return l?l.par:'-'; }
 
-        function startRandomSingleplayer(){ AudioEngine.init(); MusicEngine.init(); const seed=Math.floor(Math.random()*2147483647); const tmp=[]; generateLevelsRaw(seed); const picked=levels[Math.floor(Math.random()*levels.length)]; const copy=JSON.parse(JSON.stringify(picked)); generateLevels(); initLevel(copy); showToast('Zufällige Karte gestartet'); }
 
         function renderLevelGrid() {
             const grid = document.getElementById('levelGrid');
@@ -4948,7 +5149,7 @@
                         starStr += `<span style="color:${s <= starsEarned ? '#ffd700' : 'rgba(255,255,255,0.25)'}">★</span>`;
                     }
                     info.innerHTML = `
-                        <div style="font-size:1.1rem; color:#ffcc80; font-weight:bold; margin-bottom:6px;">Level ${currentLevelIdx + 1} &nbsp;·&nbsp; Par ${levels[currentLevelIdx] ? levels[currentLevelIdx].par : '-'}</div>
+                        <div style="font-size:1.1rem; color:#ffcc80; font-weight:bold; margin-bottom:6px;">${cgLevelLabel()} &nbsp;·&nbsp; Par ${cgCurrentPar()}</div>
                         <div style="display:flex; gap:20px; justify-content:center;">
                             <span>🏌️ <b>${strokes}</b>/15 Schläge</span>
                             <span style="color:#ffd700;">${starStr}</span>
@@ -5501,7 +5702,7 @@
                 // Regelprüfung: Maximal 15 Schläge (nicht in Open World)
                 if (cgStrokeLimit() !== Infinity && strokes >= cgStrokeLimit() && !ballPhys.moving) {
                     showToast(T('tooManyStrokes'));
-                    initLevel(currentLevelIdx);
+                    cgSessionRestart();
                 }
             }
 
@@ -5595,7 +5796,7 @@
                         // Regelprüfung: Reset erst, wenn der 15. Schlag ausgeführt wurde und der Ball ruhig liegt
                         if (cgStrokeLimit() !== Infinity && strokes >= cgStrokeLimit()) {
                             showToast(T('tooManyStrokes'));
-                            initLevel(currentLevelIdx);
+                            cgSessionRestart();
                         }
                     }
                 }
@@ -6812,6 +7013,7 @@
 
         // Zentrale Funktion zum Beenden des Spiels und Aufräumen der Szene
         function endGameAndReturnToMain() {
+            spSession = null;
             // Alle Spielobjekte aus der Drei-JS-Szene entfernen
             if (ballMesh) scene.remove(ballMesh);
             if (holeMesh) scene.remove(holeMesh);
@@ -6982,7 +7184,6 @@
             wsShowTab(wsTab);
             renderWorkshopMaps();
         }
-        function renderWorkshopMaps(){const box=document.getElementById('ws-saved-maps');if(!box)return;const maps=getSavedWorkshopMaps();box.innerHTML='';if(!maps.length){box.innerHTML='<p style="grid-column:1/-1;color:#efebe9;text-align:center">Noch keine Workshop-Maps. Erstelle deine erste Karte kostenlos.</p>';return;}maps.forEach(m=>{const card=document.createElement('div');card.style.cssText='display:flex;flex-direction:column;gap:7px;min-width:0';const b=document.createElement('button');b.className='btn';b.style.cssText='min-width:0;background:rgba(255,204,128,.2);color:#fff3e0;';b.textContent='🗺️ '+m.name;b.onclick=()=>playWorkshopMap(m);const del=document.createElement('button');del.className='btn btn-red';del.textContent='🗑️ Löschen';del.onclick=()=>deleteWorkshopMap(m.id);card.append(b,del);box.appendChild(card);});}
         function wsShowTab(tab) {
             wsTab = tab;
             ['browse', 'create', 'mine'].forEach(k => {
@@ -7203,6 +7404,7 @@
                     if (id === 'multiplayer') renderAccountGate();
                     if (id === 'settings') renderAccountUI();
                     if (id === 'workshop') renderWorkshop();
+                    if (id === 'singleplayer') showSavedMaps();
                 } catch (e) {}
             };
         })();
@@ -8112,6 +8314,7 @@
         }
 
         function nextLevel() {
+            if (spSession && !mpState.hasJoinedMultiplayer && currentLevelIdx === -1 && gameState !== 'openworld') { cgSessionLevelDone(); return; }
             // Sterne und Punkte berechnen
             const coinsCollected = levelCoins.filter(c => !c.visible).length;
             let earnedStars = 1;
@@ -8384,7 +8587,7 @@
         // ===== Schlag-Limit (Einzelspieler) und 3-Minuten-Zeit pro Level (Online) =====
         function cgStrokeLimit() {
             if (mpState.hasJoinedMultiplayer || gameState === 'openworld') return Infinity;
-            const l = levels[currentLevelIdx];
+            const l = spSession ? activeLevelRef : levels[currentLevelIdx];
             return l ? Math.min(15, l.par + 6) : Infinity;
         }
         const CG_LEVEL_TIME_MS = 180000, CG_TIME_PENALTY = 5;

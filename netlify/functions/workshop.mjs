@@ -18,7 +18,9 @@ async function identity(req) {
 }
 
 async function readDB() {
-  return (await store().get('state', { type: 'json' })) || { items: [], purchases: [], refunds: [], earnings: {} };
+  const db = (await store().get('state', { type: 'json' })) || { items: [], purchases: [], refunds: [], earnings: {} };
+  if (!Array.isArray(db.maps)) db.maps = [];
+  return db;
 }
 async function writeDB(db) { await store().setJSON('state', db); }
 function cleanItem(x, user) {
@@ -33,13 +35,32 @@ function cleanItem(x, user) {
     sales: 0, created: Date.now() };
 }
 
+function cleanMap(x, user) {
+  if (!x || typeof x !== 'object') return null;
+  const name = String(x.name || '').replace(/[<>"'`\\]/g, '').replace(/\s+/g, ' ').trim().slice(0, 32);
+  if (name.length < 2) return null;
+  const n = (v, lo, hi, def) => { const f = Number(v); return Number.isFinite(f) ? Math.max(lo, Math.min(hi, f)) : def; };
+  const pt = (p, dx, dy) => ({ x: n(p && p.x, 30, 870, dx), y: n(p && p.y, 30, 510, dy) });
+  const start = pt(x.start, 90, 270), hole = pt(x.hole, 810, 270);
+  if (Math.hypot(start.x - hole.x, start.y - hole.y) < 150) return null;
+  const types = ['tree', 'rock', 'crate', 'moving'];
+  const assets = (Array.isArray(x.assets) ? x.assets : []).slice(0, 40)
+    .filter(a => a && types.includes(a.type))
+    .map(a => ({ type: a.type, x: n(a.x, 30, 870, 450), y: n(a.y, 30, 510, 270), moving: a.type === 'moving', size: n(a.size, 10, 40, 22) }))
+    .filter(a => Math.hypot(a.x - start.x, a.y - start.y) >= 48 && Math.hypot(a.x - hole.x, a.y - hole.y) >= 55);
+  const hills = (Array.isArray(x.hills) ? x.hills : []).slice(0, 3)
+    .map(h => ({ x: n(h && h.x, 30, 870, 450), y: n(h && h.y, 30, 510, 270), r: n(h && h.r, 20, 70, 45) }));
+  return { id: 'map-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name, par: Math.round(n(x.par, 1, 9, 3)),
+    start, hole, assets, hills, creatorId: user.id, creatorName: user.name, created: Date.now() };
+}
+
 export default async (req) => {
   if (req.method === 'OPTIONS') return new Response('', { status: 204, headers: { 'access-control-allow-origin': '*', 'access-control-allow-methods': 'GET,POST,DELETE,OPTIONS', 'access-control-allow-headers': 'content-type,authorization' } });
   const user = await identity(req);
   const url = new URL(req.url);
   if (req.method === 'GET') {
     const db = await readDB();
-    return json({ ok: true, items: db.items, myPurchases: user ? db.purchases.filter(p => p.buyerId === user.id) : [], myRefunds: user ? db.refunds.filter(r => r.buyerId === user.id) : [] });
+    return json({ ok: true, items: db.items, maps: db.maps.map(({ creatorId, ...m }) => m), myPurchases: user ? db.purchases.filter(p => p.buyerId === user.id) : [], myRefunds: user ? db.refunds.filter(r => r.buyerId === user.id) : [] });
   }
   if (!user) return fail('Bitte mit Twitch anmelden; Anmeldung konnte nicht geprüft werden.', 401);
   let body;
@@ -50,6 +71,20 @@ export default async (req) => {
     if (!item) return fail('Workshop-Item ist ungültig.');
     if (db.items.some(i => i.id === item.id)) return fail('Diese Item-ID existiert bereits.', 409);
     db.items.unshift(item); await writeDB(db); return json({ ok: true, item });
+  }
+  if (body.action === 'publishMap') {
+    const map = cleanMap(body.map, user);
+    if (!map) return fail('Map ist ungültig (Name, Start/Loch-Abstand oder Objekte prüfen).');
+    if (db.maps.filter(m => m.creatorId === user.id).length >= 20) return fail('Du kannst höchstens 20 Maps veröffentlichen. Lösche zuerst eine alte.', 429);
+    if (db.maps.length >= 500) return fail('Der Workshop ist voll.', 507);
+    db.maps.unshift(map); await writeDB(db);
+    const { creatorId, ...pub } = map; return json({ ok: true, map: pub });
+  }
+  if (body.action === 'deleteMap') {
+    const m = db.maps.find(i => i.id === String(body.mapId || ''));
+    if (!m) return fail('Map nicht gefunden.', 404);
+    if (m.creatorId !== user.id) return fail('Nur der Ersteller darf diese Map löschen.', 403);
+    db.maps = db.maps.filter(i => i.id !== m.id); await writeDB(db); return json({ ok: true });
   }
   if (body.action === 'purchase') {
     const item = db.items.find(i => i.id === String(body.itemId));

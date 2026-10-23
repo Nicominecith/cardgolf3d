@@ -1,0 +1,15 @@
+{
+  "name": "CardGolf 3D",
+  "short_name": "CardGolf",
+  "description": "Mini-Golf im Karton-Look – Kampagne, Zufallslevel, Workshop und Online-Multiplayer.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone"],
+  "orientation": "any",
+  "background_color": "#2b1914",
+  "theme_color": "#2b1914",
+  "icons": [
+    { "src": "applogo.png", "sizes": "any", "type": "image/png", "purpose": "any" }
+  ]
+}

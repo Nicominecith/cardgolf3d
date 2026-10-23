@@ -17,3 +17,10 @@ Der bestehende CardGolf3D-Spielstand und die erspielten Münzen liegen im Browse
 
 ## Nächster notwendiger Schritt
 Die Münzlogik (Münzen verdienen, ausgeben, Workshop kaufen, Ersteller-Einnahmen abholen) muss auf eine zentrale Wallet mit atomaren Buchungen umgestellt werden. Für parallele Käufe/Löschungen sollte dafür eine transaktionsfähige Datenbank verwendet werden; Netlify Blobs allein ist keine sichere Transaktions-Wallet.
+
+## Neu: Workshop-Maps
+- Eigene Maps werden im Browser gespeichert (Workshop → „Neue Map bauen“) und sind unter **Level** spielbar.
+- „Veröffentlichen“ (Twitch-Login nötig) sendet die Map an `/.netlify/functions/workshop` (`publishMap`, max. 20 pro Spieler, Eingaben werden serverseitig geprüft). Alle Spieler sehen sie unter „Community-Maps“.
+- Löschen eigener Maps: `deleteMap` (nur Ersteller).
+- Ablauf im Spiel: Workshop-Map → nächste Workshop-Map → danach endlos zufällige Level.
+- `netlify.toml` setzt Cache-Header, blockiert `main.js`/`package.json` im Web und liefert eine PWA-Datei (`manifest.webmanifest`).
