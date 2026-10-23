@@ -655,6 +655,209 @@
             .level-btn.unlocked:hover { transform: none; background: rgba(141,110,99,0.7); box-shadow: 0 3px 8px rgba(0,0,0,0.3); }
             .level-btn.unlocked:active { transform: scale(1.1); background: rgba(46,204,113,0.85); }
         }
+
+        /* ===== Serverliste / Warteraum ===== */
+        #mp-tab-host, #mp-tab-list, #mp-tab-join { flex: 1 1 0; min-width: 0; margin: 0 !important; padding: 11px 6px !important; font-size: 0.82rem !important; letter-spacing: 0.6px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tab-ico { margin-right: 2px; }
+        #mp-setup-ui > .btn { margin-left: 0 !important; margin-right: 0 !important; width: 100%; box-sizing: border-box; }
+        .vis-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; }
+        .vis-chip { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 10px 6px; min-height: 68px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.12); background: rgba(0,0,0,0.25); color: #d7ccc8; font-family: inherit; cursor: pointer; transition: transform .15s, border-color .15s, background .15s; -webkit-tap-highlight-color: transparent; }
+        .vis-chip .vc-ico { font-size: 1.35rem; line-height: 1; }
+        .vis-chip b { font-size: 0.76rem; letter-spacing: 0.5px; text-transform: uppercase; }
+        .vis-chip small { font-size: 0.62rem; opacity: 0.75; line-height: 1.2; text-align: center; }
+        .vis-chip:active { transform: scale(0.96); }
+        .vis-chip.active { border-color: #ffd54f; background: linear-gradient(160deg, rgba(255,213,79,0.22), rgba(255,213,79,0.07)); color: #fff8e1; box-shadow: 0 4px 14px rgba(255,213,79,0.18); }
+        .vis-chip[data-vis="followers"].active { border-color: #b39ddb; background: linear-gradient(160deg, rgba(145,70,255,0.28), rgba(145,70,255,0.08)); box-shadow: 0 4px 14px rgba(145,70,255,0.22); }
+        .vis-note { font-size: 0.74rem; color: #bcaaa4; text-align: center; line-height: 1.4; min-height: 2.2em; }
+        .vis-note.warn { color: #ffcc80; }
+        .max-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 8px 12px; }
+        .max-row .mr-label { color: #ffcc80; font-size: 0.72rem; letter-spacing: 2px; font-weight: bold; text-transform: uppercase; }
+        .max-step { display: flex; align-items: center; gap: 10px; }
+        .max-step button { width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.08); color: #fbe9e7; font-size: 1.3rem; font-weight: 800; cursor: pointer; font-family: inherit; -webkit-tap-highlight-color: transparent; }
+        .max-step button:active { transform: scale(0.92); background: rgba(255,255,255,0.16); }
+        .max-step .ms-val { min-width: 2ch; text-align: center; font-size: 1.6rem; font-weight: 900; color: #ffd54f; font-variant-numeric: tabular-nums; }
+
+        #mp-list-panel { display: none; flex-direction: column; gap: 10px; }
+        .sl-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+        .sl-head > span { color: #ffcc80; font-size: 0.72rem; letter-spacing: 2px; font-weight: bold; text-transform: uppercase; }
+        .sl-refresh { width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.08); color: #fbe9e7; font-size: 1.15rem; cursor: pointer; font-family: inherit; -webkit-tap-highlight-color: transparent; }
+        .sl-refresh:active { transform: rotate(180deg) scale(0.92); }
+        .sl-list { display: flex; flex-direction: column; gap: 8px; max-height: min(44vh, 340px); overflow-y: auto; scrollbar-width: thin; scrollbar-color: #8d6e63 transparent; -webkit-overflow-scrolling: touch; }
+        .sl-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); }
+        .sl-item.followers { border-color: rgba(145,70,255,0.45); background: linear-gradient(160deg, rgba(145,70,255,0.15), rgba(0,0,0,0.25)); }
+        .sl-main { flex: 1; min-width: 0; }
+        .sl-name { color: #fbe9e7; font-weight: 700; font-size: 0.92rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .sl-sub { display: flex; align-items: center; gap: 8px; margin-top: 4px; font-size: 0.7rem; color: #bcaaa4; flex-wrap: wrap; }
+        .sl-badge { padding: 2px 8px; border-radius: 999px; font-size: 0.62rem; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; background: rgba(102,187,106,0.22); color: #a5d6a7; }
+        .sl-badge.f { background: rgba(145,70,255,0.28); color: #d1b8ff; }
+        .sl-count { font-weight: 800; color: #ffd54f; font-size: 0.95rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .sl-count.full { color: #ef9a9a; }
+        .sl-join { flex-shrink: 0; padding: 10px 14px; min-height: 44px; border: 0; border-radius: 12px; background: linear-gradient(145deg,#80deea,#26c6da); color: #004d40; font-weight: 800; font-size: 0.85rem; font-family: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        .sl-item.followers .sl-join { background: linear-gradient(145deg,#b39ddb,#9146ff); color: #fff; }
+        .sl-join:active { transform: scale(0.95); }
+        .sl-join:disabled { opacity: 0.45; cursor: not-allowed; filter: grayscale(0.5); }
+        .sl-msg { text-align: center; color: #bcaaa4; padding: 20px 8px; font-size: 0.85rem; line-height: 1.5; }
+        .sl-msg b { color: #ffcc80; display: block; margin-bottom: 4px; font-size: 0.95rem; }
+
+        #lobby-overlay { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(60px + env(safe-area-inset-bottom, 0px)); z-index: 700; display: none; flex-direction: column; gap: 10px; width: min(560px, 94vw); box-sizing: border-box; padding: 14px 16px; border-radius: 18px; background: linear-gradient(160deg, rgba(40,28,20,0.94), rgba(20,14,10,0.94)); border: 2px solid rgba(255,204,128,0.25); box-shadow: 0 10px 35px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06); color: #fbe9e7; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+        #lobby-overlay .lo-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        #lobby-overlay .lo-title { font-weight: 900; letter-spacing: 1.5px; font-size: 1.05rem; color: #ffd54f; text-transform: uppercase; text-shadow: 0 2px 6px rgba(0,0,0,0.4); }
+        #lobby-overlay .lo-right { display: flex; align-items: center; gap: 8px; }
+        #lobby-overlay .lo-count { font-weight: 800; font-variant-numeric: tabular-nums; background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 999px; font-size: 0.85rem; }
+        #lobby-overlay .lo-fold { width: 34px; height: 30px; border-radius: 9px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.07); color: #fbe9e7; cursor: pointer; font-size: 0.8rem; font-family: inherit; }
+        #lobby-overlay .lo-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 0.72rem; }
+        #lobby-overlay .lo-chip { padding: 3px 10px; border-radius: 999px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: #efebe9; font-weight: 700; letter-spacing: 0.4px; }
+        #lobby-overlay .lo-chip.f { background: rgba(145,70,255,0.25); border-color: rgba(145,70,255,0.5); color: #e1d4ff; }
+        #lobby-overlay .lo-chip.code { font-family: ui-monospace, Menlo, Consolas, monospace; letter-spacing: 3px; color: #ffd54f; cursor: pointer; }
+        #lobby-overlay .lo-players { display: flex; flex-wrap: wrap; gap: 6px; max-height: 88px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #8d6e63 transparent; }
+        #lobby-overlay .lo-p { display: flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; background: rgba(0,0,0,0.28); border: 1px solid rgba(255,255,255,0.08); font-size: 0.78rem; font-weight: 600; max-width: 100%; box-sizing: border-box; }
+        #lobby-overlay .lo-p.me { border-color: rgba(255,204,128,0.5); background: rgba(255,204,128,0.12); }
+        #lobby-overlay .lo-p i { width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.4); flex-shrink: 0; }
+        #lobby-overlay .lo-p span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 120px; }
+        #lobby-overlay .lo-actions { display: flex; gap: 8px; }
+        #lobby-overlay .lo-actions .btn { margin: 0; padding: 12px 14px; font-size: 0.88rem; letter-spacing: 0.5px; flex: 1; min-height: 46px; }
+        #lobby-overlay .lo-actions .btn.lo-start { flex: 1.6; background: linear-gradient(145deg,#a5d6a7,#66bb6a); color: #1b5e20; }
+        #lobby-overlay .lo-actions .btn.lo-start:disabled { opacity: 0.5; filter: grayscale(0.4); cursor: not-allowed; }
+        #lobby-overlay .lo-hint { text-align: center; font-size: 0.72rem; color: #bcaaa4; line-height: 1.35; }
+        #lobby-overlay.collapsed .lo-players, #lobby-overlay.collapsed .lo-hint { display: none; }
+
+        /* PC / große Bildschirme */
+        @media (min-width: 1100px) {
+            #lobby-overlay { bottom: 18px; width: 600px; padding: 16px 20px; }
+            #lobby-overlay .lo-title { font-size: 1.15rem; }
+            .sl-list { max-height: min(46vh, 380px); }
+        }
+        @media (min-width: 700px) {
+            #mp-setup-ui { width: min(520px, 92vw) !important; }
+        }
+        /* Tablet */
+        @media (min-width: 601px) and (max-width: 1099px) {
+            .vis-chip { min-height: 78px; }
+            .vis-chip b { font-size: 0.82rem; }
+            .vis-chip small { font-size: 0.68rem; }
+            .sl-item { padding: 12px 14px; }
+            .sl-name { font-size: 1rem; }
+            #lobby-overlay { width: min(620px, 92vw); padding: 16px 18px; }
+            #lobby-overlay .lo-actions .btn { min-height: 52px; font-size: 0.95rem; }
+        }
+        /* Handy */
+        @media (max-width: 600px) {
+            .tab-ico { display: none; }
+            .vis-grid { gap: 6px; }
+            .vis-chip { padding: 8px 4px; min-height: 64px; }
+            .vis-chip b { font-size: 0.68rem; letter-spacing: 0.2px; }
+            .vis-chip small { font-size: 0.58rem; }
+            .max-row { padding: 6px 10px; }
+            .sl-item { padding: 9px 10px; gap: 8px; }
+            .sl-name { font-size: 0.85rem; }
+            .sl-join { padding: 9px 10px; font-size: 0.78rem; }
+            #mp-tab-host, #mp-tab-list, #mp-tab-join { padding: 10px 2px !important; font-size: 0.74rem !important; letter-spacing: 0.2px !important; }
+            #lobby-overlay { width: 96vw; padding: 10px 12px; gap: 8px; border-radius: 16px; }
+            #lobby-overlay .lo-title { font-size: 0.95rem; }
+            #lobby-overlay .lo-p span { max-width: 84px; }
+            #lobby-overlay .lo-actions .btn { padding: 10px 8px; font-size: 0.82rem; }
+        }
+        /* Handy quer / sehr niedrige Fenster */
+        @media (max-height: 480px) and (orientation: landscape) {
+            .sl-list { max-height: 36vh; }
+            #lobby-overlay { width: min(520px, 72vw); bottom: calc(10px + env(safe-area-inset-bottom, 0px)); padding: 8px 12px; gap: 6px; }
+            #lobby-overlay .lo-players, #lobby-overlay .lo-hint { display: none; }
+            #lobby-overlay .lo-actions .btn { min-height: 40px; padding: 8px 10px; }
+            .vis-chip { min-height: 54px; }
+            .vis-chip small { display: none; }
+        }
+
+        /* ===== Account / Workshop / Tutorial / Kick ===== */
+        .ac-status { padding: 10px 14px; border-radius: 10px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); color: #ffcc80; font-weight: 700; font-size: 0.9rem; text-align: center; }
+        .ac-status.ok { color: #a5d6a7; border-color: rgba(102,187,106,0.4); }
+        .ac-note { color: #bcaaa4; font-size: 0.74rem; line-height: 1.45; margin: 10px 0 0 0; text-align: center; }
+        .ac-lock { display: none; flex-direction: column; align-items: center; gap: 10px; text-align: center; padding: 22px 16px; border-radius: 14px; background: rgba(145,70,255,0.12); border: 1px solid rgba(145,70,255,0.4); color: #e1d4ff; }
+        .ac-lock .ac-ico { font-size: 2.2rem; }
+        .ac-lock b { color: #fbe9e7; font-size: 1.05rem; letter-spacing: 0.5px; }
+        .ac-lock p { margin: 0; font-size: 0.85rem; line-height: 1.5; color: #d7ccc8; }
+        .ac-lock .ac-go { width: 100%; margin: 6px 0 0 0; background: linear-gradient(145deg,#b39ddb,#9146ff); color: #fff; box-sizing: border-box; }
+        #mp-setup-ui.mp-gated > *:not(#t-mp-title):not(#t-mp-info):not(#btn-mp-leave):not(#mp-account-lock) { display: none !important; }
+        #mp-setup-ui.mp-gated #mp-account-lock { display: flex !important; margin-bottom: 14px; }
+
+        #lobby-overlay .lo-p .lo-kick { margin-left: 2px; width: 24px; height: 24px; border-radius: 50%; border: 0; background: rgba(239,83,80,0.85); color: #fff; font-size: 0.75rem; font-weight: 800; cursor: pointer; line-height: 1; padding: 0; flex-shrink: 0; -webkit-tap-highlight-color: transparent; }
+        #lobby-overlay .lo-p .lo-kick:active { transform: scale(0.88); }
+        @media (pointer: coarse) { #lobby-overlay .lo-p .lo-kick { width: 30px; height: 30px; font-size: 0.9rem; } }
+
+        .ws-wrap { width: min(760px, 94vw); box-sizing: border-box; background: rgba(0,0,0,0.18); border: 2px solid rgba(255,204,128,0.2); border-radius: 18px; padding: 18px; box-shadow: 0 10px 35px rgba(0,0,0,0.45); }
+        .ws-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+        .ws-coinbox { padding: 6px 14px; border-radius: 999px; background: rgba(0,0,0,0.3); color: #ffd54f; font-size: 1.05rem; }
+        .ws-note { flex: 1 1 240px; font-size: 0.72rem; color: #ffcc80; line-height: 1.4; text-align: right; }
+        .ws-tabs { display: flex; gap: 8px; }
+        .ws-tab { flex: 1 1 0; min-width: 0; padding: 12px 6px; min-height: 46px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.14); background: rgba(141,110,99,0.4); color: #fbe9e7; font-family: inherit; font-weight: 800; font-size: 0.85rem; letter-spacing: 0.5px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        .ws-tab.active { background: linear-gradient(145deg,#ffe082,#ffd54f); color: #3e2723; }
+        .ws-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+        .ws-chip { padding: 8px 16px; min-height: 40px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.25); color: #d7ccc8; font-family: inherit; font-weight: 700; font-size: 0.82rem; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        .ws-chip.active { background: rgba(255,213,79,0.2); border-color: #ffd54f; color: #fff8e1; }
+        .ws-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; max-height: 52vh; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #8d6e63 transparent; -webkit-overflow-scrolling: touch; }
+        .ws-card { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 10px; border-radius: 14px; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); min-width: 0; }
+        .ws-prev { width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; }
+        .ws-ball { width: 46px; height: 46px; border-radius: 50%; }
+        .ws-name { color: #fbe9e7; font-weight: 800; font-size: 0.9rem; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .ws-by { color: #bcaaa4; font-size: 0.68rem; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .ws-buy { margin-top: 4px; width: 100%; min-height: 40px; padding: 8px 6px; border: 0; border-radius: 10px; background: linear-gradient(145deg,#a5d6a7,#66bb6a); color: #1b5e20; font-weight: 800; font-size: 0.8rem; font-family: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        .ws-buy:active { transform: scale(0.95); }
+        .ws-buy:disabled { background: rgba(255,255,255,0.1); color: #bcaaa4; cursor: default; }
+        .ws-create { display: flex; gap: 16px; align-items: stretch; }
+        .ws-preview { flex: 0 0 140px; display: flex; align-items: center; justify-content: center; border-radius: 14px; background: rgba(0,0,0,0.28); border: 1px dashed rgba(255,204,128,0.35); }
+        .ws-preview .ws-prev { width: 110px; height: 110px; }
+        .ws-preview .ws-ball { width: 84px; height: 84px; }
+        .ws-form { flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+        .ws-lbl { color: #ffcc80; font-size: 0.7rem; letter-spacing: 2px; font-weight: bold; text-transform: uppercase; margin-top: 4px; }
+        .ws-input { background: rgba(0,0,0,0.3); border: 2px solid rgba(255,255,255,0.12); color: #fff; padding: 10px 12px; border-radius: 10px; font-size: 1rem; outline: none; font-family: inherit; width: 100%; box-sizing: border-box; }
+        .ws-color { width: 100%; height: 44px; border: 2px solid rgba(255,255,255,0.15); border-radius: 10px; background: rgba(0,0,0,0.3); padding: 3px; cursor: pointer; box-sizing: border-box; }
+        .ws-fx { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 6px; }
+        .ws-check { color: #efebe9; font-size: 0.88rem; display: flex; align-items: center; gap: 6px; cursor: pointer; min-height: 36px; }
+        .ws-check input { width: 20px; height: 20px; }
+        .ws-cost { text-align: center; color: #ffd54f; font-weight: 700; font-size: 0.88rem; background: rgba(0,0,0,0.25); border-radius: 10px; padding: 8px; }
+        .ws-publish { width: 100%; margin: 0 !important; box-sizing: border-box; background: linear-gradient(145deg,#a5d6a7,#66bb6a); color: #1b5e20; }
+        .ws-earn { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 14px; border-radius: 12px; background: rgba(0,0,0,0.25); color: #ffd54f; font-weight: 700; margin-bottom: 10px; flex-wrap: wrap; }
+        .ws-earn .ws-buy { width: auto; margin: 0; padding: 8px 16px; }
+
+        #play-tutorial { position: fixed; inset: 0; z-index: 3000; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.72); padding: 14px; box-sizing: border-box; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+        #play-tutorial .pt-card { width: min(520px, 100%); max-height: 100%; overflow-y: auto; box-sizing: border-box; background: linear-gradient(160deg,#4e342e,#2b1b17); border: 2px solid rgba(255,204,128,0.28); border-radius: 20px; padding: 20px; color: #fbe9e7; box-shadow: 0 14px 45px rgba(0,0,0,0.6); display: flex; flex-direction: column; gap: 14px; }
+        #play-tutorial .pt-title { font-weight: 900; letter-spacing: 2px; font-size: 1.15rem; color: #ffd54f; text-align: center; text-transform: uppercase; }
+        #play-tutorial .pt-tabs { display: flex; gap: 6px; }
+        #play-tutorial .pt-tab { flex: 1 1 0; min-height: 42px; padding: 8px 4px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.14); background: rgba(0,0,0,0.25); color: #d7ccc8; font-family: inherit; font-weight: 700; font-size: 0.82rem; cursor: pointer; }
+        #play-tutorial .pt-tab.active { background: rgba(255,213,79,0.2); border-color: #ffd54f; color: #fff8e1; }
+        #play-tutorial .pt-body { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; padding: 14px 8px; border-radius: 14px; background: rgba(0,0,0,0.25); min-height: 170px; justify-content: center; }
+        #play-tutorial .pt-ico { font-size: 3rem; line-height: 1; }
+        #play-tutorial .pt-step { color: #ffcc80; font-weight: 800; letter-spacing: 1px; font-size: 0.9rem; text-transform: uppercase; }
+        #play-tutorial .pt-text { margin: 0; font-size: 0.98rem; line-height: 1.55; color: #efebe9; }
+        #play-tutorial .pt-dots { display: flex; justify-content: center; gap: 8px; }
+        #play-tutorial .pt-dots i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,0.22); }
+        #play-tutorial .pt-dots i.on { background: #ffd54f; }
+        #play-tutorial .pt-actions { display: flex; gap: 8px; align-items: center; }
+        #play-tutorial .pt-actions button { min-height: 48px; border: 0; border-radius: 12px; font-family: inherit; font-weight: 800; font-size: 0.92rem; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        #play-tutorial .pt-skip { background: transparent; color: #bcaaa4; padding: 0 8px; font-size: 0.8rem !important; font-weight: 600 !important; }
+        #play-tutorial .pt-back { flex: 1; background: rgba(255,255,255,0.1); color: #fbe9e7; }
+        #play-tutorial .pt-next { flex: 2; background: linear-gradient(145deg,#a5d6a7,#66bb6a); color: #1b5e20; }
+
+        @media (max-width: 600px) {
+            .ws-wrap { padding: 12px; border-radius: 16px; }
+            .ws-grid { grid-template-columns: repeat(2, 1fr); max-height: 50vh; }
+            .ws-tab { font-size: 0.74rem; padding: 10px 2px; }
+            .ws-create { flex-direction: column; }
+            .ws-preview { flex: 0 0 auto; padding: 10px; }
+            .ws-note { text-align: left; }
+            #play-tutorial .pt-card { padding: 16px; gap: 12px; }
+            #play-tutorial .pt-text { font-size: 0.92rem; }
+            #play-tutorial .pt-ico { font-size: 2.4rem; }
+        }
+        @media (min-width: 601px) and (max-width: 1099px) {
+            .ws-grid { grid-template-columns: repeat(3, 1fr); }
+            #play-tutorial .pt-card { width: min(580px, 100%); padding: 24px; }
+            #play-tutorial .pt-text { font-size: 1.05rem; }
+        }
+        @media (max-height: 480px) and (orientation: landscape) {
+            .ws-grid { max-height: 38vh; }
+            #play-tutorial .pt-body { min-height: 0; padding: 8px; }
+            #play-tutorial .pt-ico { font-size: 1.8rem; }
+        }
     </style>
 </head>
 <body>
@@ -954,6 +1157,7 @@
 
             <div id="main-menu-rest" style="display: flex; flex-direction: column; align-items: center; position:relative; z-index:215; transition: opacity 0.4s ease;">
                 <button class="btn" id="btn-shop-nav" style="width: 250px;" onclick="showMenu('shop')">Shop (Skins)</button>
+                <button class="btn" id="btn-workshop-nav" style="width: 250px; background: linear-gradient(145deg,#ffcc80,#ffa726); color: #3e2723;" onclick="showMenu('workshop')">🛠️ <span data-lb="wsTitle">Workshop</span></button>
                 <button class="btn" id="btn-achievements-nav" style="width: 250px; background: linear-gradient(145deg,#ffe082,#ffd54f); color: #3e2723;" onclick="showMenu('achievements')">🏅 <span id="t-achievements-nav">Achievements</span></button>
                 <button class="btn" id="btn-settings-nav" style="width: 250px;" onclick="settingsReturnToPause = false; showMenu('settings')">Einstellungen</button>
                 <button class="btn" id="btn-rules-nav" style="width: 250px;" onclick="showMenu('rules')">Regeln</button>
@@ -978,6 +1182,7 @@
             <h2 id="t-rules-title" style="margin-bottom: 20px; color: #fbe9e7;">Spielregeln</h2>
             <div id="rules-text" style="background: rgba(0,0,0,0.25); padding: 25px; border-radius: 4px; border: 3px dashed #8d6e63; color: #efebe9; text-align: left; width: min(450px, 90vw); box-sizing: border-box; line-height: 1.6;">
             </div>
+            <button class="btn" id="btn-rules-tutorial" style="margin-top: 20px;" onclick="showPlayTutorial()">🎓 Tutorial</button>
             <button class="btn btn-red" id="btn-rules-ok" style="margin-top: 30px;" onclick="showMenu('main')">Verstanden</button>
         </div>
 
@@ -1005,6 +1210,65 @@
             <button class="btn btn-red" id="btn-achievements-back" style="margin-top: 20px;" onclick="showMenu('main')">✕ Zurück</button>
         </div>
 
+        <!-- WORKSHOP -->
+        <div id="menu-workshop" class="menu-screen" style="justify-content: flex-start; padding-top: calc(24px + var(--safe-t)); padding-bottom: calc(24px + var(--safe-b)); overflow-y: auto;">
+            <h2 style="margin-bottom: 12px; color: #fbe9e7; letter-spacing: 3px;">🛠️ <span data-lb="wsTitle">Workshop</span></h2>
+            <div class="ws-wrap">
+                <div id="ws-lock" class="ac-lock" style="display:none;">
+                    <div class="ac-ico">🔐</div>
+                    <b data-lb="acLockTitle">Account nötig</b>
+                    <p data-lb="acLockText"></p>
+                    <button type="button" class="btn ac-go" onclick="settingsReturnToPause=false;showMenu('settings')">⚙️ <span data-lb="acGoSettings">Zu den Einstellungen</span></button>
+                </div>
+                <div id="ws-body" style="display:none; flex-direction:column; gap:12px;">
+                    <div class="ws-top">
+                        <div class="ws-coinbox">🪙 <b id="ws-coins">0</b></div>
+                        <div class="ws-note" id="ws-mode-note"></div>
+                    </div>
+                    <div class="ws-tabs">
+                        <button type="button" class="ws-tab active" id="ws-tab-browse" onclick="wsShowTab('browse')">🔍 <span data-lb="wsTabBrowse">Stöbern</span></button>
+                        <button type="button" class="ws-tab" id="ws-tab-create" onclick="wsShowTab('create')">🎨 <span data-lb="wsTabCreate">Erstellen</span></button>
+                        <button type="button" class="ws-tab" id="ws-tab-mine" onclick="wsShowTab('mine')">📦 <span data-lb="wsTabMine">Meine</span></button>
+                    </div>
+
+                    <div id="ws-pane-browse" style="display:flex; flex-direction:column; gap:10px;">
+                        <div class="ws-chips" id="ws-filters">
+                            <button type="button" class="ws-chip active" data-f="all" onclick="wsSetFilter('all')" data-lb="wsAll">Alle</button>
+                            <button type="button" class="ws-chip" data-f="ball" onclick="wsSetFilter('ball')">⚪ <span data-lb="wsBalls">Bälle</span></button>
+                            <button type="button" class="ws-chip" data-f="club" onclick="wsSetFilter('club')">🏌️ <span data-lb="wsClubs">Schläger</span></button>
+                        </div>
+                        <div class="ws-grid" id="ws-grid"></div>
+                    </div>
+
+                    <div id="ws-pane-create" style="display:none; flex-direction:column; gap:12px;">
+                        <div class="ws-chips" id="ws-type">
+                            <button type="button" class="ws-chip active" data-t="ball" onclick="wsSetType('ball')">⚪ <span data-lb="wsBall">Ball</span></button>
+                            <button type="button" class="ws-chip" data-t="club" onclick="wsSetType('club')">🏌️ <span data-lb="wsClub">Schläger</span></button>
+                        </div>
+                        <div class="ws-create">
+                            <div class="ws-preview" id="ws-preview"></div>
+                            <div class="ws-form">
+                                <label class="ws-lbl" data-lb="wsName">Name</label>
+                                <input type="text" id="ws-name-in" maxlength="20" class="ws-input" oninput="wsDraftChanged()" autocomplete="off">
+                                <label class="ws-lbl" id="ws-lbl-main">Farbe</label>
+                                <input type="color" id="ws-col-main" class="ws-color" oninput="wsDraftChanged()">
+                                <div id="ws-row-shaft"><label class="ws-lbl" data-lb="wsColShaft">Schaft-Farbe</label><input type="color" id="ws-col-shaft" class="ws-color" oninput="wsDraftChanged()"></div>
+                                <div id="ws-row-fx" class="ws-fx">
+                                    <label class="ws-check"><input type="checkbox" id="ws-glow" onchange="wsDraftChanged()"> ✨ <span data-lb="wsGlow">Leuchten</span></label>
+                                    <label class="ws-check"><input type="checkbox" id="ws-metal" onchange="wsDraftChanged()"> 🪩 <span data-lb="wsMetal">Metall</span></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ws-cost" id="ws-cost-line"></div>
+                        <button type="button" class="btn ws-publish" id="ws-publish" onclick="wsPublish()">🚀 <span data-lb="wsPublish">Veröffentlichen</span></button>
+                    </div>
+
+                    <div id="ws-pane-mine" style="display:none; flex-direction:column; gap:10px;"><div id="ws-mine"></div></div>
+                </div>
+            </div>
+            <button class="btn btn-red" style="margin-top: 16px;" onclick="showMenu('main')">✕ <span data-lb="lbBack">Zurück</span></button>
+        </div>
+
         <div id="menu-shop" class="menu-screen">
             <h2 id="t-shop-title">Ball Shop</h2>
             <div class="shop-tabs">
@@ -1026,6 +1290,13 @@
         <div id="menu-settings" class="menu-screen" style="pointer-events: auto;">
             <h2 id="t-settings-title" style="margin-bottom: 20px; color: #fbe9e7; letter-spacing: 3px;">⚙️ Einstellungen</h2>
             <div style="width: min(520px, 92vw); box-sizing: border-box; max-height: 70vh; overflow-y: auto; display: flex; flex-direction: column; gap: 0; margin-bottom: 20px; scrollbar-width: thin; scrollbar-color: #8d6e63 transparent; pointer-events: auto;">
+
+                <div id="settings-account" style="background: rgba(145,70,255,0.10); border-radius: 14px; padding: 20px 25px; margin-bottom: 12px; border: 1px solid rgba(145,70,255,0.4); pointer-events: auto;">
+                    <label class="stats" style="color:#b39ddb; font-size:0.75rem; letter-spacing:2px; display:block; margin-bottom:12px;">🔐 <span data-lb="acTitle">ACCOUNT</span></label>
+                    <div id="ac-status" class="ac-status">…</div>
+                    <button class="btn" id="btn-account-twitch" style="width:100%; margin: 10px 0 0 0; background: linear-gradient(145deg,#b39ddb,#9146ff); color:#fff; font-size:1rem; padding:12px;">📺 Twitch</button>
+                    <p class="ac-note" data-lb="acNote"></p>
+                </div>
 
                 <!-- AUDIO -->
                 <div style="background: rgba(0,0,0,0.2); border-radius: 14px; padding: 20px 25px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.07); pointer-events: auto;">
@@ -1176,14 +1447,9 @@
                 <!-- DATEN -->
                 <div style="background: rgba(0,0,0,0.2); border-radius: 14px; padding: 20px 25px; margin-bottom: 4px; border: 1px solid rgba(255,255,255,0.07); pointer-events: auto;">
                     <label class="stats" id="t-settings-data" style="color:#ef9a9a; font-size:0.75rem; letter-spacing:2px; display:block; margin-bottom:12px;">💾 DATEN</label>
-                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                        <button class="btn" id="btn-export-save" style="flex:1; background:rgba(100,130,100,0.6); font-size:0.85rem; padding:10px;" onclick="exportSave()">📤 Exportieren</button>
-                        <button class="btn" id="btn-import-save" style="flex:1; background:rgba(80,110,150,0.6); font-size:0.85rem; padding:10px;" onclick="importSave()">📥 Importieren</button>
-                    </div>
                     <div style="margin-top:10px;">
                         <button class="btn btn-red" id="btn-reset-save" style="width:100%; font-size:0.85rem; padding:10px;" onclick="confirmResetSave()">🗑️ Fortschritt zurücksetzen</button>
                     </div>
-                    <input type="file" id="import-file-input" accept=".json" style="display:none;" onchange="handleImportFile(event)">
                     <div id="settings-save-msg" style="color:#a5d6a7; font-size:0.8rem; margin-top:8px; min-height:18px; text-align:center; font-weight:bold;"></div>
                 </div>
 
@@ -1205,13 +1471,33 @@
 
                 <!-- Tabs -->
                 <div style="display: flex; gap: 8px; margin-bottom: 20px;">
-                    <button class="btn" id="mp-tab-host" onclick="switchMpTab('host')" style="flex:1; background: linear-gradient(145deg,#a5d6a7,#66bb6a); color:#1b5e20; padding:10px;">🏠 <span id="t-mp-tab-host">Raum erstellen</span></button>
-                    <button class="btn" id="mp-tab-join" onclick="switchMpTab('join')" style="flex:1; background: rgba(141,110,99,0.4); padding:10px;"><span id="t-mp-tab-join">Beitreten</span></button>
+                    <button class="btn" id="mp-tab-host" onclick="switchMpTab('host')" style="flex:1; background: linear-gradient(145deg,#a5d6a7,#66bb6a); color:#1b5e20; padding:10px;"><span class="tab-ico">🏠 </span><span id="t-mp-tab-host">Raum erstellen</span></button>
+                    <button class="btn" id="mp-tab-list" onclick="switchMpTab('list')" style="flex:1; background: rgba(141,110,99,0.4); padding:10px;"><span class="tab-ico">🌐 </span><span data-lb="lbTabList">Serverliste</span></button>
+                    
+                    <button class="btn" id="mp-tab-join" onclick="switchMpTab('join')" style="flex:1; background: rgba(141,110,99,0.4); padding:10px;"><span id="t-mp-tab-join">Code</span></button>
                 </div>
 
                 <!-- HOST TAB -->
                 <div id="mp-host-panel" style="display:flex; flex-direction:column; gap:12px; align-items:center;">
-                    <p id="t-mp-host-desc" style="color:#d7ccc8; font-size:0.85rem; text-align:center; margin:0;">Klicke auf "Raum erstellen" – dein Code wird generiert.<br>Teile ihn mit deinen Mitspielern!</p>
+                    <p id="t-mp-host-desc" style="display:none; color:#d7ccc8; font-size:0.85rem; text-align:center; margin:0;">Klicke auf "Raum erstellen" – dein Code wird generiert.<br>Teile ihn mit deinen Mitspielern!</p>
+                    <div id="lb-host-settings" style="display:flex; flex-direction:column; gap:12px; width:100%;">
+                        <div style="color:#ffcc80; font-size:0.72rem; letter-spacing:2px; font-weight:bold; text-transform:uppercase;" data-lb="lbVisTitle">Sichtbarkeit</div>
+                        <div class="vis-grid" id="vis-grid">
+                            <button type="button" class="vis-chip active" data-vis="private" onclick="setRoomVis('private')"><span class="vc-ico">🔒</span><b data-lb="lbVisPrivate">Privat</b><small data-lb="lbVisPrivateSub">Nur mit Code</small></button>
+                            <button type="button" class="vis-chip" data-vis="public" onclick="setRoomVis('public')"><span class="vc-ico">🌐</span><b data-lb="lbVisPublic">Öffentlich</b><small data-lb="lbVisPublicSub">In der Serverliste</small></button>
+                            <button type="button" class="vis-chip" data-vis="followers" onclick="setRoomVis('followers')"><span class="vc-ico">⭐</span><b data-lb="lbVisFollowers">Follower</b><small data-lb="lbVisFollowersSub">Nur Twitch-Follower</small></button>
+                        </div>
+                        <div class="vis-note" id="lb-vis-note"></div>
+                        <div class="max-row">
+                            <span class="mr-label" data-lb="lbMaxPlayers">Max. Spieler</span>
+                            <div class="max-step">
+                                <button type="button" onclick="stepMaxPlayers(-1)" aria-label="weniger">−</button>
+                                <span class="ms-val" id="lb-max-val">8</span>
+                                <button type="button" onclick="stepMaxPlayers(1)" aria-label="mehr">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <button class="btn" id="btn-mp-create" onclick="createRoom()" style="width:100%; background: linear-gradient(145deg,#a5d6a7,#66bb6a); color:#1b5e20; font-size:1.1rem; padding:14px;">🎮 <span id="t-btn-mp-create">Raum erstellen</span></button>
                     <!-- Wird nach Erstellung eingeblendet -->
                     <div id="mp-host-code-display" style="display:none; flex-direction:column; align-items:center; gap:8px; width:100%; background:rgba(0,0,0,0.25); border-radius:12px; padding:16px; border: 2px solid rgba(255,204,128,0.3);">
@@ -1229,7 +1515,16 @@
                         oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
                     <button class="btn" id="btn-mp-connect" onclick="connectMultiplayer()" style="width: 100%; background: linear-gradient(145deg,#80deea,#26c6da); color:#004d40; font-size:1.1rem; padding:14px;">🔗 Verbinden</button>
                 </div>
-                <button class="btn" id="btn-mp-twitch" style="width:100%; margin-top:16px; background: linear-gradient(145deg,#b39ddb,#9146ff); color:#fff; font-size:1.1rem; padding:14px;">📺 Twitch</button>
+                <!-- SERVERLISTE -->
+                <div id="mp-list-panel">
+                    <div class="sl-head">
+                        <span data-lb="lbListTitle">Öffentliche Räume</span>
+                        <button type="button" class="sl-refresh" id="sl-refresh" onclick="refreshServerList()" aria-label="Aktualisieren">⟳</button>
+                    </div>
+                    <div class="sl-list" id="sl-list"></div>
+                </div>
+                
+                
                 <button class="btn btn-red" id="btn-mp-leave" style="width:100%; margin-top:12px;" onclick="showMenu('main')">← Hauptmenü</button>
             </div>
 
@@ -1290,6 +1585,24 @@
             <button class="btn btn-red" style="margin-top: 20px; display:none;" id="mp-back-btn" onclick="exitMultiplayer()">Zurück</button>
         </div>
 
+    </div>
+
+    <!-- WARTERAUM-OVERLAY (über der leeren Warteraum-Map) -->
+    <div id="lobby-overlay">
+        <div class="lo-head">
+            <span class="lo-title" id="lo-title">🛋️ Warteraum</span>
+            <div class="lo-right">
+                <span class="lo-count" id="lo-count">1 / 8</span>
+                <button type="button" class="lo-fold" id="lo-fold" onclick="toggleLobbyFold()" aria-label="Ein-/Ausklappen">▾</button>
+            </div>
+        </div>
+        <div class="lo-meta" id="lo-meta"></div>
+        <div class="lo-players" id="lo-players"></div>
+        <div class="lo-actions">
+            <button type="button" class="btn btn-red" id="lo-leave" onclick="exitMultiplayer()">🚪 <span data-lb="lbLeave">Verlassen</span></button>
+            <button type="button" class="btn lo-start" id="lo-start" onclick="hostStartGame()" style="display:none;">▶ <span data-lb="lbStart">Spiel starten</span></button>
+        </div>
+        <div class="lo-hint" id="lo-hint"></div>
     </div>
 
     <div class="game-wrapper">
@@ -2965,7 +3278,7 @@
         // Berechnet die Höhe des Geländes an einer bestimmten Position (X, Z)
         function getTerrainHeight(x, z) {
             const level = activeLevelRef;
-            if (!level || !level.hills) return 0;
+            if (!level || !level.hills || level.noHole) return 0;
             let h = 0;
 
             // Glättung für Start und Loch (Radius von ca. 4 Einheiten flach halten)
@@ -3060,6 +3373,9 @@
             if (idx === 'openworld') {
                 l = openWorldLevel;
                 currentLevelIdx = -1; // Kein echter Kampagnen-Index
+            } else if (idx === 'lobbyarena') {
+                l = lobbyArenaLevel; // Multiplayer-Warteraum: leere Map ohne Loch/Fahne
+                currentLevelIdx = -1;
             } else {
                 if (idx < 0) idx = 0;
                 if (idx >= levels.length) idx = levels.length - 1;
@@ -3170,6 +3486,11 @@
             ballMesh.position.copy(ballPhys.pos);
             scene.add(ballMesh);
 
+            if (l.noHole) {
+                // Warteraum: weder Loch noch Fahne
+                holeMesh = null; flagGroup = null;
+                holePhys.pos.set(9999, 0, 9999);
+            } else {
             // Loch (angepasst an das Gelände) – der Boden selbst senkt sich jetzt trichterförmig ab
             // (siehe getTerrainHeight), das hier ist nur noch die Rand-Deko + der dunkle Boden ganz unten
             const hH = getTerrainHeight(l.hole.x, l.hole.z);
@@ -3234,6 +3555,7 @@
             } else {
                 flagGroup = null;
             }
+            } // Ende: if (l.noHole) ... else
 
             // Hindernisse (50 verschiedene Büro-/Bastel-Objekte als Look)
             l.obs.forEach((o, idx) => {
@@ -3303,7 +3625,7 @@
             strokes = 0;
             bouncesInLevel = 0;
             if (typeof ensureRemoteVisuals === 'function') ensureRemoteVisuals();
-            cgTimer.active = !!mpState.hasJoinedMultiplayer; cgTimer.end = Date.now() + 180000;
+            cgTimer.active = !!mpState.hasJoinedMultiplayer && !l.lobby; cgTimer.end = Date.now() + 180000;
             cameraOrbit.theta = 0; 
             
             updatePowerBar(0);
@@ -3757,10 +4079,11 @@
                 pGroup.position.y = 0.84;
                 clubGroup.add(pGroup);
             } else {
-                let clubColor = savePath.currentClub === 'iron' ? 0x95a5a6 : (savePath.currentClub === 'golden' ? 0xf1c40f : 0x7e5c42);
+                const _wsClub = clubSkins.find(c => c.id === savePath.currentClub && c.workshop);
+                let clubColor = _wsClub ? _wsClub.color : (savePath.currentClub === 'iron' ? 0x95a5a6 : (savePath.currentClub === 'golden' ? 0xf1c40f : 0x7e5c42));
                 
                 const shaftGeo = new THREE.CylinderGeometry(0.1, 0.1, 6);
-                const shaftMat = new THREE.MeshStandardMaterial({ color: 0xcccccc });
+                const shaftMat = new THREE.MeshStandardMaterial({ color: (_wsClub && _wsClub.shaft !== undefined) ? _wsClub.shaft : 0xcccccc });
                 const shaft = new THREE.Mesh(shaftGeo, shaftMat);
                 shaft.position.y = 3;
                 clubGroup.add(shaft);
@@ -3789,7 +4112,7 @@
             const boughtLabel = T('shopBought') || 'Bought';
             const skinGrid = document.getElementById('shop-skins');
             skinGrid.innerHTML = '';
-            ballSkins.forEach(skin => {
+            ballSkins.filter(sk => !sk.ephemeral).forEach(skin => {
                 const item = document.createElement('div');
                 const owned = savePath.purchasedSkins.includes(skin.id);
                 const locked = skin.storyLocked && !owned;
@@ -4059,6 +4382,90 @@
             return (dict && dict[key] !== undefined) ? dict[key] : (translations.en[key] !== undefined ? translations.en[key] : key);
         }
 
+        // ===== Übersetzungen für Serverliste / Warteraum (de + en; andere Sprachen fallen auf en zurück) =====
+        Object.assign(translations.de, {
+            lbTabCreate: "Erstellen", lbTabList: "Liste", lbTabCode: "Code",
+            lbVisTitle: "Sichtbarkeit", lbVisPrivate: "Privat", lbVisPrivateSub: "Nur mit Code", lbVisPublic: "Öffentlich", lbVisPublicSub: "In der Serverliste", lbVisFollowers: "Follower", lbVisFollowersSub: "Nur Twitch-Follower",
+            lbNotePrivate: "Nicht in der Liste. Teile den Code mit deinen Freunden.",
+            lbNotePublic: "Erscheint in der Serverliste – jeder kann ohne Code beitreten.",
+            lbNoteFollowers: "Erscheint in der Liste – nur Follower deines Twitch-Kanals können beitreten.",
+            lbNoteFollowersWarn: "Dafür musst du zuerst Twitch verbinden (Knopf „Twitch“ weiter unten).",
+            lbMaxPlayers: "Max. Spieler", lbListTitle: "Öffentliche Räume", lbLoading: "Suche Räume…",
+            lbEmpty: "Gerade ist kein Raum offen", lbEmptyHint: "Erstelle selbst einen öffentlichen Raum – dann taucht er hier auf!",
+            lbError: "Serverliste nicht erreichbar", lbErrorHint: "Prüfe deine Internetverbindung und versuche es erneut.",
+            lbRoomOf: "Raum von {name}", lbJoin: "Beitreten", lbFull: "Voll", lbPublicBadge: "Öffentlich", lbFollowerBadge: "Follower", lbFollowTwitch: "Twitch: {name}",
+            lbTitle: "Warteraum", lbStart: "Spiel starten", lbLeave: "Verlassen", lbHost: "Host", lbCode: "Code",
+            lbNeedTwo: "Mindestens 2 Spieler nötig!", lbHintHost: "Warte auf Mitspieler – starte, sobald alle da sind. Du kannst schon den Ball anstoßen!", lbHintGuest: "Warte, bis der Host das Spiel startet. Rolle in der Zwischenzeit schon mal herum!",
+            lbNeedTwitchHost: "Für Follower-Räume zuerst Twitch verbinden!", lbNeedTwitchJoin: "Verbinde zuerst Twitch (Knopf „Twitch“), um diesen Follower-Raum zu betreten!",
+            lbTwitchExpired: "Twitch-Anmeldung abgelaufen – bitte Twitch neu verbinden.", lbNotFollowing: "Nur für Follower von {name} – folge dem Kanal auf Twitch!",
+            lbFollowCheckFail: "Follower-Prüfung fehlgeschlagen.", lbRoomNotFound: "Raum nicht gefunden!", lbRoomClosed: "In diesem Raum läuft das Spiel bereits.",
+            lbJoinTimeout: "Beitritt hat zu lange gedauert.", lbConnecting: "Verbinde…",
+            roomFull: "Raum ist voll!",
+            twDesc: "Melde dich bei Twitch an, damit dein Twitch-Name im Online-Modus erscheint. Wird auch für Follower-Räume benötigt."
+        });
+        Object.assign(translations.en, {
+            lbTabCreate: "Create", lbTabList: "List", lbTabCode: "Code",
+            lbVisTitle: "Visibility", lbVisPrivate: "Private", lbVisPrivateSub: "Code only", lbVisPublic: "Public", lbVisPublicSub: "In the server list", lbVisFollowers: "Followers", lbVisFollowersSub: "Twitch followers only",
+            lbNotePrivate: "Not listed. Share the code with your friends.",
+            lbNotePublic: "Shows up in the server list – anyone can join without a code.",
+            lbNoteFollowers: "Shows up in the list – only followers of your Twitch channel can join.",
+            lbNoteFollowersWarn: "You need to connect Twitch first (the “Twitch” button below).",
+            lbMaxPlayers: "Max. players", lbListTitle: "Public rooms", lbLoading: "Searching rooms…",
+            lbEmpty: "No room is open right now", lbEmptyHint: "Create a public room yourself – it will show up here!",
+            lbError: "Server list unreachable", lbErrorHint: "Check your internet connection and try again.",
+            lbRoomOf: "{name}'s room", lbJoin: "Join", lbFull: "Full", lbPublicBadge: "Public", lbFollowerBadge: "Followers", lbFollowTwitch: "Twitch: {name}",
+            lbTitle: "Waiting room", lbStart: "Start game", lbLeave: "Leave", lbHost: "Host", lbCode: "Code",
+            lbNeedTwo: "At least 2 players needed!", lbHintHost: "Waiting for players – start as soon as everyone is here. Feel free to roll your ball around!", lbHintGuest: "Waiting for the host to start the game. Roll around in the meantime!",
+            lbNeedTwitchHost: "Connect Twitch first to create follower rooms!", lbNeedTwitchJoin: "Connect Twitch first (the “Twitch” button) to join this follower room!",
+            lbTwitchExpired: "Twitch login expired – please reconnect Twitch.", lbNotFollowing: "Followers of {name} only – follow the channel on Twitch!",
+            lbFollowCheckFail: "Follower check failed.", lbRoomNotFound: "Room not found!", lbRoomClosed: "The game in this room is already running.",
+            lbJoinTimeout: "Joining took too long.", lbConnecting: "Connecting…",
+            roomFull: "Room is full!",
+            twDesc: "Sign in with Twitch so your Twitch name shows up in online mode. Also required for follower rooms."
+        });
+        Object.assign(translations.de, {
+            lbBack: "Zurück", lbKick: "Kicken", lbKicked: "Du wurdest vom Host aus dem Raum geworfen.", lbKickedToast: "{name} wurde gekickt.",
+            acTitle: "ACCOUNT", acNote: "Online-Räume und der Workshop sind nur mit Account möglich. Melde dich dafür mit Twitch an.",
+            acLoggedIn: "Angemeldet als {name}", acLoggedOut: "Nicht angemeldet",
+            acNeed: "Dafür brauchst du einen Account – melde dich in den Einstellungen mit Twitch an.",
+            acLockTitle: "Account nötig", acLockText: "Online-Modus und Workshop gibt es nur mit Account. Melde dich in den Einstellungen mit deinem Twitch-Konto an.", acGoSettings: "Zu den Einstellungen",
+            wsTitle: "Workshop", wsTabBrowse: "Stöbern", wsTabCreate: "Erstellen", wsTabMine: "Meine", wsAll: "Alle", wsBalls: "Bälle", wsClubs: "Schläger", wsBall: "Ball", wsClub: "Schläger",
+            wsName: "Name", wsColBall: "Ballfarbe", wsColHead: "Kopf-Farbe", wsColShaft: "Schaft-Farbe", wsGlow: "Leuchten", wsMetal: "Metall", wsPublish: "Veröffentlichen",
+            wsCostLine: "Erstellen kostet {c} 🪙 · Andere kaufen es für {p} 🪙",
+            wsLocalNote: "Lokaler Modus: Items sind aktuell nur auf diesem Gerät sichtbar. Für einen gemeinsamen Workshop aller Spieler wird ein Server benötigt.",
+            wsEmpty: "Noch keine Items", wsEmptyHint: "Erstelle das erste Item im Reiter „Erstellen“!", wsBy: "von {name}", wsYours: "Dein Item", wsBuy: "Kaufen · {p} 🪙",
+            wsBoughtToast: "„{name}“ gekauft! Du findest es im Shop.", wsNameShort: "Gib dem Item einen Namen (mind. 2 Zeichen).", wsPublished: "„{name}“ veröffentlicht!",
+            wsEarnings: "Einnahmen: {n} 🪙", wsClaim: "Abholen", wsMineEmpty: "Du hast noch nichts erstellt", wsMineEmptyHint: "Gestalte einen Ball oder Schläger und verkaufe ihn!", wsSales: "{n}× verkauft"
+        });
+        Object.assign(translations.en, {
+            lbBack: "Back", lbKick: "Kick", lbKicked: "The host removed you from the room.", lbKickedToast: "{name} was kicked.",
+            acTitle: "ACCOUNT", acNote: "Online rooms and the Workshop need an account. Sign in with Twitch to use them.",
+            acLoggedIn: "Signed in as {name}", acLoggedOut: "Not signed in",
+            acNeed: "You need an account for that – sign in with Twitch in the settings.",
+            acLockTitle: "Account required", acLockText: "Online mode and the Workshop are only available with an account. Sign in with your Twitch account in the settings.", acGoSettings: "Go to settings",
+            wsTitle: "Workshop", wsTabBrowse: "Browse", wsTabCreate: "Create", wsTabMine: "Mine", wsAll: "All", wsBalls: "Balls", wsClubs: "Clubs", wsBall: "Ball", wsClub: "Club",
+            wsName: "Name", wsColBall: "Ball color", wsColHead: "Head color", wsColShaft: "Shaft color", wsGlow: "Glow", wsMetal: "Metal", wsPublish: "Publish",
+            wsCostLine: "Creating costs {c} 🪙 · Others buy it for {p} 🪙",
+            wsLocalNote: "Local mode: items are currently only visible on this device. A shared workshop for all players needs a server.",
+            wsEmpty: "No items yet", wsEmptyHint: "Create the first item in the “Create” tab!", wsBy: "by {name}", wsYours: "Your item", wsBuy: "Buy · {p} 🪙",
+            wsBoughtToast: "Bought “{name}”! Find it in the shop.", wsNameShort: "Give your item a name (min. 2 characters).", wsPublished: "“{name}” published!",
+            wsEarnings: "Earnings: {n} 🪙", wsClaim: "Collect", wsMineEmpty: "You haven't created anything yet", wsMineEmptyHint: "Design a ball or club and sell it!", wsSales: "{n}× sold"
+        });
+        // Übersetzungs-Update um die neuen Texte erweitern
+        (function () {
+            const _origUT = updateTranslations;
+            updateTranslations = function () { _origUT.apply(this, arguments); try { applyLobbyTexts(); } catch (e) {} /* (beim allerersten Aufruf evtl. noch nicht bereit) */ };
+            const _origSM = showMenu;
+            showMenu = function (id) {
+                _origSM.apply(this, arguments);
+                try { // (Variablen sind beim allerersten Aufruf evtl. noch nicht initialisiert)
+                    if (id === 'multiplayer' && currentMpTab === 'list') startBrowsing();
+                    else if (id !== 'multiplayer') stopBrowsing();
+                } catch (e) {}
+            };
+        })();
+
+
         function updateTranslations() {
             const lang = savePath.language || 'en';
             const t = translations[lang];
@@ -4106,8 +4513,6 @@
             document.getElementById('t-settings-playername').innerText = t.settingsPlayerName;
             document.getElementById('t-lang-label').innerText = t.lang;
             document.getElementById('t-settings-data').innerText = '💾 ' + t.settingsData;
-            document.getElementById('btn-export-save').innerText = '📤 ' + t.exportSave;
-            document.getElementById('btn-import-save').innerText = '📥 ' + t.importSave;
             document.getElementById('btn-reset-save').innerText = '🗑️ ' + t.resetSave;
             document.getElementById('btn-settings-back').innerText = t.back;
             // Achievements
@@ -4197,7 +4602,14 @@
             const parVal = document.getElementById('parVal');
             const levelLabel = document.getElementById('t-hud-level-label');
             const strokeLimit = document.getElementById('hud-stroke-limit');
-            if (isOW) {
+            if (mpState.inLobbyArena) {
+                if (levelLabel) levelLabel.innerText = '🛋️ ' + T('lbTitle');
+                if (levelEl) levelEl.style.display = 'none';
+                if (parSep) parSep.style.display = 'none';
+                if (parLabel) parLabel.style.display = 'none';
+                if (parVal) parVal.style.display = 'none';
+                if (strokeLimit) strokeLimit.style.display = 'none';
+            } else if (isOW) {
                 const act = (typeof STORY_ACTS !== 'undefined' && savePath.story) ? STORY_ACTS[savePath.story.act - 1] : null;
                 if (levelLabel) levelLabel.innerText = act ? (act.icon + ' AKT ' + act.id + ': ' + storyT(act.id, 'name')) : T('owLabel');
                 if (levelEl) levelEl.style.display = 'none';
@@ -4217,6 +4629,7 @@
             { const lim = cgStrokeLimit(); const el = document.getElementById('hud-stroke-limit'); if (el) el.innerText = lim === Infinity ? '' : '/' + lim; }
             document.getElementById('coinCount').innerText = savePath.coins;
             document.getElementById('shopCoins').innerText = savePath.coins;
+            { const gu = document.getElementById('btn-give-up'); if (gu && mpState.inLobbyArena) gu.style.display = 'none'; }
             updateMpLiveScoreboard();
         }
 
@@ -4225,7 +4638,7 @@
         function updateMpLiveScoreboard() {
             const panel = document.getElementById('mp-live-scoreboard');
             if (!panel) return;
-            if (!mpState.hasJoinedMultiplayer || gameState !== 'playing') { panel.style.display = 'none'; return; }
+            if (!mpState.hasJoinedMultiplayer || gameState !== 'playing' || mpState.inLobbyArena) { panel.style.display = 'none'; return; }
             panel.style.display = 'block';
             const rows = [];
             rows.push({ name: savePath.playerName + ((savePath.story && savePath.story.completed) ? ' ⭐' : ''), total: (mpState.playerScores[peer.id] || 0) + (mpState.playerFinished[peer.id] ? 0 : strokes), isMe: true });
@@ -4330,7 +4743,7 @@
             if (!overlay) return;
             const info = document.getElementById('mp-pause-info');
             if (info) {
-                info.innerHTML = `<div style="color:#80deea; font-weight:bold;">🌐 Multiplayer läuft</div><div style="margin-top:4px;">Level ${currentLevelIdx + 1} &nbsp;·&nbsp; 🏌️ <b>${strokes}</b>/15</div>`;
+                info.innerHTML = `<div style="color:#80deea; font-weight:bold;">🌐 Multiplayer läuft</div><div style="margin-top:4px;">${mpState.inLobbyArena ? '🛋️ ' + T('lbTitle') : 'Level ' + (currentLevelIdx + 1) + ' &nbsp;·&nbsp; 🏌️ <b>' + strokes + '</b>/15'}</div>`;
             }
             overlay.style.display = 'flex';
             overlay.animate([{opacity:0, transform:'scale(1.04)'},{opacity:1,transform:'scale(1)'}], {duration:200, fill:'forwards'});
@@ -5169,9 +5582,10 @@
             if (countEl) countEl.textContent = total + ' / ' + MAX_PLAYERS;
             if (fillEl) fillEl.style.width = Math.min(100, (total / MAX_PLAYERS) * 100) + '%';
             if (labelEl) labelEl.textContent = T('players');
+            if (typeof updateLobbyOverlay === 'function') updateLobbyOverlay();
         }
 
-        const MAX_PLAYERS = 8; // Online-Modus: maximal 8 Spieler pro Raum
+        let MAX_PLAYERS = 8; // Online-Modus: 2-8 Spieler pro Raum (vom Host einstellbar)
 
         // ===== ACHIEVEMENTS SCREEN =====
         function renderAchievementsScreen(filterCat) {
@@ -5240,16 +5654,325 @@
         let currentMpTab = 'host';
         let currentRoomCode = '';
 
+        // =====================================================================
+        //  SERVERLISTE + WARTERAUM
+        //  - Raum-Einstellungen: Sichtbarkeit (Privat / Öffentlich / Follower) + 2-8 Spieler
+        //  - Serverliste: serverlos über ein "Verzeichnis-Peer" (siehe unten)
+        //  - Warteraum: leere Map ohne Loch/Fahne, Host startet das Spiel
+        // =====================================================================
+        const $lb = id => document.getElementById(id);
+        let roomSetup = { vis: 'private', max: 8 };
+        let roomMeta = { vis: 'private', max: 8, code: '', ownerName: '', ownerTid: '', ownerTname: '' };
+        let lobbyArenaLevel = null;
+        let joinTimeout = null;
+
+        function applyLobbyTexts() {
+            document.querySelectorAll('[data-lb]').forEach(e => { e.textContent = T(e.dataset.lb); });
+            const jt = $lb('t-mp-tab-join'); if (jt) jt.textContent = T('lbTabCode');
+            const ht = $lb('t-mp-tab-host'); if (ht) ht.textContent = T('lbTabCreate');
+            renderRoomSetup();
+            if (mpState && mpState.inLobbyArena) updateLobbyOverlay();
+            if (lastServerListState) renderServerList(lastServerListState.rooms, lastServerListState.state);
+        }
+
+        // ---------- Raum-Einstellungen (Host-Tab) ----------
+        function setRoomVis(v) { roomSetup.vis = v; renderRoomSetup(); }
+        function stepMaxPlayers(d) { roomSetup.max = Math.max(2, Math.min(8, roomSetup.max + d)); renderRoomSetup(); }
+        function cgTwitchReady() {
+            try { return !!(savePath.twitchId && localStorage.getItem('cgTwTok')); } catch (e) { return false; }
+        }
+        function renderRoomSetup() {
+            document.querySelectorAll('#vis-grid .vis-chip').forEach(c => c.classList.toggle('active', c.dataset.vis === roomSetup.vis));
+            const mv = $lb('lb-max-val'); if (mv) mv.textContent = roomSetup.max;
+            const note = $lb('lb-vis-note');
+            if (note) {
+                const key = roomSetup.vis === 'public' ? 'lbNotePublic' : roomSetup.vis === 'followers' ? 'lbNoteFollowers' : 'lbNotePrivate';
+                let txt = T(key); let warn = false;
+                if (roomSetup.vis === 'followers' && !cgTwitchReady()) { txt += ' ' + T('lbNoteFollowersWarn'); warn = true; }
+                note.textContent = txt; note.classList.toggle('warn', warn);
+            }
+        }
+
+        // ---------- Warteraum-Arena ----------
+        function enterLobbyArena() {
+            mpState.inLobbyArena = true; mpState.multiplayerGameActive = false; mpState.isVoting = false; mpState.matchOver = false;
+            mpState.playerFinished = {}; mpState.playerScores = {}; mpState.currentRound = 0; mpState.isReady = false;
+            // Leere Map: kein Loch, keine Fahne, keine Hindernisse - jeder startet an einer zufälligen Stelle
+            lobbyArenaLevel = {
+                start: { x: (Math.random() - 0.5) * 26, z: (Math.random() - 0.5) * 20 },
+                hole: { x: 9999, z: 9999 }, obs: [], coinPos: [], hills: [], par: 0, big: false, noHole: true, lobby: true
+            };
+            respawnRemotePlayerMeshes();
+            initLevel('lobbyarena', 'playing');
+            applyChaosEvent('none');
+            setLobbyOverlay(true);
+        }
+        function setLobbyOverlay(show) {
+            const el = $lb('lobby-overlay'); if (!el) return;
+            el.style.display = show ? 'flex' : 'none';
+            if (show) updateLobbyOverlay();
+        }
+        function toggleLobbyFold() {
+            const el = $lb('lobby-overlay'); if (!el) return;
+            el.classList.toggle('collapsed');
+            const b = $lb('lo-fold'); if (b) b.textContent = el.classList.contains('collapsed') ? '▴' : '▾';
+        }
+        function copyLobbyCode() {
+            const code = roomMeta.code;
+            const done = () => showToast(T('codeCopiedPrefix') + code);
+            try { navigator.clipboard.writeText(code).then(done).catch(done); } catch (e) { done(); }
+        }
+        function updateLobbyOverlay() {
+            const el = $lb('lobby-overlay'); if (!el || !mpState.inLobbyArena) return;
+            const total = Object.keys(remotePlayers).length + 1;
+            $lb('lo-title').textContent = '🛋️ ' + T('lbTitle');
+            $lb('lo-count').textContent = total + ' / ' + MAX_PLAYERS;
+            // Infos: Sichtbarkeit (+ Code nur bei privaten Räumen)
+            const meta = $lb('lo-meta'); meta.innerHTML = '';
+            const addChip = (txt, cls, onclick) => { const c = document.createElement('span'); c.className = 'lo-chip' + (cls ? ' ' + cls : ''); c.textContent = txt; if (onclick) c.onclick = onclick; meta.appendChild(c); };
+            if (roomMeta.vis === 'private') { addChip('🔒 ' + T('lbVisPrivate'), ''); if (roomMeta.code) addChip(roomMeta.code, 'code', copyLobbyCode); }
+            else if (roomMeta.vis === 'public') addChip('🌐 ' + T('lbPublicBadge'), '');
+            else addChip('⭐ ' + T('lbFollowerBadge') + (roomMeta.ownerTname ? ' · ' + roomMeta.ownerTname : ''), 'f');
+            // Spielerliste
+            const box = $lb('lo-players'); box.innerHTML = '';
+            const addPlayer = (name, skinId, me, crown, pid) => {
+                const skin = ballSkins.find(s => s.id === skinId) || ballSkins[0];
+                const col = '#' + skin.color.toString(16).padStart(6, '0');
+                const d = document.createElement('div'); d.className = 'lo-p' + (me ? ' me' : '');
+                const dot = document.createElement('i'); dot.style.background = col;
+                const sp = document.createElement('span'); sp.textContent = (crown ? '👑 ' : '') + name + (me ? ' (' + T('you') + ')' : '');
+                d.appendChild(dot); d.appendChild(sp);
+                if (isHosting && !me && pid) { const k = document.createElement('button'); k.type = 'button'; k.className = 'lo-kick'; k.textContent = '✕'; k.title = T('lbKick'); k.setAttribute('aria-label', T('lbKick')); k.onclick = () => kickPlayer(pid); d.appendChild(k); }
+                box.appendChild(d);
+            };
+            addPlayer(savePath.playerName + ((savePath.story && savePath.story.completed) ? ' ⭐' : ''), savePath.currentSkin, true, isHosting);
+            Object.values(remotePlayers).forEach(p => addPlayer((p.name || T('settingsPlayer')) + (p.storyDone ? ' ⭐' : ''), p.skinId, false, p.id === mpState.hostId, p.id));
+            // Start-Knopf nur für den Host
+            const st = $lb('lo-start');
+            st.style.display = isHosting ? '' : 'none';
+            st.disabled = total < 2;
+            $lb('lo-hint').textContent = isHosting ? T('lbHintHost') : T('lbHintGuest');
+            // Serverliste bei Änderungen sofort aktualisieren
+            if (isHosting && roomMeta.vis !== 'private' && dirActive) dirTick();
+        }
+        function hostStartGame() {
+            if (!isHosting || !mpState.inLobbyArena) return;
+            const total = connections.filter(c => c.open).length + 1;
+            if (total < 2) return showToast(T('lbNeedTwo'));
+            stopRoomListing();
+            mpState.inLobbyArena = false; mpState.multiplayerGameActive = true;
+            setLobbyOverlay(false);
+            broadcastData({ type: 'startGame' });
+            startVotingPhase();
+        }
+        function abortJoin() {
+            clearTimeout(joinTimeout);
+            mpState.hostId = null; mpState.hasJoinedMultiplayer = false;
+            if (peer) { try { peer.destroy(); } catch (e) {} peer = null; }
+            connections = []; isHosting = false;
+            const b = $lb('btn-mp-connect'); if (b) { b.disabled = false; b.textContent = '🔗 ' + T('mpConnect'); }
+        }
+
+        // ---------- Follower-Prüfung (Twitch) ----------
+        // Prüft mit dem Twitch-Token des Beitretenden, ob er dem Raum-Besitzer folgt.
+        async function checkFollowsOwner(room) {
+            if (!room.tid) return true;
+            if (savePath.twitchId && String(savePath.twitchId) === String(room.tid)) return true; // eigener Raum
+            if (!cgTwitchReady()) { showToast(T('lbNeedTwitchJoin')); return false; }
+            try {
+                const r = await fetch('https://api.twitch.tv/helix/channels/followed?user_id=' + encodeURIComponent(savePath.twitchId) + '&broadcaster_id=' + encodeURIComponent(room.tid), {
+                    headers: { Authorization: 'Bearer ' + localStorage.getItem('cgTwTok'), 'Client-Id': TW_CID }
+                });
+                if (r.status === 401 || r.status === 403) { try { localStorage.removeItem('cgTwTok'); } catch (e) {} showToast(T('lbTwitchExpired')); return false; }
+                const d = await r.json();
+                if (d && Array.isArray(d.data) && d.data.length > 0) return true;
+                showToast(T('lbNotFollowing').replace('{name}', room.tname || '?'));
+                return false;
+            } catch (e) { showToast(T('lbFollowCheckFail')); return false; }
+        }
+        async function joinFromList(room) {
+            if (!requireAccount()) return;
+            if (room.vis === 'followers') { const ok = await checkFollowsOwner(room); if (!ok) return; }
+            connectMultiplayer(room.code);
+        }
+
+        // ---------- Verzeichnis (serverlose Serverliste) ----------
+        // Es gibt keinen eigenen Server. Stattdessen übernimmt der erste Host eines öffentlichen
+        // Raums die Rolle des "Verzeichnisses" (ein PeerJS-Peer mit fester ID). Alle anderen
+        // öffentlichen Hosts melden sich dort alle 5 s an. Wer die Liste öffnet, fragt dort nach.
+        // Geht der Verzeichnis-Host weg, übernimmt automatisch der nächste Host.
+        const CG_DIR_ID = 'cardgolf-directory-v1';
+        let dirServerPeer = null, dirRooms = {}, dirClientConn = null, dirTimer = null, dirActive = false, dirConnecting = false;
+
+        function dirClean(r) {
+            if (!r || typeof r !== 'object') return null;
+            const code = String(r.code || '').toUpperCase();
+            if (!/^[A-Z0-9]{4,8}$/.test(code)) return null;
+            const max = Math.max(2, Math.min(8, parseInt(r.max, 10) || 8));
+            return {
+                code, vis: r.vis === 'followers' ? 'followers' : 'public', max,
+                players: Math.max(1, Math.min(max, parseInt(r.players, 10) || 1)),
+                host: String(r.host || '').slice(0, 16),
+                tid: String(r.tid || '').replace(/[^0-9]/g, '').slice(0, 20),
+                tname: String(r.tname || '').slice(0, 30)
+            };
+        }
+        function dirOwnInfo() {
+            return { code: roomMeta.code, vis: roomMeta.vis, max: MAX_PLAYERS, players: Object.keys(remotePlayers).length + 1, host: roomMeta.ownerName, tid: roomMeta.ownerTid, tname: roomMeta.ownerTname };
+        }
+        function startRoomListing() { stopRoomListing(); dirActive = true; dirTick(); dirTimer = setInterval(dirTick, 5000); }
+        function stopRoomListing() {
+            clearInterval(dirTimer); dirTimer = null; dirActive = false;
+            if (roomMeta.code) {
+                if (dirServerPeer) delete dirRooms[roomMeta.code];
+                if (dirClientConn && dirClientConn.open) { try { dirClientConn.send({ type: 'remove', code: roomMeta.code }); } catch (e) {} }
+            }
+            if (dirClientConn) { try { dirClientConn.close(); } catch (e) {} dirClientConn = null; }
+        }
+        function destroyDirectory() {
+            stopRoomListing();
+            if (dirServerPeer) { try { dirServerPeer.destroy(); } catch (e) {} dirServerPeer = null; dirRooms = {}; }
+            dirConnecting = false;
+        }
+        function dirTick() {
+            if (!dirActive || !isHosting || !mpState.inLobbyArena || !roomMeta.code) return;
+            const info = dirClean(dirOwnInfo()); if (!info) return;
+            if (dirServerPeer) { dirRooms[info.code] = Object.assign({}, info, { seen: Date.now() }); return; }
+            if (dirClientConn && dirClientConn.open) { try { dirClientConn.send({ type: 'announce', room: info }); } catch (e) {} return; }
+            if (!dirConnecting) tryDirectory();
+        }
+        function tryDirectory() {
+            if (typeof Peer === 'undefined') return;
+            dirConnecting = true;
+            let p;
+            try { p = new Peer(CG_DIR_ID, { debug: 0 }); } catch (e) { dirConnecting = false; return; }
+            let settled = false;
+            p.on('open', () => {
+                settled = true; dirServerPeer = p; dirConnecting = false; dirRooms = {};
+                p.on('connection', dirServeConn);
+                p.on('disconnected', () => { if (dirServerPeer === p) { dirServerPeer = null; dirRooms = {}; } try { p.destroy(); } catch (e) {} });
+                dirTick();
+            });
+            p.on('error', err => {
+                if (settled) return;
+                settled = true;
+                try { p.destroy(); } catch (e) {}
+                if (err && err.type === 'unavailable-id') connectToDirectory(); else dirConnecting = false;
+            });
+        }
+        function connectToDirectory() {
+            if (!peer || !dirActive) { dirConnecting = false; return; }
+            let c;
+            try { c = peer.connect(CG_DIR_ID, { reliable: true }); } catch (e) { dirConnecting = false; return; }
+            const to = setTimeout(() => { if (!c.open) { dirConnecting = false; try { c.close(); } catch (e) {} } }, 6000);
+            c.on('open', () => { clearTimeout(to); dirClientConn = c; dirConnecting = false; dirTick(); });
+            c.on('close', () => { clearTimeout(to); if (dirClientConn === c) dirClientConn = null; dirConnecting = false; });
+            c.on('error', () => { dirConnecting = false; });
+        }
+        function dirServeConn(conn) {
+            conn.on('data', d => {
+                if (!d || typeof d !== 'object') return;
+                if (d.type === 'announce') {
+                    const info = dirClean(d.room);
+                    if (info) { dirRooms[info.code] = Object.assign({}, info, { seen: Date.now() }); conn._room = info.code; }
+                } else if (d.type === 'remove') {
+                    const code = String(d.code || '').toUpperCase(); if (dirRooms[code] && conn._room === code) delete dirRooms[code];
+                } else if (d.type === 'list') {
+                    const now = Date.now();
+                    Object.keys(dirRooms).forEach(k => { if (now - dirRooms[k].seen > 16000) delete dirRooms[k]; });
+                    try { conn.send({ type: 'rooms', rooms: Object.values(dirRooms).map(r => ({ code: r.code, vis: r.vis, max: r.max, players: r.players, host: r.host, tid: r.tid, tname: r.tname })) }); } catch (e) {}
+                }
+            });
+            conn.on('close', () => { if (conn._room && dirRooms[conn._room]) delete dirRooms[conn._room]; });
+        }
+
+        // ---------- Serverliste anzeigen ----------
+        let browsePeer = null, browseTimer = null, browseBusy = false, lastServerListState = null;
+        function stopBrowsing() {
+            clearInterval(browseTimer); browseTimer = null;
+            if (browsePeer) { try { browsePeer.destroy(); } catch (e) {} browsePeer = null; }
+            browseBusy = false;
+        }
+        function startBrowsing() {
+            clearInterval(browseTimer);
+            refreshServerList();
+            browseTimer = setInterval(() => {
+                const panel = $lb('mp-list-panel'), setup = $lb('mp-setup-ui');
+                if (gameState !== 'multiplayer' || !panel || panel.style.display === 'none' || !setup || setup.style.display === 'none') return;
+                refreshServerList(true);
+            }, 6000);
+        }
+        function refreshServerList(silent, retried) {
+            if (typeof Peer === 'undefined') return renderServerList(null, 'error');
+            if (browseBusy) return;
+            browseBusy = true;
+            if (!silent) renderServerList(null, 'loading');
+            const run = () => {
+                if (!browsePeer) { browseBusy = false; return; }
+                let done = false, to = null, c = null;
+                const finish = rooms => {
+                    if (done) return; done = true; browseBusy = false; clearTimeout(to);
+                    if (browsePeer) browsePeer._cgFail = null;
+                    try { c && c.close(); } catch (e) {}
+                    renderServerList(rooms, 'list');
+                    if (!retried && !silent && rooms && rooms.length === 0) setTimeout(() => { if (browseTimer) refreshServerList(true, true); }, 2000);
+                };
+                browsePeer._cgFail = () => finish([]);
+                to = setTimeout(() => finish([]), 5000);
+                try { c = browsePeer.connect(CG_DIR_ID, { reliable: true }); } catch (e) { return finish([]); }
+                c.on('open', () => { try { c.send({ type: 'list' }); } catch (e) { finish([]); } });
+                c.on('data', d => { if (d && d.type === 'rooms' && Array.isArray(d.rooms)) finish(d.rooms.map(dirClean).filter(Boolean)); });
+                c.on('error', () => finish([]));
+            };
+            if (browsePeer && browsePeer.open) return run();
+            if (browsePeer) { browseBusy = false; return; } // noch am Öffnen
+            browsePeer = new Peer();
+            browsePeer.on('open', run);
+            browsePeer.on('error', e => {
+                const f = browsePeer && browsePeer._cgFail;
+                if (browsePeer && browsePeer.destroyed) browsePeer = null;
+                if (f) f();
+                else { browseBusy = false; if (!e || e.type !== 'peer-unavailable') renderServerList(null, 'error'); }
+            });
+        }
+        function renderServerList(rooms, state) {
+            lastServerListState = { rooms, state };
+            const box = $lb('sl-list'); if (!box) return;
+            box.innerHTML = '';
+            const msg = (title, text) => { const d = document.createElement('div'); d.className = 'sl-msg'; const b = document.createElement('b'); b.textContent = title; d.appendChild(b); d.appendChild(document.createTextNode(text)); box.appendChild(d); };
+            if (state === 'loading') return msg('⏳ ' + T('lbLoading'), '');
+            if (state === 'error') return msg('⚠️ ' + T('lbError'), T('lbErrorHint'));
+            if (!rooms || rooms.length === 0) return msg('🛋️ ' + T('lbEmpty'), T('lbEmptyHint'));
+            rooms.slice().sort((a, b) => (a.vis === b.vis ? 0 : a.vis === 'public' ? -1 : 1) || (b.players - a.players)).forEach(r => {
+                const full = r.players >= r.max;
+                const row = document.createElement('div'); row.className = 'sl-item' + (r.vis === 'followers' ? ' followers' : '');
+                const main = document.createElement('div'); main.className = 'sl-main';
+                const nm = document.createElement('div'); nm.className = 'sl-name'; nm.textContent = T('lbRoomOf').replace('{name}', r.host || T('settingsPlayer'));
+                const sub = document.createElement('div'); sub.className = 'sl-sub';
+                const badge = document.createElement('span'); badge.className = 'sl-badge' + (r.vis === 'followers' ? ' f' : '');
+                badge.textContent = r.vis === 'followers' ? '⭐ ' + T('lbFollowerBadge') : '🌐 ' + T('lbPublicBadge');
+                sub.appendChild(badge);
+                if (r.vis === 'followers' && r.tname) { const t = document.createElement('span'); t.textContent = T('lbFollowTwitch').replace('{name}', r.tname); sub.appendChild(t); }
+                main.appendChild(nm); main.appendChild(sub);
+                const cnt = document.createElement('div'); cnt.className = 'sl-count' + (full ? ' full' : ''); cnt.textContent = '👥 ' + r.players + '/' + r.max;
+                const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'sl-join'; btn.textContent = full ? T('lbFull') : T('lbJoin'); btn.disabled = full;
+                btn.onclick = () => joinFromList(r);
+                row.appendChild(main); row.appendChild(cnt); row.appendChild(btn); box.appendChild(row);
+            });
+        }
+
         function switchMpTab(tab) {
             currentMpTab = tab;
-            document.getElementById('mp-host-panel').style.display = tab === 'host' ? 'flex' : 'none';
-            document.getElementById('mp-join-panel').style.display = tab === 'join' ? 'flex' : 'none';
-            const hostBtn = document.getElementById('mp-tab-host');
-            const joinBtn = document.getElementById('mp-tab-join');
-            hostBtn.style.background = tab === 'host' ? 'linear-gradient(145deg,#a5d6a7,#66bb6a)' : 'rgba(141,110,99,0.4)';
-            hostBtn.style.color = tab === 'host' ? '#1b5e20' : '';
-            joinBtn.style.background = tab === 'join' ? 'linear-gradient(145deg,#80deea,#26c6da)' : 'rgba(141,110,99,0.4)';
-            joinBtn.style.color = tab === 'join' ? '#004d40' : '';
+            const panels = { host: 'mp-host-panel', list: 'mp-list-panel', join: 'mp-join-panel' };
+            Object.keys(panels).forEach(k => { const p = $lb(panels[k]); if (p) p.style.display = (k === tab) ? 'flex' : 'none'; });
+            const styles = { host: ['linear-gradient(145deg,#a5d6a7,#66bb6a)', '#1b5e20'], list: ['linear-gradient(145deg,#ffe082,#ffd54f)', '#3e2723'], join: ['linear-gradient(145deg,#80deea,#26c6da)', '#004d40'] };
+            ['host', 'list', 'join'].forEach(k => {
+                const b = $lb('mp-tab-' + k); if (!b) return;
+                b.style.background = (k === tab) ? styles[k][0] : 'rgba(141,110,99,0.4)';
+                b.style.color = (k === tab) ? styles[k][1] : '';
+            });
+            if (tab === 'list' && cgHasAccount()) startBrowsing(); else stopBrowsing();
+            if (tab === 'host') renderRoomSetup();
         }
 
         function generateRoomCode() {
@@ -5260,9 +5983,12 @@
         }
 
         function createRoom() {
+            if (!requireAccount()) return;
             const name = document.getElementById('mp-name').value.trim() || T('settingsPlayer');
             if (typeof Peer === 'undefined') return showToast(T('peerNotLoaded'));
+            if (roomSetup.vis === 'followers' && !cgTwitchReady()) { renderRoomSetup(); return showToast(T('lbNeedTwitchHost')); }
 
+            stopBrowsing();
             currentRoomCode = generateRoomCode();
             const code = currentRoomCode;
 
@@ -5271,51 +5997,53 @@
             generateLevels(seed);
 
             savePath.playerName = name;
+            MAX_PLAYERS = roomSetup.max;
+            roomMeta = { vis: roomSetup.vis, max: roomSetup.max, code, ownerName: name, ownerTid: savePath.twitchId || '', ownerTname: savePath.twitchName || '' };
             mpState.hasJoinedMultiplayer = true;
             mpState.hostId = 'cardgolf-' + code;
 
-            // Code anzeigen
-            document.getElementById('mp-host-code-text').textContent = code;
-            document.getElementById('mp-host-code-display').style.display = 'flex';
-            document.getElementById('btn-mp-create').textContent = '⏳ ' + T('mpWaiting');
-            document.getElementById('btn-mp-create').disabled = true;
+            const createBtn = document.getElementById('btn-mp-create');
+            if (createBtn) { createBtn.textContent = '⏳ ' + T('lbConnecting'); createBtn.disabled = true; }
 
             if (peer) { peer.destroy(); peer = null; }
             connections = [];
 
             const tryPeer = new Peer('cardgolf-' + code, { debug: 0 });
+            let opened = false;
             tryPeer.on('open', () => {
+                opened = true;
                 isHosting = true; peer = tryPeer;
-                setMpStatus('Raum offen. Warte auf Mitspieler...', 'connecting');
                 peer.on('connection', conn => {
+                    // Läuft das Spiel schon (oder ist der Raum nicht im Warteraum) -> abweisen
+                    if (!mpState.inLobbyArena) {
+                        conn.on('open', () => { conn.send({ type: 'roomClosed' }); setTimeout(() => conn.close(), 300); });
+                        return;
+                    }
                     if (connections.length + 1 >= MAX_PLAYERS) {
                         conn.on('open', () => { conn.send({ type: 'roomFull' }); setTimeout(() => conn.close(), 300); });
                         return;
                     }
                     setupConnection(conn);
                     updateMpPlayerList();
-
-                    // Nach Verbindung: Lobby anzeigen
-                    document.getElementById('mp-setup-ui').style.display = 'none';
-                    document.getElementById('mp-lobby-ui').style.display = 'flex';
-                    document.getElementById('mp-room-title').innerHTML = '🌐 ' + T('mpTitle') + ': <span style="color:#ffcc80;">' + code + '</span>';
                 });
-                peer.on('error', handlePeerError);
-
-                // Direkt Lobby anzeigen (Host ist alleine bis jmd beitritt)
-                document.getElementById('mp-setup-ui').style.display = 'none';
-                document.getElementById('mp-lobby-ui').style.display = 'flex';
-                document.getElementById('mp-room-title').innerHTML = '🌐 ' + T('mpShareCode').replace('–', '').trim() + ': <span style="color:#ffd54f; font-size:1.4rem; letter-spacing:4px;">' + code + '</span>';
-                updateMpPlayerList();
-                showToast('✅ ' + T('roomCreated') + code);
+                setMpStatus('Raum offen. Warte auf Mitspieler...', 'connecting');
+                if (createBtn) { createBtn.textContent = '🎮 ' + T('mpCreateRoom'); createBtn.disabled = false; }
+                enterLobbyArena();
+                if (roomMeta.vis !== 'private') startRoomListing();
+                showToast('✅ ' + T('roomCreated') + (roomMeta.vis === 'private' ? code : ''));
             });
             tryPeer.on('error', err => {
-                // ID vergeben → neuen Code generieren und nochmal versuchen
-                if (err.type === 'unavailable-id') {
-                    currentRoomCode = generateRoomCode();
-                    document.getElementById('mp-host-code-text').textContent = currentRoomCode;
+                // ID vergeben -> neuen Code generieren und nochmal versuchen
+                if (!opened && err.type === 'unavailable-id') {
+                    try { tryPeer.destroy(); } catch (e) {}
                     createRoom();
-                } else { handlePeerError(err); }
+                    return;
+                }
+                handlePeerError(err);
+                if (!opened) {
+                    mpState.hasJoinedMultiplayer = false; mpState.hostId = null;
+                    if (createBtn) { createBtn.textContent = '🎮 ' + T('mpCreateRoom'); createBtn.disabled = false; }
+                }
             });
         }
 
@@ -5324,40 +6052,49 @@
             navigator.clipboard.writeText(code).then(() => showToast(T('codeCopiedPrefix') + code)).catch(() => showToast(T('codeCopiedPrefix') + code));
         }
 
-        function connectMultiplayer() {
+        function connectMultiplayer(codeArg) {
+            if (!requireAccount()) return;
             const name = document.getElementById('mp-name').value.trim() || T('settingsPlayer');
             const codeInput = document.getElementById('mp-code');
-            const code = (codeInput ? codeInput.value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'') : '');
+            const raw = (typeof codeArg === 'string') ? codeArg : (codeInput ? codeInput.value : '');
+            const code = raw.trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
             if (!code) return showToast(T('enterCode'));
             if (typeof Peer === 'undefined') return showToast(T('peerNotLoaded'));
+            if (peer) return; // bereits in einem Raum / Verbindung läuft
 
+            stopBrowsing();
             let seed = 0;
             for (let i = 0; i < code.length; i++) seed = code.charCodeAt(i) + ((seed << 5) - seed);
             generateLevels(seed);
 
             savePath.playerName = name;
-            mpState.hasJoinedMultiplayer = true;
             mpState.hostId = 'cardgolf-' + code;
-            document.getElementById('mp-setup-ui').style.display = 'none';
-            document.getElementById('mp-lobby-ui').style.display = 'flex';
-            document.getElementById('mp-room-title').innerHTML = '🌐 ' + T('mpTitle') + ': <span style="color:#ffcc80;">' + code + '</span>';
-            setMpStatus(T('connected').replace('!', '...'), 'connecting');
+            roomMeta = { vis: 'private', max: MAX_PLAYERS, code, ownerName: '', ownerTid: '', ownerTname: '' };
+            connections = []; isHosting = false;
 
-            if (peer) { peer.destroy(); peer = null; }
-            connections = [];
+            const btn = document.getElementById('btn-mp-connect');
+            if (btn) { btn.disabled = true; btn.textContent = '⏳ ' + T('lbConnecting'); }
+            showToast(T('lbConnecting'));
 
-            isHosting = false;
             peer = new Peer();
-            peer.on('open', () => {
-                setMpStatus('Beitreten...', 'connecting');
-                setupConnection(peer.connect('cardgolf-' + code));
-            });
+            peer.on('open', () => { setupConnection(peer.connect('cardgolf-' + code)); });
             peer.on('error', handlePeerError);
+            // Der Warteraum öffnet sich, sobald der Host seine Raum-Infos geschickt hat ('roomInfo')
+            clearTimeout(joinTimeout);
+            joinTimeout = setTimeout(() => { if (!mpState.inLobbyArena && !isHosting) { showToast(T('lbJoinTimeout')); abortJoin(); } }, 12000);
         }
 
         function handlePeerError(err) {
-            setMpStatus('Fehler: ' + (err.type || 'Unbekannt'), 'error');
-            showToast(T('connError') + (err.type || err.message || 'Unknown'));
+            const msg = String((err && (err.message || err.type)) || '');
+            if (msg.indexOf(CG_DIR_ID) !== -1) return; // Verzeichnis-Verbindung, kein Spielfehler
+            if (err && err.type === 'peer-unavailable') {
+                showToast(T('lbRoomNotFound'));
+                if (!mpState.inLobbyArena && !isHosting) abortJoin();
+                return;
+            }
+            setMpStatus('Fehler: ' + ((err && err.type) || 'Unbekannt'), 'error');
+            showToast(T('connError') + ((err && (err.type || err.message)) || 'Unknown'));
+            if (!mpState.inLobbyArena && !isHosting) abortJoin();
         }
 
         function toggleReady() {
@@ -5370,6 +6107,7 @@
         }
 
         function checkAllReady() {
+            return; // ersetzt durch den Warteraum: der Host startet das Spiel selbst (hostStartGame)
             if (!isHosting || mpState.isVoting) return;
             const allReady = Object.values(remotePlayers).every(p => p.isReady);
             if (mpState.isReady && allReady && Object.keys(remotePlayers).length > 0) {
@@ -5521,12 +6259,12 @@
         }
 
         function resetMpMatch() {
-            mpState.currentRound = 0;
-            mpState.playerScores = {};
-            mpState.playerFinished = {};
-            mpState.multiplayerGameActive = false;
-            mpState.matchOver = false;
-            showMenu('multiplayer');
+            // Nach dem Spiel ("Erneut spielen"): alle landen wieder im Warteraum
+            const rb = document.getElementById('btn-mp-replay');
+            if (rb) { rb.disabled = false; rb.textContent = '🔄 ' + T('mpReplay'); }
+            const rs = document.getElementById('mp-replay-status'); if (rs) rs.textContent = '';
+            enterLobbyArena();
+            if (isHosting && roomMeta.vis !== 'private') startRoomListing();
         }
 
         function startVotingPhase() {
@@ -5712,30 +6450,54 @@
             conn.on('open', () => {
                 setMpStatus(T('connected') + ' (' + (connections.length + 1) + '/' + MAX_PLAYERS + ' ' + T('players') + ')', 'connected');
                 showToast(T('connected'));
-                conn.send({ type: 'playerInfo', id: peer.id, name: savePath.playerName, skinId: savePath.currentSkin, isReady: mpState.isReady, storyDone: !!(savePath.story && savePath.story.completed) });
+                if (isHosting) conn.send({ type: 'roomInfo', max: MAX_PLAYERS, vis: roomMeta.vis, code: roomMeta.code, ownerName: roomMeta.ownerName, ownerTid: roomMeta.ownerTid, ownerTname: roomMeta.ownerTname });
+                conn.send({ type: 'playerInfo', id: peer.id, name: savePath.playerName, skinId: savePath.currentSkin, isReady: mpState.isReady, storyDone: !!(savePath.story && savePath.story.completed), uid: savePath.twitchId || '', skinDef: mySkinDef() });
                 updateMpPlayerList();
             });
             conn.on('data', data => {
                 if (data.type === 'roomFull') {
                     showToast(T('roomFull'));
-                    setTimeout(() => exitMultiplayer(), 800);
+                    abortJoin();
+                    return;
+                }
+                if (data.type === 'roomClosed') {
+                    showToast(T('lbRoomClosed'));
+                    abortJoin();
+                    return;
+                }
+                if (data.type === 'roomInfo') {
+                    clearTimeout(joinTimeout);
+                    MAX_PLAYERS = Math.max(2, Math.min(8, parseInt(data.max, 10) || 8));
+                    roomMeta = { vis: data.vis || 'private', max: MAX_PLAYERS, code: String(data.code || roomMeta.code || ''), ownerName: String(data.ownerName || ''), ownerTid: String(data.ownerTid || ''), ownerTname: String(data.ownerTname || '') };
+                    mpState.hasJoinedMultiplayer = true;
+                    if (!mpState.inLobbyArena) enterLobbyArena();
+                    return;
+                }
+                if (data.type === 'kicked') {
+                    if (conn.peer === mpState.hostId) { showToast(T('lbKicked')); exitMultiplayer(); }
+                    return;
+                }
+                if (data.type === 'startGame') {
+                    if (conn.peer === mpState.hostId) { mpState.inLobbyArena = false; mpState.multiplayerGameActive = true; setLobbyOverlay(false); }
                     return;
                 }
                 if (data.type === 'playerInfo') {
                     if (!remotePlayers[data.id]) {
+                        if (isHosting && data.uid && bannedUids[data.uid]) { try { conn.send({ type: 'kicked' }); } catch (e) {} setTimeout(() => { try { conn.close(); } catch (e) {} }, 250); return; }
+                        if (data.skinDef && data.skinId && !ballSkins.find(s => s.id === data.skinId)) ballSkins.push({ id: String(data.skinId).slice(0, 40), names: { en: '?' }, color: (+data.skinDef.color) || 0xffffff, glow: !!data.skinDef.glow, metal: !!data.skinDef.metal, price: 0, ephemeral: true });
                         const skin = ballSkins.find(s => s.id === data.skinId) || ballSkins[0];
                         const mesh = new THREE.Mesh(new THREE.SphereGeometry(0.6,16,16), new THREE.MeshStandardMaterial({ color: skin.color, emissive: skin.glow ? skin.color : 0, emissiveIntensity: skin.glow ? 0.8 : 0.2 }));
                         scene.add(mesh);
                         const label = createNameLabel((data.name || T('settingsPlayer')) + (data.storyDone ? ' ⭐' : '')); scene.add(label);
                         remotePlayers[data.id] = { 
                             id: data.id, mesh, label, name: data.name, 
-                            skinId: data.skinId, isReady: !!data.isReady, lastVote: -1, storyDone: !!data.storyDone
+                            skinId: data.skinId, isReady: !!data.isReady, lastVote: -1, storyDone: !!data.storyDone, uid: data.uid || '', skinDef: data.skinDef || null
                         };
                         showToast((data.name || T('players')) + T('someoneJoined'));
                         if (isHosting) {
                             connections.forEach(c => { if (c.open && c.peer !== conn.peer) c.send(data); });
-                            Object.keys(remotePlayers).forEach(pid => { if (pid !== data.id) { const rp = remotePlayers[pid]; conn.send({ type: 'playerInfo', id: pid, name: rp.name, skinId: rp.skinId, isReady: rp.isReady, storyDone: !!rp.storyDone }); } });
-                            conn.send({ type: 'playerInfo', id: peer.id, name: savePath.playerName, skinId: savePath.currentSkin, isReady: mpState.isReady, storyDone: !!(savePath.story && savePath.story.completed) });
+                            Object.keys(remotePlayers).forEach(pid => { if (pid !== data.id) { const rp = remotePlayers[pid]; conn.send({ type: 'playerInfo', id: pid, name: rp.name, skinId: rp.skinId, isReady: rp.isReady, storyDone: !!rp.storyDone, uid: rp.uid || '', skinDef: rp.skinDef || null }); } });
+                            conn.send({ type: 'playerInfo', id: peer.id, name: savePath.playerName, skinId: savePath.currentSkin, isReady: mpState.isReady, storyDone: !!(savePath.story && savePath.story.completed), uid: savePath.twitchId || '', skinDef: mySkinDef() });
                         }
                     } else {
                         Object.assign(remotePlayers[data.id], { name: data.name, skinId: data.skinId, isReady: !!data.isReady, storyDone: !!data.storyDone });
@@ -5811,10 +6573,12 @@
                 }
             });
             conn.on('close', () => {
+                if (!mpState.hasJoinedMultiplayer && !isHosting) return; // Beitritt noch nicht abgeschlossen
                 const name = remotePlayers[conn.peer]?.name || T('settingsPlayer');
                 if (remotePlayers[conn.peer]) { scene.remove(remotePlayers[conn.peer].mesh); if (remotePlayers[conn.peer].label) scene.remove(remotePlayers[conn.peer].label); delete remotePlayers[conn.peer]; }
                 connections = connections.filter(c => c.peer !== conn.peer);
                 delete replayRequests[conn.peer];
+                if (isHosting) broadcastData({ type: 'playerLeft', id: conn.peer, name });
                 updateMpPlayerList();
                 setMpStatus(connections.length > 0 ? (T('connected') + ' (' + (connections.length+1) + '/' + MAX_PLAYERS + ' ' + T('players') + ')') : T('mpWaiting'), connections.length > 0 ? 'connected' : 'connecting');
                 showToast(name + T('playerLeftSuffix'));
@@ -5855,6 +6619,8 @@
         }
 
         function exitMultiplayer() {
+            destroyDirectory(); setLobbyOverlay(false); clearTimeout(joinTimeout);
+            MAX_PLAYERS = 8; roomMeta = { vis: 'private', max: 8, code: '', ownerName: '', ownerTid: '', ownerTname: '' };
             if (peer && connections.length > 0) broadcastData({ type: 'playerLeft', id: peer.id, name: savePath.playerName });
             if (peer) { peer.destroy(); peer = null; }
             if (mpState.votingInterval) { clearInterval(mpState.votingInterval); mpState.votingInterval = null; }
@@ -5879,6 +6645,294 @@
             
             endGameAndReturnToMain(); // Nutzt die globale Aufräum-Funktion
         }
+        // =====================================================================
+        //  ACCOUNT (Twitch) / KICK / WORKSHOP / TUTORIAL
+        // =====================================================================
+        const WS_CREATE_COST = 1000;   // Kosten, ein Item zu erstellen
+        const WS_BUY_PRICE = 1500;     // Kaufpreis im Workshop
+        const WS_CREATOR_CUT = 1000;   // Anteil, den der Ersteller pro Verkauf bekommt
+
+        // ---------- Account ----------
+        function cgHasAccount() { return !!(savePath.twitchName && cgTwitchReady()); }
+        function requireAccount() {
+            if (cgHasAccount()) return true;
+            showToast(T('acNeed'));
+            settingsReturnToPause = false;
+            showMenu('settings');
+            return false;
+        }
+        function renderAccountUI() {
+            const st = $lb('ac-status'); if (!st) return;
+            const ok = cgHasAccount();
+            st.textContent = ok ? ('✅ ' + T('acLoggedIn').replace('{name}', savePath.twitchName)) : ('🔒 ' + T('acLoggedOut'));
+            st.classList.toggle('ok', ok);
+            const sp = $lb('settings-playername'); if (sp) { sp.readOnly = !!savePath.twitchName; if (savePath.twitchName) sp.value = savePath.twitchName; }
+        }
+        function renderAccountGate() {
+            const setup = $lb('mp-setup-ui'); if (!setup) return;
+            let lock = $lb('mp-account-lock');
+            if (!lock) {
+                lock = document.createElement('div'); lock.id = 'mp-account-lock'; lock.className = 'ac-lock';
+                lock.innerHTML = '<div class="ac-ico">🔐</div><b data-lb="acLockTitle"></b><p data-lb="acLockText"></p>' +
+                    '<button type="button" class="btn ac-go" onclick="settingsReturnToPause=false;showMenu(\'settings\')">⚙️ <span data-lb="acGoSettings"></span></button>';
+                const info = $lb('t-mp-info'); info.parentNode.insertBefore(lock, info.nextSibling);
+                lock.querySelectorAll('[data-lb]').forEach(e => { e.textContent = T(e.dataset.lb); });
+            }
+            setup.classList.toggle('mp-gated', !cgHasAccount());
+        }
+
+        // ---------- Spieler aus dem Warteraum kicken (nur Host) ----------
+        let bannedUids = {};
+        function mySkinDef() {
+            const s = ballSkins.find(x => x.id === savePath.currentSkin);
+            return (s && String(s.id).indexOf('ws_') === 0) ? { color: s.color, glow: !!s.glow, metal: !!s.metal } : null;
+        }
+        function kickPlayer(pid) {
+            if (!isHosting || !mpState.inLobbyArena) return;
+            const rp = remotePlayers[pid];
+            const c = connections.find(x => x.peer === pid); if (!c) return;
+            if (rp && rp.uid) bannedUids[rp.uid] = true;
+            try { c.send({ type: 'kicked' }); } catch (e) {}
+            setTimeout(() => { try { c.close(); } catch (e) {} }, 250);
+            showToast(T('lbKickedToast').replace('{name}', (rp && rp.name) || '?'));
+        }
+
+        // ---------- Workshop ----------
+        // Speicher-Schicht: aktuell LOKAL (nur dieses Gerät). Für einen gemeinsamen Workshop
+        // aller Spieler muss diese Schicht gegen einen Server getauscht werden (gleiche 4 Methoden).
+        const WS_KEY = 'cgWorkshopDB_v1';
+        const WorkshopStore = {
+            mode: 'local',
+            _db() { try { const d = JSON.parse(localStorage.getItem(WS_KEY)); if (d && Array.isArray(d.items)) return d; } catch (e) {} return { items: [], earnings: {} }; },
+            _save(db) { try { localStorage.setItem(WS_KEY, JSON.stringify(db)); } catch (e) {} },
+            async list() { return this._db().items.map(wsSanitize).filter(Boolean); },
+            async publish(item) { const db = this._db(); db.items.unshift(item); this._save(db); return item; },
+            async recordSale(itemId) { const db = this._db(); const it = db.items.find(x => x.id === itemId); if (!it) return; it.sales = (it.sales || 0) + 1; db.earnings[it.creatorId] = (db.earnings[it.creatorId] || 0) + WS_CREATOR_CUT; this._save(db); },
+            async earnings(creatorId) { return (this._db().earnings[creatorId] || 0); },
+            async claim(creatorId) { const db = this._db(); const v = db.earnings[creatorId] || 0; db.earnings[creatorId] = 0; this._save(db); return v; }
+        };
+        function wsCleanName(s, max) { return String(s || '').replace(/[<>&"'`\\]/g, '').replace(/\s+/g, ' ').trim().slice(0, max || 20); }
+        function wsSanitize(it) {
+            if (!it || typeof it !== 'object') return null;
+            const id = String(it.id || ''); if (!/^ws_[a-z0-9]{4,24}$/.test(id)) return null;
+            const col = v => Math.max(0, Math.min(0xffffff, parseInt(v, 10) || 0));
+            const name = wsCleanName(it.name, 20); if (name.length < 2) return null;
+            return { id, type: it.type === 'club' ? 'club' : 'ball', name, creatorId: String(it.creatorId || '').replace(/[^0-9]/g, '').slice(0, 20), creatorName: wsCleanName(it.creatorName, 16),
+                color: col(it.color), shaft: col(it.shaft === undefined ? 0xcccccc : it.shaft), glow: !!it.glow, metal: !!it.metal, sales: Math.max(0, parseInt(it.sales, 10) || 0), created: parseInt(it.created, 10) || 0 };
+        }
+        function wsRegister(raw) {
+            const it = wsSanitize(raw); if (!it) return;
+            const list = it.type === 'club' ? clubSkins : ballSkins;
+            if (list.find(s => s.id === it.id)) return;
+            const def = { id: it.id, names: { en: it.name }, color: it.color, price: WS_BUY_PRICE, workshop: true, creator: it.creatorName };
+            if (it.type === 'ball') { def.glow = it.glow; def.metal = it.metal; } else { def.shaft = it.shaft; }
+            list.push(def);
+        }
+        function registerWorkshopItems() {
+            if (!savePath.workshopOwned) savePath.workshopOwned = {};
+            Object.values(savePath.workshopOwned).forEach(wsRegister);
+        }
+        const wsHex = n => '#' + (n >>> 0).toString(16).padStart(6, '0');
+        function wsPreviewEl(it) {
+            const box = document.createElement('div'); box.className = 'ws-prev';
+            if (it.type === 'club') {
+                box.innerHTML = '<svg viewBox="0 0 60 60" width="100%" height="100%"><g transform="rotate(-28 30 32)"><rect x="28" y="2" width="4" height="40" rx="2" fill="' + wsHex(it.shaft) + '"/><rect x="19" y="40" width="24" height="11" rx="3" fill="' + wsHex(it.color) + '" stroke="rgba(0,0,0,.35)"/></g></svg>';
+            } else {
+                const b = document.createElement('div'); b.className = 'ws-ball';
+                const c = wsHex(it.color);
+                b.style.background = 'radial-gradient(circle at 32% 30%, rgba(255,255,255,.85) 0, ' + c + ' 42%, rgba(0,0,0,.45) 135%)';
+                if (it.glow) b.style.boxShadow = '0 0 16px ' + c + ', 0 0 4px #fff8';
+                if (it.metal) b.style.filter = 'saturate(1.25) contrast(1.2)';
+                box.appendChild(b);
+            }
+            return box;
+        }
+        let wsTab = 'browse', wsFilter = 'all';
+        let wsDraft = { type: 'ball', name: '', color: 0xff7043, shaft: 0xcccccc, glow: false, metal: false };
+        const wsIsOwned = it => !!(savePath.workshopOwned && savePath.workshopOwned[it.id]);
+
+        function renderWorkshop() {
+            const ok = cgHasAccount();
+            $lb('ws-lock').style.display = ok ? 'none' : 'flex';
+            $lb('ws-body').style.display = ok ? 'flex' : 'none';
+            if (!ok) return;
+            $lb('ws-coins').textContent = savePath.coins;
+            $lb('ws-mode-note').textContent = WorkshopStore.mode === 'local' ? T('wsLocalNote') : '';
+            $lb('ws-mode-note').style.display = WorkshopStore.mode === 'local' ? '' : 'none';
+            wsShowTab(wsTab);
+        }
+        function wsShowTab(tab) {
+            wsTab = tab;
+            ['browse', 'create', 'mine'].forEach(k => {
+                $lb('ws-pane-' + k).style.display = (k === tab) ? 'flex' : 'none';
+                $lb('ws-tab-' + k).classList.toggle('active', k === tab);
+            });
+            $lb('ws-coins').textContent = savePath.coins;
+            if (tab === 'browse') wsRenderBrowse(); else if (tab === 'create') wsRenderCreate(); else wsRenderMine();
+        }
+        function wsSetFilter(f) { wsFilter = f; wsRenderBrowse(); }
+        async function wsRenderBrowse() {
+            document.querySelectorAll('#ws-filters .ws-chip').forEach(c => c.classList.toggle('active', c.dataset.f === wsFilter));
+            const grid = $lb('ws-grid'); grid.innerHTML = '';
+            const items = (await WorkshopStore.list()).filter(i => wsFilter === 'all' || i.type === wsFilter);
+            if (!items.length) { const d = document.createElement('div'); d.className = 'sl-msg'; d.style.gridColumn = '1/-1'; d.innerHTML = '<b></b>'; d.firstChild.textContent = '🛠️ ' + T('wsEmpty'); d.appendChild(document.createTextNode(T('wsEmptyHint'))); grid.appendChild(d); return; }
+            items.forEach(it => {
+                const mine = it.creatorId && String(it.creatorId) === String(savePath.twitchId);
+                const owned = wsIsOwned(it);
+                const card = document.createElement('div'); card.className = 'ws-card';
+                card.appendChild(wsPreviewEl(it));
+                const nm = document.createElement('div'); nm.className = 'ws-name'; nm.textContent = it.name;
+                const by = document.createElement('div'); by.className = 'ws-by'; by.textContent = (it.type === 'club' ? '🏌️ ' : '⚪ ') + T('wsBy').replace('{name}', it.creatorName || '?');
+                const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'ws-buy';
+                if (owned || mine) { btn.disabled = true; btn.textContent = mine ? '★ ' + T('wsYours') : '✓ ' + T('shopBought'); }
+                else { btn.textContent = T('wsBuy').replace('{p}', WS_BUY_PRICE); btn.onclick = () => wsBuy(it); }
+                card.appendChild(nm); card.appendChild(by); card.appendChild(btn); grid.appendChild(card);
+            });
+        }
+        async function wsBuy(it) {
+            if (!requireAccount()) return;
+            if (wsIsOwned(it)) return;
+            if (savePath.coins < WS_BUY_PRICE) { AudioEngine.error(); return showToast(T('notEnoughCoins')); }
+            savePath.coins -= WS_BUY_PRICE;
+            if (!savePath.workshopOwned) savePath.workshopOwned = {};
+            savePath.workshopOwned[it.id] = it; wsRegister(it);
+            (it.type === 'club' ? savePath.purchasedClubs : savePath.purchasedSkins).push(it.id);
+            await WorkshopStore.recordSale(it.id);
+            saveProgress(); updateUI(); AudioEngine.notify();
+            showToast(T('wsBoughtToast').replace('{name}', it.name));
+            wsShowTab(wsTab);
+        }
+        function wsRenderCreate() {
+            $lb('ws-cost-line').textContent = T('wsCostLine').replace('{c}', WS_CREATE_COST).replace('{p}', WS_BUY_PRICE);
+            document.querySelectorAll('#ws-type .ws-chip').forEach(c => c.classList.toggle('active', c.dataset.t === wsDraft.type));
+            $lb('ws-name-in').value = wsDraft.name;
+            $lb('ws-col-main').value = wsHex(wsDraft.color); $lb('ws-col-shaft').value = wsHex(wsDraft.shaft);
+            $lb('ws-glow').checked = wsDraft.glow; $lb('ws-metal').checked = wsDraft.metal;
+            $lb('ws-row-shaft').style.display = wsDraft.type === 'club' ? '' : 'none';
+            $lb('ws-row-fx').style.display = wsDraft.type === 'ball' ? '' : 'none';
+            $lb('ws-lbl-main').textContent = wsDraft.type === 'club' ? T('wsColHead') : T('wsColBall');
+            const pv = $lb('ws-preview'); pv.innerHTML = ''; pv.appendChild(wsPreviewEl(wsDraft));
+            $lb('ws-publish').disabled = false;
+        }
+        function wsDraftChanged() {
+            wsDraft.name = wsCleanName($lb('ws-name-in').value, 20);
+            wsDraft.color = parseInt($lb('ws-col-main').value.slice(1), 16) || 0;
+            wsDraft.shaft = parseInt($lb('ws-col-shaft').value.slice(1), 16) || 0;
+            wsDraft.glow = $lb('ws-glow').checked; wsDraft.metal = $lb('ws-metal').checked;
+            const pv = $lb('ws-preview'); pv.innerHTML = ''; pv.appendChild(wsPreviewEl(wsDraft));
+        }
+        function wsSetType(t) { wsDraft.type = t; wsRenderCreate(); }
+        async function wsPublish() {
+            if (!requireAccount()) return;
+            wsDraftChanged();
+            if (wsDraft.name.length < 2) { AudioEngine.error(); return showToast(T('wsNameShort')); }
+            if (savePath.coins < WS_CREATE_COST) { AudioEngine.error(); return showToast(T('notEnoughCoins')); }
+            $lb('ws-publish').disabled = true;
+            const rnd = Math.random().toString(36).slice(2, 8);
+            const item = { id: 'ws_' + Date.now().toString(36) + rnd, type: wsDraft.type, name: wsDraft.name, creatorId: String(savePath.twitchId), creatorName: wsCleanName(savePath.twitchName, 16),
+                color: wsDraft.color, shaft: wsDraft.shaft, glow: wsDraft.glow, metal: wsDraft.type === 'ball' && wsDraft.metal, sales: 0, created: Date.now() };
+            savePath.coins -= WS_CREATE_COST;
+            if (!savePath.workshopOwned) savePath.workshopOwned = {};
+            savePath.workshopOwned[item.id] = item; wsRegister(item);
+            (item.type === 'club' ? savePath.purchasedClubs : savePath.purchasedSkins).push(item.id);
+            await WorkshopStore.publish(item);
+            saveProgress(); updateUI(); AudioEngine.success();
+            showToast(T('wsPublished').replace('{name}', item.name));
+            wsDraft.name = ''; wsShowTab('mine');
+        }
+        async function wsRenderMine() {
+            const box = $lb('ws-mine'); box.innerHTML = '';
+            const myId = String(savePath.twitchId);
+            const items = (await WorkshopStore.list()).filter(i => String(i.creatorId) === myId);
+            const earn = await WorkshopStore.earnings(myId);
+            const head = document.createElement('div'); head.className = 'ws-earn';
+            const t = document.createElement('span'); t.textContent = '💰 ' + T('wsEarnings').replace('{n}', earn); head.appendChild(t);
+            const cb = document.createElement('button'); cb.type = 'button'; cb.className = 'ws-buy'; cb.textContent = T('wsClaim'); cb.disabled = earn <= 0;
+            cb.onclick = async () => { const v = await WorkshopStore.claim(myId); if (v > 0) { savePath.coins += v; saveProgress(); updateUI(); showToast('+' + v + ' 🪙'); AudioEngine.success(); } wsShowTab('mine'); };
+            head.appendChild(cb); box.appendChild(head);
+            const grid = document.createElement('div'); grid.className = 'ws-grid'; box.appendChild(grid);
+            if (!items.length) { const d = document.createElement('div'); d.className = 'sl-msg'; d.style.gridColumn = '1/-1'; d.innerHTML = '<b></b>'; d.firstChild.textContent = '🎨 ' + T('wsMineEmpty'); d.appendChild(document.createTextNode(T('wsMineEmptyHint'))); grid.appendChild(d); return; }
+            items.forEach(it => {
+                const card = document.createElement('div'); card.className = 'ws-card';
+                card.appendChild(wsPreviewEl(it));
+                const nm = document.createElement('div'); nm.className = 'ws-name'; nm.textContent = it.name;
+                const by = document.createElement('div'); by.className = 'ws-by'; by.textContent = '🛒 ' + T('wsSales').replace('{n}', it.sales || 0);
+                card.appendChild(nm); card.appendChild(by); grid.appendChild(card);
+            });
+        }
+
+        // ---------- Tutorial beim ersten Druck auf "Spielen" ----------
+        const TUT_TEXT = {
+            de: {
+                title: 'So spielst du', skip: 'Überspringen', next: 'Weiter', back: 'Zurück', done: 'Los geht\'s!', devices: { phone: '📱 Handy', tablet: '📋 Tablet', pc: '🖥️ PC' },
+                pc: [['🏌️', 'Schlagen', 'Klicke auf den Ball, ziehe die Maus nach hinten und lass los. Je weiter du ziehst, desto kräftiger der Schlag.'], ['🎥', 'Kamera & Zoom', 'Halte die rechte Maustaste und bewege die Maus, um dich umzusehen. Mit dem Mausrad zoomst du.'], ['⛳', 'Ziel', 'Bring den Ball ins Loch (bei der Fahne) – mit möglichst wenigen Schlägen. Sammle Münzen für bis zu 3 Sterne. Pause: Esc.'], ['🌐', 'Online', 'Für Online-Räume und den Workshop brauchst du einen Account (Einstellungen → Twitch). Mit Tab siehst du die Punktestände.']],
+                tablet: [['🏌️', 'Schlagen', 'Tippe auf den Ball, ziehe den Finger nach hinten und lass los. Je weiter du ziehst, desto kräftiger der Schlag.'], ['🎥', 'Kamera & Zoom', 'Ziehe mit einem Finger über eine freie Fläche, um die Kamera zu drehen. Mit zwei Fingern (Pinch) zoomst du.'], ['⛳', 'Ziel', 'Bring den Ball ins Loch (bei der Fahne) – mit möglichst wenigen Schlägen. Sammle Münzen für bis zu 3 Sterne. Tipp: Querformat spielt sich am besten.'], ['🌐', 'Online', 'Für Online-Räume und den Workshop brauchst du einen Account (Einstellungen → Twitch). Unten findest du die Knöpfe „Punktestand“ und „Chat“.']],
+                phone: [['🏌️', 'Schlagen', 'Tippe auf den Ball, ziehe den Finger nach hinten und lass los. Je weiter du ziehst, desto kräftiger der Schlag.'], ['🎥', 'Kamera & Zoom', 'Ziehe mit einem Finger über eine freie Fläche, um dich umzusehen. Mit zwei Fingern (Pinch) zoomst du.'], ['⛳', 'Ziel', 'Bring den Ball ins Loch (bei der Fahne) – mit möglichst wenigen Schlägen. Sammle Münzen für bis zu 3 Sternen. Pause: Knopf oben.'], ['🌐', 'Online', 'Für Online-Räume und den Workshop brauchst du einen Account (Einstellungen → Twitch). Unten: „Punktestand“ und „Chat“.']]
+            },
+            en: {
+                title: 'How to play', skip: 'Skip', next: 'Next', back: 'Back', done: 'Let\'s go!', devices: { phone: '📱 Phone', tablet: '📋 Tablet', pc: '🖥️ PC' },
+                pc: [['🏌️', 'Hitting', 'Click the ball, pull the mouse backwards and release. The further you pull, the harder the shot.'], ['🎥', 'Camera & zoom', 'Hold the right mouse button and move the mouse to look around. Use the mouse wheel to zoom.'], ['⛳', 'Goal', 'Get the ball into the hole (by the flag) with as few strokes as possible. Collect coins for up to 3 stars. Pause: Esc.'], ['🌐', 'Online', 'Online rooms and the Workshop need an account (Settings → Twitch). Hold Tab to see the scores.']],
+                tablet: [['🏌️', 'Hitting', 'Tap the ball, drag your finger backwards and let go. The further you drag, the harder the shot.'], ['🎥', 'Camera & zoom', 'Drag with one finger on an empty area to rotate the camera. Pinch with two fingers to zoom.'], ['⛳', 'Goal', 'Get the ball into the hole (by the flag) with as few strokes as possible. Collect coins for up to 3 stars. Tip: landscape mode plays best.'], ['🌐', 'Online', 'Online rooms and the Workshop need an account (Settings → Twitch). Use the “Scores” and “Chat” buttons at the bottom.']],
+                phone: [['🏌️', 'Hitting', 'Tap the ball, drag your finger backwards and let go. The further you drag, the harder the shot.'], ['🎥', 'Camera & zoom', 'Drag with one finger on an empty area to look around. Pinch with two fingers to zoom.'], ['⛳', 'Goal', 'Get the ball into the hole (by the flag) with as few strokes as possible. Collect coins for up to 3 stars. Pause: button at the top.'], ['🌐', 'Online', 'Online rooms and the Workshop need an account (Settings → Twitch). At the bottom: “Scores” and “Chat”.']]
+            }
+        };
+        function cgDetectDevice() {
+            const coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+            const w = Math.min(window.innerWidth, window.innerHeight);
+            if (!coarse) return 'pc';
+            return w < 600 ? 'phone' : 'tablet';
+        }
+        function showPlayTutorial(onDone) {
+            const lang = (savePath.language === 'de') ? 'de' : 'en';
+            const tx = TUT_TEXT[lang];
+            let dev = cgDetectDevice(), step = 0;
+            let ov = $lb('play-tutorial'); if (ov) ov.remove();
+            ov = document.createElement('div'); ov.id = 'play-tutorial';
+            document.body.appendChild(ov);
+            const finish = () => { ov.remove(); savePath.tutorialSeen = true; savePath.tutorialDone = true; saveProgress(); if (onDone) onDone(); };
+            function draw() {
+                const steps = tx[dev]; const s = steps[step];
+                ov.innerHTML = '';
+                const card = document.createElement('div'); card.className = 'pt-card';
+                const h = document.createElement('div'); h.className = 'pt-title'; h.textContent = '🎓 ' + tx.title; card.appendChild(h);
+                const tabs = document.createElement('div'); tabs.className = 'pt-tabs';
+                ['phone', 'tablet', 'pc'].forEach(k => { const b = document.createElement('button'); b.type = 'button'; b.className = 'pt-tab' + (k === dev ? ' active' : ''); b.textContent = tx.devices[k]; b.onclick = () => { dev = k; step = 0; draw(); }; tabs.appendChild(b); });
+                card.appendChild(tabs);
+                const body = document.createElement('div'); body.className = 'pt-body';
+                const ic = document.createElement('div'); ic.className = 'pt-ico'; ic.textContent = s[0];
+                const st = document.createElement('div'); st.className = 'pt-step'; st.textContent = (step + 1) + ' / ' + steps.length + ' · ' + s[1];
+                const tt = document.createElement('p'); tt.className = 'pt-text'; tt.textContent = s[2];
+                body.appendChild(ic); body.appendChild(st); body.appendChild(tt); card.appendChild(body);
+                const dots = document.createElement('div'); dots.className = 'pt-dots';
+                steps.forEach((_, i) => { const d = document.createElement('i'); if (i === step) d.className = 'on'; dots.appendChild(d); });
+                card.appendChild(dots);
+                const row = document.createElement('div'); row.className = 'pt-actions';
+                const skip = document.createElement('button'); skip.type = 'button'; skip.className = 'pt-skip'; skip.textContent = tx.skip; skip.onclick = finish;
+                const back = document.createElement('button'); back.type = 'button'; back.className = 'pt-back'; back.textContent = '‹ ' + tx.back; back.style.visibility = step > 0 ? 'visible' : 'hidden'; back.onclick = () => { step--; draw(); };
+                const next = document.createElement('button'); next.type = 'button'; next.className = 'pt-next'; next.textContent = (step === steps.length - 1) ? tx.done : tx.next + ' ›';
+                next.onclick = () => { if (step === steps.length - 1) finish(); else { step++; draw(); } };
+                row.appendChild(skip); row.appendChild(back); row.appendChild(next); card.appendChild(row);
+                ov.appendChild(card);
+            }
+            draw();
+        }
+        (function () {
+            const _origTPS = togglePlaySubMenu;
+            togglePlaySubMenu = function () {
+                if (!savePath.tutorialSeen && !playPanelsOpen) { showPlayTutorial(() => _origTPS()); return; }
+                return _origTPS.apply(this, arguments);
+            };
+            const _origSM2 = showMenu;
+            showMenu = function (id) {
+                _origSM2.apply(this, arguments);
+                try {
+                    if (id === 'multiplayer') renderAccountGate();
+                    if (id === 'settings') renderAccountUI();
+                    if (id === 'workshop') renderWorkshop();
+                } catch (e) {}
+            };
+        })();
+
         // ===== ENDE MULTIPLAYER =====
 
         // Aufgeben: Im Multiplayer -> exitMultiplayer, im Einzelspieler -> Hauptmenü
@@ -6996,8 +8050,8 @@
             // Twitch: fester Platz oben rechts, nur im Online-Menü
             const REDIR = location.origin + '/';
             const inp = document.getElementById('mp-name');
-            const btn = document.getElementById('btn-mp-twitch'); const modal = mk('div', 'tw-modal');
-            function refresh() { const n = savePath.twitchName; btn.textContent = '📺 ' + (n ? 'Twitch: ' + n : T('twConnect')); if (inp) { inp.readOnly = !!n; if (n) inp.value = n; } }
+            const btn = document.getElementById('btn-account-twitch'); const modal = mk('div', 'tw-modal');
+            function refresh() { try { renderRoomSetup(); renderAccountUI(); renderAccountGate(); } catch (e) {} const n = savePath.twitchName; btn.textContent = '📺 ' + (n ? 'Twitch: ' + n : T('twConnect')); if (inp) { inp.readOnly = !!n; if (n) inp.value = n; } }
             function render() {
                 const n = savePath.twitchName;
                 modal.innerHTML = `<div class="tw-card"><div class="tw-top">Twitch</div><div class="tw-body">` + (n
@@ -7005,11 +8059,11 @@
                     : `<div>${T('twDesc')}</div><small>${T('twRedirect')} <b>${_cgEsc(REDIR)}</b></small><button class="btn" id="tw-go" style="background: linear-gradient(145deg,#b39ddb,#9146ff); color:#fff;">📺 ${T('twConnect')}</button><button class="btn" id="tw-close" style="background: rgba(141,110,99,0.4);">${T('twCancel')}</button>`) + `</div></div>`;
                 const $ = id => document.getElementById(id);
                 $('tw-close').onclick = () => { modal.style.display = 'none'; };
-                if ($('tw-off')) $('tw-off').onclick = () => { delete savePath.twitchName; saveProgress(); refresh(); modal.style.display = 'none'; showToast(T('twToastOff')); };
+                if ($('tw-off')) $('tw-off').onclick = () => { delete savePath.twitchName; delete savePath.twitchId; try { localStorage.removeItem('cgTwTok'); } catch (e) {} saveProgress(); refresh(); modal.style.display = 'none'; showToast(T('twToastOff')); };
                 if ($('tw-go')) $('tw-go').onclick = () => {
                     if (!/^https?:$/.test(location.protocol)) return showToast(T('twWebOnly'));
                     saveProgress();
-                    location.href = 'https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=' + TW_CID + '&redirect_uri=' + encodeURIComponent(REDIR);
+                    location.href = 'https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=' + TW_CID + '&redirect_uri=' + encodeURIComponent(REDIR) + '&scope=' + encodeURIComponent('user:read:follows');
                 };
             }
             btn.onclick = () => { render(); modal.style.display = 'flex'; };
@@ -7021,8 +8075,8 @@
                 fetch('https://api.twitch.tv/helix/users', { headers: { Authorization: 'Bearer ' + token, 'Client-Id': TW_CID } })
                     .then(r => r.json()).then(d => {
                         const u = d.data && d.data[0]; if (!u) return showToast(T('twFail'));
-                        savePath.twitchName = u.display_name; savePath.playerName = u.display_name; saveProgress();
-                        refresh(); showMenu('multiplayer'); showToast(T('twToastOn') + u.display_name);
+                        savePath.twitchName = u.display_name; savePath.twitchId = u.id; savePath.playerName = u.display_name; try { localStorage.setItem('cgTwTok', token); } catch (e) {} saveProgress();
+                        refresh(); showMenu('settings'); showToast(T('twToastOn') + u.display_name);
                     }).catch(() => showToast(T('twFail')));
             }
             setInterval(() => {
@@ -7031,7 +8085,7 @@
                 sbBtn.style.display = inGame ? 'block' : 'none';
                 chatBtn.style.display = (mp && (inGame || gameState === 'multiplayer')) ? 'block' : 'none';
                 if (!chatBtn.style.display || chatBtn.style.display === 'none') chat.style.display = 'none';
-                if (gameState !== 'multiplayer') modal.style.display = 'none';
+                if (gameState !== 'settings') modal.style.display = 'none';
                 if (gameState === 'playing' && !mp && !savePath.tutorialDone && tut.style.display !== 'flex') tut.style.display = 'flex';
             }, 600);
         })();
@@ -7094,7 +8148,9 @@
             if (isHosting) checkRoundEnd();
         }
 
+        registerWorkshopItems();
         applyLoadedProgressToUI();
+        try { renderAccountUI(); renderAccountGate(); } catch (e) {}
 
         animate();
     </script>
