@@ -6,7 +6,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#3e2723">
+    <meta name="theme-color" content="#2b1914">
     <title>CardGolf 3D - Professional Edition</title>
     <script src="./three.min.js"></script>
     <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
@@ -858,7 +858,43 @@
             #play-tutorial .pt-body { min-height: 0; padding: 8px; }
             #play-tutorial .pt-ico { font-size: 1.8rem; }
         }
-    </style>
+    
+        /* Workshop Studio 2.0: responsive creator */
+        .ws-studio { display:grid; grid-template-columns:minmax(180px,.8fr) minmax(0,1.2fr); gap:14px; }
+        .ws-studio-preview { min-height:260px; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; border-radius:18px; border:1px solid rgba(255,204,128,.25); background:radial-gradient(ellipse at 50% 30%,rgba(255,204,128,.17),transparent 55%),linear-gradient(145deg,#201512,#4a2e24); perspective:700px; }
+        .ws-studio-preview:after { content:'3D STUDIO · LIVE PREVIEW'; position:absolute; bottom:10px; left:12px; font-size:.62rem; letter-spacing:1.5px; color:#bcaaa4; }
+        .ws-3d-club { position:relative; width:72px; height:220px; transform-style:preserve-3d; transform:rotate(25deg) rotateY(-25deg); transition:transform .18s; filter:drop-shadow(12px 14px 7px #0008); }
+        .ws-3d-club .shaft { position:absolute; width:var(--shaft-width,9px); height:var(--shaft-length,145px); left:calc(50% - 4px); top:5px; border-radius:9px; background:linear-gradient(90deg,#222,var(--shaft-color,#ccc) 35%,#fff 50%,var(--shaft-color,#ccc) 72%,#333); box-shadow:inset 0 0 3px #fff8; }
+        .ws-3d-club .grip { position:absolute; width:16px; height:var(--grip-length,46px); left:calc(50% - 8px); top:0; border-radius:7px 7px 3px 3px; background:repeating-linear-gradient(155deg,#171717 0 4px,#444 4px 6px); border:1px solid #888; }
+        .ws-3d-club .head { position:absolute; width:var(--head-width,66px); height:var(--head-height,32px); top:calc(var(--shaft-length,145px) - 2px); left:calc(50% - var(--head-width,66px)/2); border-radius:45% 25% 35% 30%; background:linear-gradient(145deg,#fff7,var(--head-color,#ff7043) 26%,#241915 115%); border:2px solid #ffffff50; box-shadow:inset 0 2px 4px #fff8, inset 0 -5px 7px #0008; transform:rotate(-12deg) rotateY(15deg); }
+        .ws-3d-club .head:after { content:attr(data-mark); position:absolute; inset:0; display:grid; place-items:center; color:var(--mark-color,#fff); font-size:var(--mark-size,12px); font-weight:900; text-shadow:0 1px 3px #000; overflow:hidden; }
+        .ws-3d-ball { width:120px;height:120px;border-radius:50%;position:relative; background:radial-gradient(circle at 28% 23%,#fff 0,var(--ball-color,#ff7043) 35%,#111 130%); box-shadow:inset -10px -12px 18px #0008,inset 5px 5px 12px #fff9,0 18px 25px #0008; transform:rotateY(-20deg); }
+        .ws-3d-ball:after { content:attr(data-mark); position:absolute; inset:0; display:grid; place-items:center; color:var(--mark-color,#fff); font-size:var(--mark-size,18px); font-weight:900; text-shadow:0 2px 4px #000; }
+        .ws-studio-controls { min-width:0; display:flex; flex-direction:column; gap:9px; }
+        .ws-control-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+        .ws-control { min-width:0; padding:9px 10px; background:#0003; border:1px solid #ffffff12; border-radius:11px; }
+        .ws-control label { display:flex; justify-content:space-between; gap:8px; color:#efebe9; font-size:.78rem; font-weight:700; }
+        .ws-control input[type=range] { width:100%; accent-color:#ffcc80; margin:9px 0 0; }
+        .ws-control input[type=text],.ws-control select { width:100%; box-sizing:border-box; margin-top:6px; padding:9px; color:#fff; background:#241713; border:1px solid #ffffff2b; border-radius:8px; }
+        .ws-palette { display:flex; flex-wrap:wrap; gap:8px; margin-top:7px; }
+        .ws-swatch { width:28px;height:28px;border:2px solid #ffffff66;border-radius:50%;padding:0;cursor:pointer;box-shadow:0 2px 5px #0006; }
+        .ws-swatch:focus { outline:2px solid white; outline-offset:2px; }
+        .ws-brush { display:flex;align-items:center;gap:8px;flex-wrap:wrap; }
+        .ws-brush input[type=color] { width:40px;height:36px;border:0;background:transparent;padding:0; }
+        .ws-studio-hint { color:#bcaaa4;font-size:.72rem;line-height:1.4; }
+        .ws-animation-choice { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+        .ws-animation-choice label { display:flex; gap:6px; align-items:center; padding:8px 10px; border-radius:10px; background:#0003; font-size:.82rem; }
+        @media(max-width:680px) {
+          .ws-studio { grid-template-columns:1fr; }
+          .ws-studio-preview { min-height:190px; }
+          .ws-3d-club { transform:scale(.78) rotate(25deg) rotateY(-25deg); }
+          .ws-control-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+          .ws-create { flex-direction:column; }
+          .ws-preview { min-height:110px; flex-basis:auto; }
+        }
+        @media(min-width:681px) and (max-width:1000px) { .ws-studio { grid-template-columns:1fr; } .ws-studio-preview { min-height:220px; } }
+
+</style>
 </head>
 <body>
 
@@ -1145,7 +1181,7 @@
 
             <!-- Hauptmenü-Inhalt (z-index über den Panels, aber unter dem Spielen-Button) -->
             <div id="main-menu-content" style="display:flex; flex-direction:column; align-items:center; position:relative; z-index:215; transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.77,0,0.175,1);">
-                <img src="applogoremoved.png" alt="Logo" style="width: clamp(120px, 32vw, 230px); margin-bottom: 12px;">
+                <img src="applogo.png" alt="CardGolf 3D Logo" style="width: clamp(130px, 34vw, 250px); max-height:28vh; object-fit:contain; margin-bottom:12px; filter:drop-shadow(0 10px 18px #0008) drop-shadow(0 0 12px #ffcc8033);">
                 <h1 id="t-title" style="font-size: clamp(2rem, 11vw, 4.5rem); margin-bottom: 10px; font-style: italic;">CardGolf</h1>
                 <p id="t-subtitle" style="margin-bottom: clamp(24px, 8vh, 60px); color: #bcaaa4; opacity: 0.9; letter-spacing: 3px; font-weight: bold; font-size: clamp(0.65rem, 3vw, 1rem);">3D RECYCLED EDITION</p>
                 <button class="btn" id="btn-continue" style="width: 250px; display: none; background: #a5d6a7;" onclick="showMenu(pausedFromState)">Weiter</button>
@@ -1259,6 +1295,23 @@
                                 </div>
                             </div>
                         </div>
+                        <section class="ws-studio" aria-label="Erweiterter 3D-Konstruktor">
+                            <div class="ws-studio-preview" id="ws-studio-preview"><div class="ws-3d-ball" id="ws-live-ball" data-mark="CG"></div><div class="ws-3d-club" id="ws-live-club" style="display:none"><div class="grip"></div><div class="shaft"></div><div class="head" data-mark="CG"></div></div></div>
+                            <div class="ws-studio-controls">
+                                <div class="ws-lbl">🧰 3D-Konstruktor</div>
+                                <div class="ws-control-grid">
+                                    <div class="ws-control"><label for="ws-size">Größe <output id="ws-size-val">100%</output></label><input id="ws-size" type="range" min="60" max="150" value="100" oninput="wsStudioChanged()"></div>
+                                    <div class="ws-control"><label for="ws-width">Breite <output id="ws-width-val">100%</output></label><input id="ws-width" type="range" min="60" max="160" value="100" oninput="wsStudioChanged()"></div>
+                                    <div class="ws-control"><label for="ws-shaft-length">Schaftlänge <output id="ws-shaft-length-val">145</output></label><input id="ws-shaft-length" type="range" min="90" max="175" value="145" oninput="wsStudioChanged()"></div>
+                                    <div class="ws-control"><label for="ws-grip">Griff <output id="ws-grip-val">46</output></label><input id="ws-grip" type="range" min="25" max="65" value="46" oninput="wsStudioChanged()"></div>
+                                    <div class="ws-control"><label for="ws-rough">Oberfläche <output id="ws-rough-val">50%</output></label><input id="ws-rough" type="range" min="0" max="100" value="50" oninput="wsStudioChanged()"></div>
+                                    <div class="ws-control"><label for="ws-mark-size">Textgröße <output id="ws-mark-size-val">14</output></label><input id="ws-mark-size" type="range" min="8" max="28" value="14" oninput="wsStudioChanged()"></div>
+                                </div>
+                                <div class="ws-control"><label for="ws-mark">Logo / Text auf Objekt</label><input id="ws-mark" type="text" maxlength="5" value="CG" placeholder="z. B. CG" oninput="wsStudioChanged()"></div>
+                                <div class="ws-control"><label>🎨 Pinsel & Farbpalette</label><div class="ws-brush"><input id="ws-brush-color" type="color" value="#ff7043" aria-label="Pinsel-Farbe" oninput="wsBrushPaint()"><span class="ws-studio-hint">Farbe auswählen und auf Ball, Kopf oder Schaft anwenden.</span></div><div class="ws-palette"><button class="ws-swatch" style="background:#ff7043" aria-label="Koralle" onclick="wsApplyColor('#ff7043')"></button><button class="ws-swatch" style="background:#29b6f6" aria-label="Blau" onclick="wsApplyColor('#29b6f6')"></button><button class="ws-swatch" style="background:#66bb6a" aria-label="Grün" onclick="wsApplyColor('#66bb6a')"></button><button class="ws-swatch" style="background:#ffd54f" aria-label="Gold" onclick="wsApplyColor('#ffd54f')"></button><button class="ws-swatch" style="background:#ab47bc" aria-label="Violett" onclick="wsApplyColor('#ab47bc')"></button><button class="ws-swatch" style="background:#eeeeee" aria-label="Weiß" onclick="wsApplyColor('#eeeeee')"></button><button class="ws-swatch" style="background:#263238" aria-label="Anthrazit" onclick="wsApplyColor('#263238')"></button></div></div>
+                                <div class="ws-studio-hint">Die Vorschau reagiert live auf deine Regler. Größen, Griff, Markierung und Farben werden beim Veröffentlichen gespeichert.</div>
+                            </div>
+                        </section>
                         <div class="ws-cost" id="ws-cost-line"></div>
                         <button type="button" class="btn ws-publish" id="ws-publish" onclick="wsPublish()">🚀 <span data-lb="wsPublish">Veröffentlichen</span></button>
                     </div>
@@ -1296,6 +1349,15 @@
                     <div id="ac-status" class="ac-status">…</div>
                     <button class="btn" id="btn-account-twitch" style="width:100%; margin: 10px 0 0 0; background: linear-gradient(145deg,#b39ddb,#9146ff); color:#fff; font-size:1rem; padding:12px;">📺 Twitch</button>
                     <p class="ac-note" data-lb="acNote"></p>
+                </div>
+
+                <div style="background:rgba(0,0,0,.2);border-radius:14px;padding:18px 22px;margin-bottom:12px;border:1px solid rgba(255,204,128,.22);pointer-events:auto;">
+                    <label class="stats" style="color:#ffcc80;font-size:.75rem;letter-spacing:2px;display:block;margin-bottom:10px;">🏌️ SCHLAGANIMATION</label>
+                    <div class="ws-animation-choice">
+                        <label><input type="radio" name="strike-animation" value="realistic" checked onchange="setStrikeAnimation('realistic')"> ✨ Realistisch (neu)</label>
+                        <label><input type="radio" name="strike-animation" value="classic" onchange="setStrikeAnimation('classic')"> ↩️ Klassisch (alt)</label>
+                    </div>
+                    <p style="font-size:.78rem;color:#bcaaa4;margin:8px 0 0;">Die neue Animation nutzt Ausholbewegung, Beschleunigung und einen kurzen Nachschwung. Du kannst jederzeit zurückwechseln.</p>
                 </div>
 
                 <!-- AUDIO -->
@@ -5291,15 +5353,26 @@
                 }
             }
 
-            // Schläger Animation
+            // Schläger Animation: realistischer Aushol-, Beschleunigungs- und Nachschwung
             if (clubAnimation.active) {
-                clubAnimation.progress += 0.15;
-                clubGroup.rotation.x = -currentPower * 0.8 + clubAnimation.progress * 2;
+                const legacySwing = getStrikeAnimation() === 'classic';
+                clubAnimation.progress += legacySwing ? 0.15 : 0.085;
+                const p = Math.min(1, clubAnimation.progress / (legacySwing ? 1.2 : 1.35));
                 const angle = Math.atan2(clubAnimation.targetDir.x, clubAnimation.targetDir.z);
                 clubGroup.rotation.set(0, angle, 0);
-                clubGroup.rotateX(-currentPower * 0.8 + clubAnimation.progress * 2);
-                
-                if (clubAnimation.progress >= 1.2) {
+                if (legacySwing) {
+                    clubGroup.rotateX(-currentPower * 0.8 + clubAnimation.progress * 2);
+                } else {
+                    const swing = p < 0.34
+                        ? -0.28 - (p / 0.34) * (0.62 + currentPower * 0.38)
+                        : p < 0.58
+                            ? -0.9 + ((p - 0.34) / 0.24) * 2.25
+                            : 1.35 - ((p - 0.58) / 0.42) * 0.48;
+                    clubGroup.rotateX(swing);
+                    clubGroup.rotateZ(Math.sin(p * Math.PI) * 0.08);
+                }
+
+                if (clubAnimation.progress >= (legacySwing ? 1.2 : 1.35)) {
                     const launchForce = currentPower * 1.8 * savePath.hitSensitivity;
                     ballPhys.vx = clubAnimation.targetDir.x * launchForce * 0.4;
                     ballPhys.vz = clubAnimation.targetDir.z * launchForce * 0.4;
@@ -6718,7 +6791,7 @@
             const col = v => Math.max(0, Math.min(0xffffff, parseInt(v, 10) || 0));
             const name = wsCleanName(it.name, 20); if (name.length < 2) return null;
             return { id, type: it.type === 'club' ? 'club' : 'ball', name, creatorId: String(it.creatorId || '').replace(/[^0-9]/g, '').slice(0, 20), creatorName: wsCleanName(it.creatorName, 16),
-                color: col(it.color), shaft: col(it.shaft === undefined ? 0xcccccc : it.shaft), glow: !!it.glow, metal: !!it.metal, sales: Math.max(0, parseInt(it.sales, 10) || 0), created: parseInt(it.created, 10) || 0 };
+                color: col(it.color), shaft: col(it.shaft === undefined ? 0xcccccc : it.shaft), glow: !!it.glow, metal: !!it.metal, shape: it.shape && typeof it.shape === 'object' ? { size: Math.max(60,Math.min(150,+it.shape.size||100)), width: Math.max(60,Math.min(160,+it.shape.width||100)), shaftLength: Math.max(90,Math.min(175,+it.shape.shaftLength||145)), grip: Math.max(25,Math.min(65,+it.shape.grip||46)), roughness: Math.max(0,Math.min(100,+it.shape.roughness||50)), mark: wsCleanName(it.shape.mark||'CG',5) } : { size:100,width:100,shaftLength:145,grip:46,roughness:50,mark:'CG' }, sales: Math.max(0, parseInt(it.sales, 10) || 0), created: parseInt(it.created, 10) || 0 };
         }
         function wsRegister(raw) {
             const it = wsSanitize(raw); if (!it) return;
@@ -6747,6 +6820,11 @@
             }
             return box;
         }
+        document.addEventListener('DOMContentLoaded', () => {
+            const mode = getStrikeAnimation();
+            document.querySelectorAll('input[name="strike-animation"]').forEach(r => r.checked = r.value === mode);
+            wsStudioChanged();
+        });
         let wsTab = 'browse', wsFilter = 'all';
         let wsDraft = { type: 'ball', name: '', color: 0xff7043, shaft: 0xcccccc, glow: false, metal: false };
         const wsIsOwned = it => !!(savePath.workshopOwned && savePath.workshopOwned[it.id]);
@@ -6813,6 +6891,41 @@
             $lb('ws-lbl-main').textContent = wsDraft.type === 'club' ? T('wsColHead') : T('wsColBall');
             const pv = $lb('ws-preview'); pv.innerHTML = ''; pv.appendChild(wsPreviewEl(wsDraft));
             $lb('ws-publish').disabled = false;
+            if (typeof wsStudioChanged === 'function') wsStudioChanged();
+        }
+        function wsStudioChanged() {
+            const get = id => document.getElementById(id);
+            const size = +get('ws-size').value, width = +get('ws-width').value;
+            const len = +get('ws-shaft-length').value, grip = +get('ws-grip').value;
+            const rough = +get('ws-rough').value, markSize = +get('ws-mark-size').value;
+            [['ws-size-val',size+'%'],['ws-width-val',width+'%'],['ws-shaft-length-val',len],['ws-grip-val',grip],['ws-rough-val',rough+'%'],['ws-mark-size-val',markSize]].forEach(([id,v])=>get(id).textContent=v);
+            const ball=get('ws-live-ball'), club=get('ws-live-club'), head=club.querySelector('.head');
+            ball.style.display=wsDraft.type==='ball'?'block':'none'; club.style.display=wsDraft.type==='club'?'block':'none';
+            ball.style.width=(120*size/100)+'px'; ball.style.height=(120*size/100)+'px';
+            ball.style.setProperty('--ball-color',wsHex(wsDraft.color)); ball.dataset.mark=get('ws-mark').value || '';
+            club.style.transform=`scale(${size/100}) rotate(25deg) rotateY(-25deg)`;
+            club.style.setProperty('--head-width',(66*width/100)+'px'); club.style.setProperty('--head-height',(32*size/100)+'px');
+            club.style.setProperty('--shaft-length',len+'px'); club.style.setProperty('--grip-length',grip+'px');
+            club.style.setProperty('--shaft-width',(5+width/25)+'px'); club.style.setProperty('--shaft-color',wsHex(wsDraft.shaft)); club.style.setProperty('--head-color',wsHex(wsDraft.color));
+            head.dataset.mark=get('ws-mark').value || ''; head.style.setProperty('--mark-size',markSize+'px');
+            const gloss=1-rough/125; ball.style.filter=`contrast(${1.05+gloss*.2})`; club.style.filter=`drop-shadow(12px 14px 7px #0008) saturate(${1.3-rough/250})`;
+            head.style.boxShadow=`inset 0 ${2+gloss*4}px ${4+gloss*5}px #fff8,inset 0 -5px 7px #0008`;
+        }
+        function wsApplyColor(hex) {
+            document.getElementById('ws-brush-color').value=hex;
+            if (wsDraft.type==='club') document.getElementById('ws-col-main').value=hex;
+            else document.getElementById('ws-col-main').value=hex;
+            wsDraftChanged(); wsStudioChanged();
+        }
+        function wsBrushPaint() { wsApplyColor(document.getElementById('ws-brush-color').value); }
+        function setStrikeAnimation(mode) {
+            savePath.strikeAnimation = mode === 'classic' ? 'classic' : 'realistic';
+            document.querySelectorAll('input[name="strike-animation"]').forEach(r=>r.checked=r.value===savePath.strikeAnimation);
+            try { localStorage.setItem('cgStrikeAnimation', savePath.strikeAnimation); } catch(e) {}
+            showToast(savePath.strikeAnimation==='realistic'?'✨ Realistische Schlaganimation aktiviert':'↩️ Klassische Schlaganimation aktiviert');
+        }
+        function getStrikeAnimation() {
+            try { return localStorage.getItem('cgStrikeAnimation') || savePath.strikeAnimation || 'realistic'; } catch(e) { return 'realistic'; }
         }
         function wsDraftChanged() {
             wsDraft.name = wsCleanName($lb('ws-name-in').value, 20);
@@ -6820,6 +6933,7 @@
             wsDraft.shaft = parseInt($lb('ws-col-shaft').value.slice(1), 16) || 0;
             wsDraft.glow = $lb('ws-glow').checked; wsDraft.metal = $lb('ws-metal').checked;
             const pv = $lb('ws-preview'); pv.innerHTML = ''; pv.appendChild(wsPreviewEl(wsDraft));
+            if (typeof wsStudioChanged === 'function') wsStudioChanged();
         }
         function wsSetType(t) { wsDraft.type = t; wsRenderCreate(); }
         async function wsPublish() {
@@ -6830,7 +6944,7 @@
             $lb('ws-publish').disabled = true;
             const rnd = Math.random().toString(36).slice(2, 8);
             const item = { id: 'ws_' + Date.now().toString(36) + rnd, type: wsDraft.type, name: wsDraft.name, creatorId: String(savePath.twitchId), creatorName: wsCleanName(savePath.twitchName, 16),
-                color: wsDraft.color, shaft: wsDraft.shaft, glow: wsDraft.glow, metal: wsDraft.type === 'ball' && wsDraft.metal, sales: 0, created: Date.now() };
+                color: wsDraft.color, shaft: wsDraft.shaft, glow: wsDraft.glow, metal: wsDraft.type === 'ball' && wsDraft.metal, shape: { size: +($lb('ws-size')?.value || 100), width: +($lb('ws-width')?.value || 100), shaftLength: +($lb('ws-shaft-length')?.value || 145), grip: +($lb('ws-grip')?.value || 46), roughness: +($lb('ws-rough')?.value || 50), mark: wsCleanName($lb('ws-mark')?.value || 'CG', 5) }, sales: 0, created: Date.now() };
             savePath.coins -= WS_CREATE_COST;
             if (!savePath.workshopOwned) savePath.workshopOwned = {};
             savePath.workshopOwned[item.id] = item; wsRegister(item);
