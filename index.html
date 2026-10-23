@@ -895,6 +895,15 @@
         @media(min-width:681px) and (max-width:1000px) { .ws-studio { grid-template-columns:1fr; } .ws-studio-preview { min-height:220px; } }
 
 </style>
+
+<style id="cg-map-editor-responsive-upgrade">
+#menu-map-editor{box-sizing:border-box;width:100%;max-width:100vw;min-height:100dvh;}
+#menu-map-editor .btn{min-height:42px;max-width:100%;white-space:normal;touch-action:manipulation;}
+#map-editor-canvas{max-width:100%;height:auto;touch-action:pan-y;display:block;}
+#menu-map-editor label{max-width:100%;flex-wrap:wrap;}
+@media(max-width:600px){#menu-map-editor{padding-left:8px!important;padding-right:8px!important;gap:9px!important;}#menu-map-editor h2{font-size:clamp(1.15rem,5vw,1.6rem);text-align:center;}#menu-map-editor>div{width:100%;}#menu-map-editor>div:nth-of-type(2){display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px!important;}#menu-map-editor>div:nth-of-type(2) .btn{font-size:.82rem;padding:9px 6px;}#menu-map-editor .ws-lbl{grid-column:1/-1;}#map-editor-canvas{width:100%;}#menu-map-editor>div:nth-of-type(4){display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px!important;}#menu-map-editor>div:nth-of-type(4) .btn{font-size:.8rem;padding:9px 5px;}}
+@media(min-width:601px) and (max-width:1024px){#menu-map-editor{padding-left:16px!important;padding-right:16px!important;}#menu-map-editor>div:nth-of-type(2){display:flex;flex-wrap:wrap;justify-content:center;gap:8px;}}
+</style>
 </head>
 <body>
 
@@ -5723,7 +5732,7 @@
             const readyTxt = mpState.isReady ? T('mpReady').replace(/^[✅❌]\s*/,'') : T('mpNotReady');
             list.innerHTML = `<div class="mp-player-item is-you">
                 <div class="mp-player-ball" style="background:${localColor}"></div>
-                <span>${savePath.playerName}${(savePath.story && savePath.story.completed) ? ' ⭐' : ''} (${T('you')})</span>
+                <span>${savePath.playerName}${(savePath.story && savePath.story.completed) ? ' ⭐' : ''} (${T('you')}) <small style="display:block;opacity:.78;font-size:.72em">${localSkin.names?.[(savePath.language||'en')] || localSkin.names?.en || localSkin.id}</small></span>
                 <span class="mp-ready-badge ${mpState.isReady ? 'is-ready' : ''}">${readyTxt}</span>
             </div>`;
             Object.values(remotePlayers).forEach(p => {
@@ -5732,7 +5741,7 @@
                 const pReadyTxt = p.isReady ? T('mpReady').replace(/^[✅❌]\s*/,'') : T('mpNotReady');
                 list.innerHTML += `<div class="mp-player-item">
                     <div class="mp-player-ball" style="background:${col}"></div>
-                    <span>${p.name || T('settingsPlayer')}${p.storyDone ? ' ⭐' : ''}</span>
+                    <span>${p.name || T('settingsPlayer')}${p.storyDone ? ' ⭐' : ''} <small style="display:block;opacity:.78;font-size:.72em">${skin.names?.[(savePath.language||'en')] || skin.names?.en || skin.id}</small></span>
                     <span class="mp-ready-badge ${p.isReady ? 'is-ready' : ''}">${pReadyTxt}</span>
                 </div>`;
             });
@@ -6761,7 +6770,7 @@
                     connections = connections.filter(c => c.peer !== data.id);
                     delete replayRequests[data.id];
                     updateMpPlayerList(); showToast(data.name + T('playerLeftSuffix'));
-                    if (data.id === mpState.hostId) exitMultiplayer();
+                    if (data.id === mpState.hostId) cgBeginHostReconnectGrace();
                     else checkLastPlayerStanding();
                 }
             });
@@ -6775,7 +6784,7 @@
                 updateMpPlayerList();
                 setMpStatus(connections.length > 0 ? (T('connected') + ' (' + (connections.length+1) + '/' + MAX_PLAYERS + ' ' + T('players') + ')') : T('mpWaiting'), connections.length > 0 ? 'connected' : 'connecting');
                 showToast(name + T('playerLeftSuffix'));
-                if (!isHosting && conn.peer === mpState.hostId) exitMultiplayer();
+                if (!isHosting && conn.peer === mpState.hostId) cgBeginHostReconnectGrace();
                 else checkLastPlayerStanding();
             });
             conn.on('error', err => { setMpStatus('Verbindungsfehler', 'error'); });
@@ -6812,6 +6821,8 @@
         }
 
         function exitMultiplayer() {
+            cgRejoinIntentionalExit = true;
+            try { localStorage.removeItem("cardgolf3d_pending_rejoin_v1"); } catch (e) {}
             destroyDirectory(); setLobbyOverlay(false); clearTimeout(joinTimeout);
             MAX_PLAYERS = 8; roomMeta = { vis: 'private', max: 8, code: '', ownerName: '', ownerTid: '', ownerTname: '' };
             if (peer && connections.length > 0) broadcastData({ type: 'playerLeft', id: peer.id, name: savePath.playerName });
@@ -8381,6 +8392,80 @@
             updateMpWaitingList();
             if (isHosting) checkRoundEnd();
         }
+
+        // Host-Unterbrechung: Spieler warten bis zu 60 Sekunden auf denselben Raumcode.
+        // Der Host muss innerhalb dieses Fensters mit derselben Peer-ID (cardgolf-CODE) zurückkommen.
+        let cgHostGraceTimer = null;
+        let cgHostGraceInterval = null;
+        let cgHostGraceUntil = 0;
+        function cgBeginHostReconnectGrace() {
+            if (isHosting || !mpState || !mpState.hostId || cgHostGraceTimer) return;
+            cgHostGraceUntil = Date.now() + 60000;
+            setMpStatus('Host getrennt – warte bis zu 60 Sekunden auf Wiederverbindung …', 'connecting');
+            showToast('Host getrennt. Die Lobby bleibt 60 Sekunden offen.');
+            cgHostGraceInterval = setInterval(() => {
+                if (Date.now() >= cgHostGraceUntil) return;
+                if (!peer || peer.destroyed || connections.some(c => c.peer === mpState.hostId && c.open)) return;
+                try {
+                    const reconnect = peer.connect(mpState.hostId, { reliable: true });
+                    reconnect.on('open', () => {
+                        if (cgHostGraceTimer) clearTimeout(cgHostGraceTimer);
+                        if (cgHostGraceInterval) clearInterval(cgHostGraceInterval);
+                        cgHostGraceTimer = cgHostGraceInterval = null;
+                        setupConnection(reconnect);
+                        setMpStatus('Host wieder verbunden!', 'connected');
+                        showToast('Verbindung zur Lobby wiederhergestellt.');
+                    });
+                } catch (e) {}
+            }, 2500);
+            cgHostGraceTimer = setTimeout(() => {
+                if (cgHostGraceInterval) clearInterval(cgHostGraceInterval);
+                cgHostGraceTimer = cgHostGraceInterval = null;
+                showToast('Die Lobby wurde geschlossen, weil der Host länger als 60 Sekunden weg war.');
+                exitMultiplayer();
+            }, 60000);
+        }
+
+        // === 60-Sekunden-Multiplayer-Wiederbeitritt nach versehentlichem Reload ===
+        const CG_REJOIN_KEY = 'cardgolf3d_pending_rejoin_v1';
+        let cgRejoinIntentionalExit = false;
+        function cgRememberMultiplayerSession() {
+            try {
+                if (cgRejoinIntentionalExit || !peer || !mpState || !mpState.hasJoinedMultiplayer || !roomMeta || !roomMeta.code) return;
+                localStorage.setItem(CG_REJOIN_KEY, JSON.stringify({
+                    code: String(roomMeta.code).toUpperCase(), name: (savePath && savePath.playerName) || '',
+                    expiresAt: Date.now() + 60000, savedAt: Date.now(), wasHost: !!isHosting
+                }));
+            } catch (e) {}
+        }
+        window.addEventListener('pagehide', cgRememberMultiplayerSession);
+        window.addEventListener('beforeunload', cgRememberMultiplayerSession);
+        function cgOfferRejoinAfterReload() {
+            let saved;
+            try { saved = JSON.parse(localStorage.getItem(CG_REJOIN_KEY) || 'null'); } catch (e) { saved = null; }
+            if (!saved || !saved.code || !saved.expiresAt) return;
+            const remaining = Math.ceil((saved.expiresAt - Date.now()) / 1000);
+            if (remaining <= 0) { localStorage.removeItem(CG_REJOIN_KEY); return; }
+            const message = 'Möchtest du der vorherigen Online-Partie wieder beitreten?\n\nRaum: ' + saved.code + '\nVerbleibende Zeit: ' + remaining + ' Sekunden';
+            if (window.confirm(message)) {
+                if (Date.now() > saved.expiresAt) {
+                    localStorage.removeItem(CG_REJOIN_KEY);
+                    showToast('Die Zeit zum Wiederbeitreten ist abgelaufen.');
+                    return;
+                }
+                const nameInput = document.getElementById('mp-name');
+                if (nameInput && saved.name) nameInput.value = saved.name;
+                const codeInput = document.getElementById('mp-code');
+                if (codeInput) codeInput.value = saved.code;
+                try { localStorage.removeItem(CG_REJOIN_KEY); } catch (e) {}
+                // Der Raumcode wird wiederverwendet; falls der Host noch erreichbar ist, tritt man erneut bei.
+                setTimeout(() => connectMultiplayer(saved.code), 150);
+            } else {
+                try { localStorage.removeItem(CG_REJOIN_KEY); } catch (e) {}
+            }
+        }
+        // Warten, bis die Multiplayer-Funktionen und UI initialisiert sind.
+        setTimeout(cgOfferRejoinAfterReload, 900);
 
         registerWorkshopItems();
         applyLoadedProgressToUI();
