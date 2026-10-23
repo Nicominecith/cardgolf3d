@@ -5105,6 +5105,7 @@
                 clubAnimation.active = true;
                 clubAnimation.progress = 0;
                 isDragging = false;
+                if (mpState && mpState.hasJoinedMultiplayer && peer) broadcastData({ type: 'clubSwing', id: peer.id, dir: Math.sign(slingshotDir.x || 1), club: savePath.currentClub, power: currentPower, at: Date.now() });
                 if (savePath.currentClub === 'uchiha') AudioEngine.uchihaSwing();
                 else AudioEngine.swing();
             }
@@ -5231,12 +5232,14 @@
                 clubAnimation.active = true;
                 clubAnimation.progress = 0;
                 isDragging = false;
+                if (mpState && mpState.hasJoinedMultiplayer && peer) broadcastData({ type: 'clubSwing', id: peer.id, dir: Math.sign(slingshotDir.x || 1), club: savePath.currentClub, power: currentPower, at: Date.now() });
                 if (savePath.currentClub === 'uchiha') AudioEngine.uchihaSwing();
                 else AudioEngine.swing();
             }
         }, { passive: true });
 
         function update() {
+            Object.values(remotePlayers).forEach(rp => { if (rp.clubGroup) { if (rp.mesh) rp.clubGroup.position.set(rp.mesh.position.x, rp.mesh.position.y + .1, rp.mesh.position.z); animateRemoteClub(rp); } });
             // Hindernis-Uhr (auch beim Warten im Multiplayer, damit der Host-Sync stimmt)
             if (gameState === 'playing' || gameState === 'openworld' || (mpState.hasJoinedMultiplayer && gameState === 'mp-waiting')) obsClock += obsRate;
             obsNetTick();
@@ -5363,13 +5366,15 @@
                 if (legacySwing) {
                     clubGroup.rotateX(-currentPower * 0.8 + clubAnimation.progress * 2);
                 } else {
-                    const swing = p < 0.34
-                        ? -0.28 - (p / 0.34) * (0.62 + currentPower * 0.38)
-                        : p < 0.58
-                            ? -0.9 + ((p - 0.34) / 0.24) * 2.25
-                            : 1.35 - ((p - 0.58) / 0.42) * 0.48;
-                    clubGroup.rotateX(swing);
-                    clubGroup.rotateZ(Math.sin(p * Math.PI) * 0.08);
+                    // Draufsicht-Golfschwung: Ausholen seitlich hinter den Ball,
+                    // schneller Abschwung durch die Treffzone und kontrollierter Finish-Bogen.
+                    const swing = p < 0.36
+                        ? -0.22 - (p / 0.36) * (0.78 + currentPower * 0.32)
+                        : p < 0.60
+                            ? -1.0 + ((p - 0.36) / 0.24) * 2.35
+                            : 1.35 - ((p - 0.60) / 0.40) * 0.55;
+                    clubGroup.rotateZ(swing);
+                    clubGroup.rotateX(Math.sin(p * Math.PI) * 0.12);
                 }
 
                 if (clubAnimation.progress >= (legacySwing ? 1.2 : 1.35)) {
@@ -6506,6 +6511,31 @@
             }, 2000);
         }
 
+        // Remote-Schläger: wird über das PeerJS-Netzwerk gemeinsam animiert.
+        function ensureRemoteClub(rp) {
+            if (!rp || rp.clubGroup) return rp && rp.clubGroup;
+            const g = new THREE.Group();
+            const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.035, 1.65, 8), new THREE.MeshStandardMaterial({color:0xc7c7c7, metalness:.82, roughness:.25}));
+            shaft.position.y = .78; g.add(shaft);
+            const grip = new THREE.Mesh(new THREE.CylinderGeometry(.055,.06,.42,8), new THREE.MeshStandardMaterial({color:0x25201d, roughness:.9}));
+            grip.position.y = 1.72; g.add(grip);
+            const head = new THREE.Mesh(new THREE.BoxGeometry(.38,.12,.22), new THREE.MeshStandardMaterial({color:0xffcc80, metalness:.72, roughness:.3}));
+            head.position.set(0,-.12,.08); g.add(head);
+            g.visible = false; scene.add(g); rp.clubGroup = g; rp.clubSwingUntil = 0; rp.clubSwingDir = 1;
+            return g;
+        }
+        function animateRemoteClub(rp) {
+            if (!rp || !rp.clubGroup) return;
+            const g = rp.clubGroup;
+            if (Date.now() < (rp.clubSwingUntil || 0)) {
+                const p = 1 - Math.max(0, rp.clubSwingUntil - Date.now()) / 720;
+                const arc = p < .35 ? -0.75 * (p/.35) : p < .62 ? -0.75 + 2.0*((p-.35)/.27) : 1.25 - .8*((p-.62)/.38);
+                g.rotation.z = arc * (rp.clubSwingDir || 1);
+                g.rotation.x = Math.sin(p*Math.PI) * .22;
+                g.visible = true;
+            } else g.visible = false;
+        }
+
         function broadcastData(data) {
             if (!peer || connections.length === 0) return;
             connections.forEach(c => { if (c.open) c.send(data); });
@@ -6566,6 +6596,7 @@
                             id: data.id, mesh, label, name: data.name, 
                             skinId: data.skinId, isReady: !!data.isReady, lastVote: -1, storyDone: !!data.storyDone, uid: data.uid || '', skinDef: data.skinDef || null
                         };
+                        ensureRemoteClub(remotePlayers[data.id]);
                         showToast((data.name || T('players')) + T('someoneJoined'));
                         if (isHosting) {
                             connections.forEach(c => { if (c.open && c.peer !== conn.peer) c.send(data); });
@@ -6595,6 +6626,7 @@
                         if (data.strokes !== undefined) rp.currentStrokes = data.strokes;
                         rp.lastSyncTime = Date.now();
                         if (rp.label) rp.label.position.set(mesh.position.x, mesh.position.y + 2, mesh.position.z);
+                        const rc = ensureRemoteClub(rp); if (rc) { rc.position.set(mesh.position.x, mesh.position.y + .1, mesh.position.z); animateRemoteClub(rp); }
                     }
                     if (isHosting) connections.forEach(c => { if (c.open && c.peer !== conn.peer) c.send(data); });
                 } else if (data.type === 'ready') {
@@ -6602,6 +6634,10 @@
                     updateMpPlayerList(); if (isHosting) checkAllReady();
                 } else if (data.type === 'startVoting') { initVotingUI(data.options, data.chaosEvent);
                 } else if (data.type === 'vote') { if (remotePlayers[data.id]) remotePlayers[data.id].lastVote = data.mapIdx; renderVotingGrid();
+                } else if (data.type === 'clubSwing') {
+                    const rp = remotePlayers[data.id];
+                    if (rp) { const cg = ensureRemoteClub(rp); if (cg) { rp.clubSwingUntil = Date.now() + 720; rp.clubSwingDir = Math.sign(data.dir || 1); if (rp.mesh) cg.position.copy(rp.mesh.position); } }
+                    if (isHosting) connections.forEach(c => { if (c.open && c.peer !== conn.peer) c.send(data); });
                 } else if (data.type === 'ballHit') {
                     if (data.targetId === peer.id) {
                         ballPhys.vx += data.impulse.x;
@@ -6625,7 +6661,7 @@
                     mpState.playerScores[data.id] += data.strokes;
                     // Ball + Label des fertiggewordenen Spielers aus der Szene entfernen
                     if (remotePlayers[data.id]) {
-                        if (remotePlayers[data.id].mesh) { scene.remove(remotePlayers[data.id].mesh); remotePlayers[data.id].mesh = null; }
+                        if (remotePlayers[data.id].mesh) { scene.remove(remotePlayers[data.id].mesh); remotePlayers[data.id].mesh = null; } if (remotePlayers[data.id].clubGroup) { scene.remove(remotePlayers[data.id].clubGroup); remotePlayers[data.id].clubGroup = null; }
                         if (remotePlayers[data.id].label) { scene.remove(remotePlayers[data.id].label); remotePlayers[data.id].label = null; }
                     }
                     updateMpWaitingList();
@@ -6648,7 +6684,7 @@
             conn.on('close', () => {
                 if (!mpState.hasJoinedMultiplayer && !isHosting) return; // Beitritt noch nicht abgeschlossen
                 const name = remotePlayers[conn.peer]?.name || T('settingsPlayer');
-                if (remotePlayers[conn.peer]) { scene.remove(remotePlayers[conn.peer].mesh); if (remotePlayers[conn.peer].label) scene.remove(remotePlayers[conn.peer].label); delete remotePlayers[conn.peer]; }
+                if (remotePlayers[conn.peer]) { scene.remove(remotePlayers[conn.peer].mesh); if (remotePlayers[conn.peer].clubGroup) scene.remove(remotePlayers[conn.peer].clubGroup); if (remotePlayers[conn.peer].label) scene.remove(remotePlayers[conn.peer].label); delete remotePlayers[conn.peer]; }
                 connections = connections.filter(c => c.peer !== conn.peer);
                 delete replayRequests[conn.peer];
                 if (isHosting) broadcastData({ type: 'playerLeft', id: conn.peer, name });
@@ -6698,7 +6734,7 @@
             if (peer) { peer.destroy(); peer = null; }
             if (mpState.votingInterval) { clearInterval(mpState.votingInterval); mpState.votingInterval = null; }
             connections = []; isHosting = false;
-            Object.values(remotePlayers).forEach(p => { scene.remove(p.mesh); if (p.label) scene.remove(p.label); });
+            Object.values(remotePlayers).forEach(p => { if (p.mesh) scene.remove(p.mesh); if (p.clubGroup) scene.remove(p.clubGroup); if (p.label) scene.remove(p.label); });
             remotePlayers = {};
             
             mpState = { isReady: false, myVote: -1, votingOptions: [], isVoting: false, votingTimer: 5, votingInterval: null, currentRound: 0, maxRounds: 5, chaosEvent: null, playerFinished: {}, playerScores: {}, multiplayerGameActive: false, hasJoinedMultiplayer: false, hostId: null, matchOver: false };
@@ -8127,15 +8163,15 @@
         const TW_CID = 's0ksdxmpxljqt3ij8cpxs5c0awvtpy';
         (function () {
             const st = document.createElement('style');
-            st.textContent = `#cg-scoreboard{position:fixed;top:max(12px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:900;display:none;flex-direction:column;min-width:min(320px,92vw);max-width:92vw;background:rgba(20,14,10,.9);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:6px 0;color:#f3e9e0;font:14px/1.2 system-ui,sans-serif;font-variant-numeric:tabular-nums;pointer-events:none}
+            st.textContent = `#cg-scoreboard{position:fixed;top:max(12px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:900;display:none;flex-direction:column;width:min(360px,calc(100vw - 24px));max-width:92vw;background:linear-gradient(145deg,rgba(57,36,27,.96),rgba(24,16,13,.94));backdrop-filter:blur(14px);border:1px solid rgba(255,204,128,.38);box-shadow:0 12px 35px #0008,inset 0 1px #fff2;border-radius:16px;padding:7px 0;color:#f3e9e0;font:14px/1.25 system-ui,sans-serif;font-variant-numeric:tabular-nums;pointer-events:none}
             #cg-scoreboard .sb-h{display:flex;justify-content:space-between;padding:6px 14px 8px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.6;border-bottom:1px solid rgba(255,255,255,.1)}
             #cg-scoreboard .sb-r{display:flex;align-items:center;gap:10px;padding:7px 14px}#cg-scoreboard .sb-r.me{background:rgba(255,204,128,.12)}
             #cg-scoreboard .sb-p{width:18px;opacity:.5}#cg-scoreboard .sb-n{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#cg-scoreboard .sb-s{font-weight:700}#cg-scoreboard .sb-d{width:14px;color:#7bd88f}
-            .cg-fab{position:fixed;bottom:max(12px,env(safe-area-inset-bottom));z-index:850;display:none;padding:9px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:rgba(20,14,10,.82);color:#f3e9e0;font:600 13px system-ui,sans-serif;cursor:pointer}
+            .cg-fab{position:fixed;bottom:max(14px,env(safe-area-inset-bottom));z-index:850;display:none;min-height:42px;padding:10px 16px;border-radius:14px;border:1px solid rgba(255,204,128,.48);background:linear-gradient(145deg,rgba(110,72,53,.96),rgba(42,27,21,.96));box-shadow:0 5px 16px #0006,inset 0 1px #fff3;color:#fff3e0;font:800 13px system-ui,sans-serif;letter-spacing:.03em;cursor:pointer;touch-action:manipulation;transition:transform .15s,filter .15s}
             #cg-sb-btn{left:max(12px,env(safe-area-inset-left))}#cg-chat-btn{right:max(12px,env(safe-area-inset-right))}
-            #cg-chat{position:fixed;right:max(12px,env(safe-area-inset-right));bottom:calc(58px + env(safe-area-inset-bottom));z-index:860;display:none;flex-direction:column;gap:6px;width:min(300px,86vw);padding:10px;border-radius:12px;background:rgba(20,14,10,.9);border:1px solid rgba(255,255,255,.14);color:#f3e9e0;font:13px/1.35 system-ui,sans-serif}
-            #cg-chat-log{max-height:140px;overflow-y:auto;display:flex;flex-direction:column;gap:3px}#cg-chat-log b{color:#ffcc80}
-            #cg-chat input{padding:8px;border-radius:8px;border:1px solid #4a3a2e;background:#120d09;color:#f3e9e0;font-size:14px}
+            #cg-chat{position:fixed;right:max(12px,env(safe-area-inset-right));bottom:calc(68px + env(safe-area-inset-bottom));z-index:860;display:none;flex-direction:column;gap:8px;width:min(340px,calc(100vw - 24px));max-height:min(48dvh,360px);box-sizing:border-box;padding:12px;border-radius:17px;background:linear-gradient(145deg,rgba(57,36,27,.97),rgba(24,16,13,.97));backdrop-filter:blur(14px);border:1px solid rgba(255,204,128,.4);box-shadow:0 12px 35px #0009;color:#f3e9e0;font:13px/1.4 system-ui,sans-serif}
+            #cg-chat-log{max-height:220px;min-height:48px;overflow-y:auto;display:flex;flex-direction:column;gap:5px;overscroll-behavior:contain}#cg-chat-log>div{padding:6px 8px;border-radius:9px;background:#ffffff0b;overflow-wrap:anywhere}#cg-chat-log b{color:#ffcc80}
+            #cg-chat input{box-sizing:border-box;width:100%;padding:11px 12px;border-radius:11px;border:1px solid #a87951;background:#120d09;color:#f3e9e0;font-size:16px;outline:none}#cg-chat input:focus{border-color:#ffcc80;box-shadow:0 0 0 3px #ffcc8026}.cg-fab:active{transform:translateY(1px) scale(.98);filter:brightness(1.12)}@media(min-width:900px){#cg-chat{width:360px;max-height:42dvh}#cg-chat-log{max-height:260px}}@media(max-width:420px){.cg-fab{padding:9px 12px;min-height:40px;font-size:12px}#cg-sb-btn{left:max(8px,env(safe-area-inset-left))}#cg-chat-btn{right:max(8px,env(safe-area-inset-right))}#cg-scoreboard{top:max(8px,env(safe-area-inset-top));width:calc(100vw - 16px)}}
             #cg-tut{position:fixed;inset:0;z-index:950;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6)}
             #cg-tut div{max-width:min(380px,90vw);background:#2a1d15;border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:20px;color:#f3e9e0;font:15px/1.5 system-ui,sans-serif}
             #cg-tut h3{margin:0 0 10px;font-size:18px}#cg-tut p{margin:6px 0}#cg-tut button{margin-top:14px;width:100%;padding:11px;border:0;border-radius:10px;background:#ffcc80;color:#3e2a1a;font-weight:700;font-size:15px}
