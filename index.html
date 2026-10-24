@@ -365,11 +365,6 @@
         .cg-tb.down::after, .cg-tb:active::after { opacity: 1; }
         .cg-tb img { width: 52%; height: 52%; pointer-events: none; image-rendering: auto; }
         #cg-touch-btns.tablet .cg-tb { --d: 76px; }
-        #cg-stick { position: fixed; left: calc(14px + env(safe-area-inset-left, 0px)); bottom: calc(14px + env(safe-area-inset-bottom, 0px)); width: 128px; height: 128px; z-index: 41; display: none; touch-action: none; -webkit-tap-highlight-color: transparent; transform-origin: left bottom; transform: scale(var(--hud-s, 1)); opacity: var(--hud-o, 0.9); background: url(controls/kenney/joystick_circle_pad_a.png) center / 100% 100% no-repeat; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.45)); }
-        #cg-stick.tablet { width: 156px; height: 156px; }
-        #cg-stick .nub { position: absolute; left: 50%; top: 50%; width: 50%; height: 50%; margin: -25% 0 0 -25%; background: url(controls/kenney/joystick_circle_nub_a.png) center / 100% 100% no-repeat; pointer-events: none; will-change: transform; }
-        #cg-stick.down .nub { background-image: url(controls/kenney/joystick_circle_nub_highlight.png); }
-        body.cg-has-stick #cg-hud { bottom: calc(160px + env(safe-area-inset-bottom, 0px)); }
 
         @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
@@ -9106,54 +9101,19 @@
             const hudEl = document.createElement('div'); hudEl.id = 'cg-hud'; hudEl.className = 'cg-hint-list';
             const tbEl = document.createElement('div'); tbEl.id = 'cg-touch-btns';
             document.body.appendChild(hudEl); document.body.appendChild(tbEl);
-            // ---------- Kenney-Kamera-Joystick (nur Touch) ----------
-            const stickEl = document.createElement('div'); stickEl.id = 'cg-stick';
-            const nubEl = document.createElement('div'); nubEl.className = 'nub'; stickEl.appendChild(nubEl);
-            document.body.appendChild(stickEl);
-            let stickId = null, stickX = 0, stickY = 0;
-            function stickMove(e) {
-                const r = stickEl.getBoundingClientRect(), R = r.width / 2;
-                let dx = e.clientX - (r.left + R), dy = e.clientY - (r.top + R);
-                const m = Math.hypot(dx, dy), max = R * 0.5;
-                if (m > max) { dx *= max / m; dy *= max / m; }
-                nubEl.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
-                const dz = cfg().dead / 100;
-                const nx = dx / max, ny = dy / max, mag = Math.hypot(nx, ny);
-                if (mag < dz) { stickX = 0; stickY = 0; } else { const k = (mag - dz) / (1 - dz) / mag; stickX = nx * k; stickY = ny * k; }
-            }
-            function stickEnd(e) {
-                if (e.pointerId !== stickId) return;
-                stickId = null; stickX = 0; stickY = 0; stickEl.classList.remove('down'); nubEl.style.transform = '';
-            }
-            stickEl.addEventListener('pointerdown', e => { if (stickId !== null) return; e.preventDefault(); e.stopPropagation(); stickId = e.pointerId; try { stickEl.setPointerCapture(e.pointerId); } catch (_) {} stickEl.classList.add('down'); stickMove(e); });
-            stickEl.addEventListener('pointermove', e => { if (e.pointerId === stickId) { e.preventDefault(); stickMove(e); } });
-            ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ev => stickEl.addEventListener(ev, stickEnd));
-            let stickLast = performance.now();
-            (function stickLoop(t) {
-                const dt = Math.min(0.05, (t - stickLast) / 1000); stickLast = t;
-                if ((stickX || stickY) && inGame()) {
-                    const inv = savePath.invertCam ? -1 : 1, sp = 2.2 * (cfg().sens / 100) * (savePath.mouseSensitivity || 1) * dt;
-                    cameraOrbit.theta -= stickX * sp * inv;
-                    cameraOrbit.phi = Math.max(0.1, Math.min(Math.PI / 2 - 0.1, cameraOrbit.phi + stickY * sp * inv));
-                }
-                requestAnimationFrame(stickLoop);
-            })(stickLast);
-
             let hudSig = '';
             function hudTick() {
                 const c = cfg(), mode = effMode(), style = effStyle();
                 const sig = [mode, style, T('hudAim'), c.size, c.opacity].join('|');
                 if (sig !== hudSig) {
                     hudSig = sig;
-                    renderHints(hudEl, mode, style); renderTouch(tbEl, style, mode); stickEl.classList.toggle('tablet', mode === 'tablet');
-                    [hudEl, tbEl, stickEl].forEach(e => { e.style.setProperty('--hud-s', c.size / 100); e.style.setProperty('--hud-o', c.opacity / 100); });
+                    renderHints(hudEl, mode, style); renderTouch(tbEl, style, mode);
+                    [hudEl, tbEl].forEach(e => { e.style.setProperty('--hud-s', c.size / 100); e.style.setProperty('--hud-o', c.opacity / 100); });
                 }
                 const ig = inGame();
                 hudEl.style.display = (ig && c.hints) ? 'flex' : 'none';
                 const touchOn = ig && c.touchBtns && (mode === 'phone' || mode === 'tablet');
                 tbEl.style.display = touchOn ? 'flex' : 'none';
-                stickEl.style.display = touchOn ? 'block' : 'none';
-                document.body.classList.toggle('cg-has-stick', touchOn);
             }
             setInterval(hudTick, 250);
 
