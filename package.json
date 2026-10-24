@@ -20,6 +20,7 @@
       "icon.ico",
       "three.min.js",
       "Sounds/**/*",
+      "controls/**/*",
       "build/**/*"
     ],
     "win": {
