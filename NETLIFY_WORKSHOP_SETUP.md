@@ -6,8 +6,14 @@
 - Serverseitige Erstellerprüfung beim Löschen.
 - Kaufdatensätze und idempotente Erstattungsdatensätze (ein Datensatz pro Kauf).
 
-## Wichtig – noch nicht als Echtgeld-/Münz-Wallet produktionsfertig
-Der bestehende CardGolf3D-Spielstand und die erspielten Münzen liegen im Browser (`savePath`/localStorage). Deshalb kann ein Netlify-Endpunkt den korrekten Kontostand nicht sicher kennen, solange das Spielkonto und alle Münzbewegungen nicht vollständig auf eine serverseitige Wallet umgestellt wurden. Der API-Entwurf verbucht deshalb absichtlich keine endgültige Münzauszahlung und markiert Rückerstattungen als `pending-wallet-integration`. Damit werden keine falschen Erfolgsversprechen gemacht und keine Münzen verloren.
+## Workshop komplett über Netlify Blobs
+- Workshop-Items, Käufe, Ersteller-Einnahmen und Rückerstattungen liegen serverseitig in Netlify Blobs (`cardgolf3d-workshop`). Die Webseite hat dafür keinen lokalen Workshop-Speicher mehr.
+- Kaufen/Veröffentlichen: erst Server, dann Münzen im Spielstand (schlägt der Server fehl, werden keine Münzen abgezogen).
+- Einnahmen abholen (`claim`): Server setzt die Einnahmen auf 0 und liefert den Betrag.
+- Item löschen (`delete`, nur Ersteller): Käufer bekommen beim nächsten Öffnen des Workshops automatisch ihre Münzen zurück (`claimRefunds`), das Item verschwindet bei ihnen.
+- Beim Öffnen des Workshops werden Käufe geräteübergreifend wiederhergestellt (`myPurchases`).
+- Preise stehen in `workshop.mjs` (`PRICE`, `CREATOR_CUT`) und müssen zu `WS_BUY_PRICE` / `WS_CREATOR_CUT` in `index.html` passen.
+- Hinweis: Münzen selbst liegen weiter im Spielstand des Browsers. Wer Münzen manipuliert, kann sie also auch hier einsetzen; eine echte Wallet bräuchte eine transaktionsfähige Datenbank.
 
 ## Netlify deploy
 1. ZIP-Inhalt ins GitHub-Repository übernehmen und auf Netlify deployen.

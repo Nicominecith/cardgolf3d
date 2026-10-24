@@ -308,15 +308,33 @@
             align-self: center;
         }
         .toast {
-            background: #bcaaa4;
-            color: #3e2723;
-            padding: 12px 25px;
-            border-radius: 4px;
-            box-shadow: 4px 4px 0 #5d4037;
+            position: relative;
+            background: linear-gradient(135deg,#4e342e,#6d4c41);
+            color: #fbe9e7;
+            padding: 10px 34px 10px 16px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,204,128,0.4);
             font-weight: bold;
+            font-size: 0.85rem;
+            width: 100%;
+            box-sizing: border-box;
             animation: slideUp 0.3s ease-out;
             pointer-events: auto;
+            touch-action: pan-y;
+            user-select: none; -webkit-user-select: none;
+            cursor: grab;
+            word-break: break-word;
         }
+        .toast-x {
+            position: absolute; top: 6px; right: 8px;
+            width: 22px; height: 22px; padding: 0;
+            border: 0; border-radius: 50%;
+            background: rgba(255,255,255,0.12); color: #ffcc80;
+            font-size: 0.8rem; line-height: 22px; text-align: center;
+            cursor: pointer; pointer-events: auto;
+        }
+        .toast-x:hover { background: rgba(255,255,255,0.25); }
         @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
         @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
@@ -937,6 +955,19 @@
 @media(max-width:380px){.cg-map-grid{grid-template-columns:1fr}}
 @media(min-width:601px) and (max-width:1100px){.cg-map-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}}
 @media(prefers-reduced-motion:reduce){.btn,.btn::before{transition:none!important}}
+.cg-map-prev{width:100%;height:auto;aspect-ratio:5/3;border-radius:10px;display:block;box-shadow:0 3px 10px #0007}
+.cg-map-info{display:flex;flex-direction:column;gap:6px;min-width:0}
+.ws-grid .cg-map-card{grid-column:1/-1;flex-direction:row;align-items:center;gap:12px}
+.ws-grid .cg-map-card .cg-map-prev{width:min(170px,42%);flex:0 0 auto}
+.ws-grid .cg-map-card .cg-map-info{flex:1 1 0}
+.ws-prev3d{width:104px;height:104px;cursor:pointer;position:relative;border-radius:16px;background:radial-gradient(circle at 50% 38%,rgba(255,255,255,.16),rgba(255,255,255,0) 70%);-webkit-tap-highlight-color:transparent}
+.ws-prev3d img{width:100%;height:100%;object-fit:contain;pointer-events:none;filter:drop-shadow(0 6px 6px rgba(0,0,0,.4))}
+.ws-prev3d::after{content:'🔄 3D';position:absolute;right:-4px;bottom:-2px;font-size:.62rem;font-weight:800;background:#ffd54f;color:#3e2723;border-radius:8px;padding:1px 6px;letter-spacing:.5px}
+.ws-prev3d:focus-visible{outline:3px solid #ffe082}
+#cg-3d-viewer{position:fixed;inset:0;z-index:100000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(18,9,6,.9);padding:calc(16px + var(--safe-t,0px)) 16px calc(16px + var(--safe-b,0px));box-sizing:border-box}
+#cg-3d-viewer canvas{width:min(86vw,60vh,460px);height:min(86vw,60vh,460px);touch-action:none;cursor:grab;border-radius:22px;background:radial-gradient(circle at 50% 35%,#6d4c41,#2b1914 75%);box-shadow:0 14px 40px #000a}
+.cg-3d-title{color:#fff3e0;font-weight:800;font-size:1.2rem;letter-spacing:1px}
+
 
 </style>
 <style id="cg-map-editor-responsive-upgrade">
@@ -1261,17 +1292,17 @@
              onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity=''">
 
         <div id="menu-singleplayer" class="menu-screen cg-scroll">
-            <h2 class="cg-h2">⛳ Einzelspieler</h2>
-            <p class="cg-lead">Kampagne, zufällige Level oder deine Workshop-Maps – nach jedem Loch geht es automatisch weiter.</p>
+            <h2 class="cg-h2">⛳ <span data-lb="spTitle">Einzelspieler</span></h2>
+            <p class="cg-lead" data-lb="spLead">Kampagne, zufällige Level oder deine Workshop-Maps – nach jedem Loch geht es automatisch weiter.</p>
             <div class="cg-col">
-                <button class="btn btn-green" onclick="showMenu('levels')">🏆 Level</button>
-                <button class="btn btn-gold" onclick="startRandomSingleplayer()">🎲 Zufälliges Level</button>
-                <button class="btn btn-gold" onclick="startAllWorkshopMaps()">▶ Alle Workshop-Maps nacheinander</button>
-                <button class="btn btn-ghost" onclick="showMenu('workshop')">🛠️ Workshop &amp; Map-Editor</button>
+                <button class="btn btn-green" onclick="showMenu('levels')">🏆 <span data-lb="spLevels">Level</span></button>
+                <button class="btn btn-gold" onclick="startRandomSingleplayer()">🎲 <span data-lb="spRandom">Zufälliges Level</span></button>
+                <button class="btn btn-gold" onclick="startAllWorkshopMaps()">▶ <span data-lb="spAllMaps">Alle Workshop-Maps nacheinander</span></button>
+                <button class="btn btn-ghost" onclick="showMenu('workshop')">🛠️ <span data-lb="spWorkshop">Workshop &amp; Map-Editor</span></button>
             </div>
-            <h3 class="cg-h3">🗺️ Meine Workshop-Maps</h3>
+            <h3 class="cg-h3">🗺️ <span data-lb="spMyMaps">Meine Workshop-Maps</span></h3>
             <div id="saved-map-list" class="cg-map-grid"></div>
-            <button class="btn btn-red" onclick="showMenu('main')">Zurück</button>
+            <button class="btn btn-red" onclick="showMenu('main')" data-lb="lbBack">Zurück</button>
         </div>
 
         <div id="menu-levels" class="menu-screen">
@@ -1315,44 +1346,33 @@
         <!-- WORKSHOP -->
         <div id="menu-workshop" class="menu-screen" style="justify-content: flex-start; padding-top: calc(24px + var(--safe-t)); padding-bottom: calc(24px + var(--safe-b)); overflow-y: auto;">
             <h2 style="margin-bottom: 12px; color: #fbe9e7; letter-spacing: 3px;">🛠️ <span data-lb="wsTitle">Workshop</span></h2>
-            <div id="ws-maps-section" class="cg-section">
-                <h3 class="cg-h3">🗺️ Maps &amp; Level</h3>
-                <div class="cg-toolbar">
-                    <button class="btn btn-gold" onclick="mapEditorNew();toggleWorkshopMapEditor(true)">＋ Neue Map bauen</button>
-                    <button class="btn btn-green" onclick="startAllWorkshopMaps()">▶ Alle spielen</button>
-                </div>
-                <div id="ws-saved-maps" class="cg-map-grid"></div>
-                <h3 class="cg-h3">🌍 Community-Maps</h3>
-                <p id="ws-community-note" class="cg-note"></p>
-                <div id="ws-community-maps" class="cg-map-grid"></div>
-            </div>
             <div id="ws-map-editor-inline" class="cg-editor" style="display:none;">
-                <h2 class="cg-h2">🧱 Map-Editor</h2>
-                <p class="cg-lead">Tippe auf die Fläche, um Objekte zu setzen. Bis zu 3 Hügel, 40 Objekte. Start und Loch sind Pflicht.</p>
+                <h2 class="cg-h2">🧱 <span data-lb="meTitle">Map-Editor</span></h2>
+                <p class="cg-lead" data-lb="meLead">Tippe auf die Fläche, um Objekte zu setzen. Bis zu 3 Hügel, 40 Objekte. Start und Loch sind Pflicht.</p>
                 <div class="cg-toolbar">
-                    <label class="ws-lbl">Name <input id="map-name" class="ws-input" maxlength="32" placeholder="Mapname" style="width:min(240px,60vw)"></label>
-                    <label class="ws-lbl">Par <input id="map-par" class="ws-input" type="number" min="1" max="9" value="3" style="width:70px"></label>
+                    <label class="ws-lbl"><span data-lb="meName">Name</span> <input id="map-name" class="ws-input" maxlength="32" placeholder="Mapname" data-lb-ph="meNamePh" style="width:min(240px,60vw)"></label>
+                    <label class="ws-lbl"><span data-lb="mePar">Par</span> <input id="map-par" class="ws-input" type="number" min="1" max="9" value="3" style="width:70px"></label>
                 </div>
                 <div class="cg-toolbar" id="map-tools">
-                    <button class="btn ws-tool" data-tool="hill" onclick="setMapTool('hill')">⛰️ Hügel (<span id="map-hill-count">0</span>/3)</button>
-                    <button class="btn ws-tool" data-tool="tree" onclick="setMapTool('tree')">🌲 Baum</button>
-                    <button class="btn ws-tool" data-tool="rock" onclick="setMapTool('rock')">🪨 Fels</button>
-                    <button class="btn ws-tool" data-tool="crate" onclick="setMapTool('crate')">📦 Kiste</button>
-                    <button class="btn ws-tool" data-tool="moving" onclick="setMapTool('moving')">↔️ Beweglich</button>
-                    <button class="btn ws-tool" data-tool="start" onclick="setMapTool('start')">📍 Start</button>
-                    <button class="btn ws-tool" data-tool="hole" onclick="setMapTool('hole')">🏁 Loch</button>
-                    <button class="btn ws-tool" data-tool="erase" onclick="setMapTool('erase')">🧽 Löschen</button>
+                    <button class="btn ws-tool" data-tool="hill" onclick="setMapTool('hill')">⛰️ <span data-lb="toolHill">Hügel</span> (<span id="map-hill-count">0</span>/3)</button>
+                    <button class="btn ws-tool" data-tool="tree" onclick="setMapTool('tree')">🌲 <span data-lb="toolTree">Baum</span></button>
+                    <button class="btn ws-tool" data-tool="rock" onclick="setMapTool('rock')">🪨 <span data-lb="toolRock">Fels</span></button>
+                    <button class="btn ws-tool" data-tool="crate" onclick="setMapTool('crate')">📦 <span data-lb="toolCrate">Kiste</span></button>
+                    <button class="btn ws-tool" data-tool="moving" onclick="setMapTool('moving')">↔️ <span data-lb="toolMoving">Beweglich</span></button>
+                    <button class="btn ws-tool" data-tool="start" onclick="setMapTool('start')">📍 <span data-lb="toolStart">Start</span></button>
+                    <button class="btn ws-tool" data-tool="hole" onclick="setMapTool('hole')">🏁 <span data-lb="toolHole">Loch</span></button>
+                    <button class="btn ws-tool" data-tool="erase" onclick="setMapTool('erase')">🧽 <span data-lb="toolErase">Löschen</span></button>
                 </div>
                 <div class="cg-canvas-wrap">
                     <canvas id="map-editor-canvas" width="900" height="540"></canvas>
                 </div>
                 <div class="cg-toolbar">
-                    <button class="btn btn-ghost" onclick="mapEditorUndo()">↩️ Zurück</button>
-                    <button class="btn btn-ghost" onclick="mapEditorClear()">🗑️ Leeren</button>
-                    <button class="btn btn-green" onclick="saveWorkshopMap()">💾 Speichern</button>
-                    <button class="btn btn-gold" onclick="testWorkshopMap()">▶ Testen</button>
-                    <button class="btn btn-gold" onclick="uploadWorkshopMap()">🌍 Veröffentlichen</button>
-                    <button class="btn btn-red" onclick="toggleWorkshopMapEditor(false)">Fertig</button>
+                    <button class="btn btn-ghost" onclick="mapEditorUndo()">↩️ <span data-lb="meUndo">Zurück</span></button>
+                    <button class="btn btn-ghost" onclick="mapEditorClear()">🗑️ <span data-lb="meClear">Leeren</span></button>
+                    <button class="btn btn-green" onclick="saveWorkshopMap()">💾 <span data-lb="meSave">Speichern</span></button>
+                    <button class="btn btn-gold" onclick="testWorkshopMap()">▶ <span data-lb="meTest">Testen</span></button>
+                    <button class="btn btn-gold" onclick="uploadWorkshopMap()">🌍 <span data-lb="mePublish">Veröffentlichen</span></button>
+                    <button class="btn btn-red" onclick="toggleWorkshopMapEditor(false)" data-lb="meDone">Fertig</button>
                 </div>
                 <p id="map-editor-status" role="status" class="cg-note"></p>
             </div>
@@ -1366,7 +1386,7 @@
                 <div id="ws-body" style="display:none; flex-direction:column; gap:12px;">
                     <div class="ws-top">
                         <div class="ws-coinbox">🪙 <b id="ws-coins">0</b></div>
-                        <div class="ws-note" id="ws-mode-note"></div>
+                        
                     </div>
                     <div class="ws-tabs">
                         <button type="button" class="ws-tab active" id="ws-tab-browse" onclick="wsShowTab('browse')">🔍 <span data-lb="wsTabBrowse">Stöbern</span></button>
@@ -1379,6 +1399,7 @@
                             <button type="button" class="ws-chip active" data-f="all" onclick="wsSetFilter('all')" data-lb="wsAll">Alle</button>
                             <button type="button" class="ws-chip" data-f="ball" onclick="wsSetFilter('ball')">⚪ <span data-lb="wsBalls">Bälle</span></button>
                             <button type="button" class="ws-chip" data-f="club" onclick="wsSetFilter('club')">🏌️ <span data-lb="wsClubs">Schläger</span></button>
+                            <button type="button" class="ws-chip" data-f="map" onclick="wsSetFilter('map')">🗺️ <span data-lb="wsMapsChip">Maps</span></button>
                         </div>
                         <div class="ws-grid" id="ws-grid"></div>
                     </div>
@@ -1387,6 +1408,7 @@
                         <div class="ws-chips" id="ws-type">
                             <button type="button" class="ws-chip active" data-t="ball" onclick="wsSetType('ball')">⚪ <span data-lb="wsBall">Ball</span></button>
                             <button type="button" class="ws-chip" data-t="club" onclick="wsSetType('club')">🏌️ <span data-lb="wsClub">Schläger</span></button>
+                            <button type="button" class="ws-chip" data-t="map" onclick="wsSetType('map')">🗺️ <span data-lb="wsMapChip">Map</span></button>
                         </div>
                         <div class="ws-create">
                             <div class="ws-preview" id="ws-preview"></div>
@@ -1402,21 +1424,21 @@
                                 </div>
                             </div>
                         </div>
-                        <section class="ws-studio" aria-label="Erweiterter 3D-Konstruktor">
+                        <section class="ws-studio" aria-label="Erweiterter 3D-Konstruktor" data-lb-aria="wsStudioAria">
                             <div class="ws-studio-preview" id="ws-studio-preview"><div class="ws-3d-ball" id="ws-live-ball" data-mark="CG"></div><div class="ws-3d-club" id="ws-live-club" style="display:none"><div class="grip"></div><div class="shaft"></div><div class="head" data-mark="CG"></div></div></div>
                             <div class="ws-studio-controls">
-                                <div class="ws-lbl">🧰 3D-Konstruktor</div>
+                                <div class="ws-lbl">🧰 <span data-lb="wsStudio">3D-Konstruktor</span></div>
                                 <div class="ws-control-grid">
-                                    <div class="ws-control"><label for="ws-size">Größe <output id="ws-size-val">100%</output></label><input id="ws-size" type="range" min="60" max="150" value="100" oninput="wsStudioChanged()"></div>
-                                    <div class="ws-control"><label for="ws-width">Breite <output id="ws-width-val">100%</output></label><input id="ws-width" type="range" min="60" max="160" value="100" oninput="wsStudioChanged()"></div>
-                                    <div class="ws-control"><label for="ws-shaft-length">Schaftlänge <output id="ws-shaft-length-val">145</output></label><input id="ws-shaft-length" type="range" min="90" max="175" value="145" oninput="wsStudioChanged()"></div>
-                                    <div class="ws-control"><label for="ws-grip">Griff <output id="ws-grip-val">46</output></label><input id="ws-grip" type="range" min="25" max="65" value="46" oninput="wsStudioChanged()"></div>
-                                    <div class="ws-control"><label for="ws-rough">Oberfläche <output id="ws-rough-val">50%</output></label><input id="ws-rough" type="range" min="0" max="100" value="50" oninput="wsStudioChanged()"></div>
-                                    <div class="ws-control"><label for="ws-mark-size">Textgröße <output id="ws-mark-size-val">14</output></label><input id="ws-mark-size" type="range" min="8" max="28" value="14" oninput="wsStudioChanged()"></div>
+                                    <div class="ws-control"><label for="ws-size"><span data-lb="wsSize">Größe</span> <output id="ws-size-val">100%</output></label><input id="ws-size" type="range" min="60" max="150" value="100" oninput="wsStudioChanged()"></div>
+                                    <div class="ws-control"><label for="ws-width"><span data-lb="wsWidth">Breite</span> <output id="ws-width-val">100%</output></label><input id="ws-width" type="range" min="60" max="160" value="100" oninput="wsStudioChanged()"></div>
+                                    <div class="ws-control"><label for="ws-shaft-length"><span data-lb="wsShaftLen">Schaftlänge</span> <output id="ws-shaft-length-val">145</output></label><input id="ws-shaft-length" type="range" min="90" max="175" value="145" oninput="wsStudioChanged()"></div>
+                                    <div class="ws-control"><label for="ws-grip"><span data-lb="wsGrip">Griff</span> <output id="ws-grip-val">46</output></label><input id="ws-grip" type="range" min="25" max="65" value="46" oninput="wsStudioChanged()"></div>
+                                    <div class="ws-control"><label for="ws-rough"><span data-lb="wsSurface">Oberfläche</span> <output id="ws-rough-val">50%</output></label><input id="ws-rough" type="range" min="0" max="100" value="50" oninput="wsStudioChanged()"></div>
+                                    <div class="ws-control"><label for="ws-mark-size"><span data-lb="wsTextSize">Textgröße</span> <output id="ws-mark-size-val">14</output></label><input id="ws-mark-size" type="range" min="8" max="28" value="14" oninput="wsStudioChanged()"></div>
                                 </div>
-                                <div class="ws-control"><label for="ws-mark">Logo / Text auf Objekt</label><input id="ws-mark" type="text" maxlength="5" value="CG" placeholder="z. B. CG" oninput="wsStudioChanged()"></div>
-                                <div class="ws-control"><label>🎨 Pinsel & Farbpalette</label><div class="ws-brush"><input id="ws-brush-color" type="color" value="#ff7043" aria-label="Pinsel-Farbe" oninput="wsBrushPaint()"><span class="ws-studio-hint">Farbe auswählen und auf Ball, Kopf oder Schaft anwenden.</span></div><div class="ws-palette"><button class="ws-swatch" style="background:#ff7043" aria-label="Koralle" onclick="wsApplyColor('#ff7043')"></button><button class="ws-swatch" style="background:#29b6f6" aria-label="Blau" onclick="wsApplyColor('#29b6f6')"></button><button class="ws-swatch" style="background:#66bb6a" aria-label="Grün" onclick="wsApplyColor('#66bb6a')"></button><button class="ws-swatch" style="background:#ffd54f" aria-label="Gold" onclick="wsApplyColor('#ffd54f')"></button><button class="ws-swatch" style="background:#ab47bc" aria-label="Violett" onclick="wsApplyColor('#ab47bc')"></button><button class="ws-swatch" style="background:#eeeeee" aria-label="Weiß" onclick="wsApplyColor('#eeeeee')"></button><button class="ws-swatch" style="background:#263238" aria-label="Anthrazit" onclick="wsApplyColor('#263238')"></button></div></div>
-                                <div class="ws-studio-hint">Die Vorschau reagiert live auf deine Regler. Größen, Griff, Markierung und Farben werden beim Veröffentlichen gespeichert.</div>
+                                <div class="ws-control"><label for="ws-mark" data-lb="wsMark">Logo / Text auf Objekt</label><input id="ws-mark" type="text" maxlength="5" value="CG" placeholder="z. B. CG" data-lb-ph="wsMarkPh" oninput="wsStudioChanged()"></div>
+                                <div class="ws-control"><label>🎨 <span data-lb="wsBrush">Pinsel & Farbpalette</span></label><div class="ws-brush"><input id="ws-brush-color" type="color" value="#ff7043" aria-label="Pinsel-Farbe" data-lb-aria="wsBrushAria" oninput="wsBrushPaint()"><span class="ws-studio-hint" data-lb="wsBrushHint">Farbe auswählen und auf Ball, Kopf oder Schaft anwenden.</span></div><div class="ws-palette"><button class="ws-swatch" style="background:#ff7043" aria-label="Koralle" onclick="wsApplyColor('#ff7043')"></button><button class="ws-swatch" style="background:#29b6f6" aria-label="Blau" onclick="wsApplyColor('#29b6f6')"></button><button class="ws-swatch" style="background:#66bb6a" aria-label="Grün" onclick="wsApplyColor('#66bb6a')"></button><button class="ws-swatch" style="background:#ffd54f" aria-label="Gold" onclick="wsApplyColor('#ffd54f')"></button><button class="ws-swatch" style="background:#ab47bc" aria-label="Violett" onclick="wsApplyColor('#ab47bc')"></button><button class="ws-swatch" style="background:#eeeeee" aria-label="Weiß" onclick="wsApplyColor('#eeeeee')"></button><button class="ws-swatch" style="background:#263238" aria-label="Anthrazit" onclick="wsApplyColor('#263238')"></button></div></div>
+                                <div class="ws-studio-hint" data-lb="wsStudioHint">Die Vorschau reagiert live auf deine Regler. Größen, Griff, Markierung und Farben werden beim Veröffentlichen gespeichert.</div>
                             </div>
                         </section>
                         <div class="ws-cost" id="ws-cost-line"></div>
@@ -1459,12 +1481,12 @@
                 </div>
 
                 <div style="background:rgba(0,0,0,.2);border-radius:14px;padding:18px 22px;margin-bottom:12px;border:1px solid rgba(255,204,128,.22);pointer-events:auto;">
-                    <label class="stats" style="color:#ffcc80;font-size:.75rem;letter-spacing:2px;display:block;margin-bottom:10px;">🏌️ SCHLAGANIMATION</label>
+                    <label class="stats" style="color:#ffcc80;font-size:.75rem;letter-spacing:2px;display:block;margin-bottom:10px;">🏌️ <span data-lb="stStrike">SCHLAGANIMATION</span></label>
                     <div class="ws-animation-choice">
-                        <label><input type="radio" name="strike-animation" value="realistic" checked onchange="setStrikeAnimation('realistic')"> ✨ Realistisch (neu)</label>
-                        <label><input type="radio" name="strike-animation" value="classic" onchange="setStrikeAnimation('classic')"> ↩️ Klassisch (alt)</label>
+                        <label><input type="radio" name="strike-animation" value="realistic" checked onchange="setStrikeAnimation('realistic')"> ✨ <span data-lb="stStrikeReal">Realistisch (neu)</span></label>
+                        <label><input type="radio" name="strike-animation" value="classic" onchange="setStrikeAnimation('classic')"> ↩️ <span data-lb="stStrikeClassic">Klassisch (alt)</span></label>
                     </div>
-                    <p style="font-size:.78rem;color:#bcaaa4;margin:8px 0 0;">Die neue Animation nutzt Ausholbewegung, Beschleunigung und einen kurzen Nachschwung. Du kannst jederzeit zurückwechseln.</p>
+                    <p data-lb="stStrikeNote" style="font-size:.78rem;color:#bcaaa4;margin:8px 0 0;">Die neue Animation nutzt Ausholbewegung, Beschleunigung und einen kurzen Nachschwung. Du kannst jederzeit zurückwechseln.</p>
                 </div>
 
                 <!-- AUDIO -->
@@ -2807,6 +2829,12 @@
                 badge.remove();
             }
         }
+        // Normale Nachrichten haben eine eigene Warteschlange (ohne +N-Zähler), getrennt von den Achievements.
+        let msgToastQueue = [], msgToastActive = 0;
+        function enqueueMsgToast(renderFn) {
+            const run = (fn) => { msgToastActive++; fn(() => { msgToastActive = Math.max(0, msgToastActive - 1); const n = msgToastQueue.shift(); if (n) run(n); }); };
+            if (msgToastActive < TOAST_MAX_VISIBLE) run(renderFn); else msgToastQueue.push(renderFn);
+        }
         function enqueueToast(renderFn) {
             if (toastActiveCount < TOAST_MAX_VISIBLE) {
                 toastActiveCount++;
@@ -2824,6 +2852,45 @@
                 updateToastQueueBadge();
                 next(toastDone);
             }
+        }
+
+        // Schließen per ✕ oder Wegwischen (links/rechts); Auto-Schließen nach ms.
+        function cgToastInteract(toast, onDone, ms) {
+            let done = false, timer = null, sx = null, dx = 0;
+            const finish = (dir) => {
+                if (done) return; done = true; clearTimeout(timer);
+                toast.style.transition = 'opacity .25s ease, transform .25s ease';
+                toast.style.opacity = '0';
+                toast.style.transform = dir ? 'translateX(' + (dir * 110) + '%)' : 'translateY(8px)';
+                setTimeout(() => { toast.remove(); onDone(); }, 260);
+            };
+            const arm = () => { clearTimeout(timer); timer = setTimeout(() => finish(0), ms); };
+            const x = document.createElement('button');
+            x.type = 'button'; x.className = 'toast-x'; x.textContent = '✕';
+            x.setAttribute('aria-label', T('toastClose'));
+            x.onclick = (e) => { e.stopPropagation(); finish(0); };
+            toast.appendChild(x);
+            toast.addEventListener('pointerdown', (e) => {
+                if (e.target === x || done) return;
+                sx = e.clientX; dx = 0; clearTimeout(timer);
+                toast.style.animation = 'none'; toast.style.transition = 'none';
+                try { toast.setPointerCapture(e.pointerId); } catch (err) {}
+            });
+            toast.addEventListener('pointermove', (e) => {
+                if (sx === null || done) return;
+                dx = e.clientX - sx;
+                toast.style.transform = 'translateX(' + dx + 'px)';
+                toast.style.opacity = String(Math.max(0.25, 1 - Math.abs(dx) / 220));
+            });
+            const end = () => {
+                if (sx === null || done) return;
+                const d = dx; sx = null;
+                if (Math.abs(d) > 60) finish(d > 0 ? 1 : -1);
+                else { toast.style.transition = 'transform .2s ease, opacity .2s ease'; toast.style.transform = ''; toast.style.opacity = '1'; arm(); }
+            };
+            toast.addEventListener('pointerup', end);
+            toast.addEventListener('pointercancel', end);
+            arm();
         }
 
         function unlockAchievement(id) {
@@ -2853,10 +2920,10 @@
             enqueueToast((onDone) => {
                 const container = document.getElementById('toast-container');
                 const toast = document.createElement('div');
-                toast.style.cssText = 'background:linear-gradient(135deg,#4e342e,#6d4c41);color:#fbe9e7;padding:10px 16px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.1);font-weight:bold;animation:slideUp 0.3s ease-out;pointer-events:auto;border:1px solid rgba(255,204,128,0.4);width:100%;box-sizing:border-box;';
+                toast.style.cssText = 'position:relative;touch-action:pan-y;user-select:none;cursor:grab;background:linear-gradient(135deg,#4e342e,#6d4c41);color:#fbe9e7;padding:10px 34px 10px 16px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.1);font-weight:bold;animation:slideUp 0.3s ease-out;pointer-events:auto;border:1px solid rgba(255,204,128,0.4);width:100%;box-sizing:border-box;';
                 toast.innerHTML = `<div style="font-size:0.6rem;color:#ffcc80;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;">🏅 ${T('achUnlocked')}</div><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:1.3rem;">${ach.icon}</span><div style="min-width:0;"><div style="font-size:0.85rem;">${achName(ach)}</div><div style="font-size:0.68rem;opacity:0.75;">${ach.secret ? achRealDesc(ach) : achDesc(ach)}</div></div></div>`;
                 container.appendChild(toast);
-                setTimeout(() => { toast.style.opacity='0'; toast.style.transition='opacity 0.5s'; setTimeout(()=>{toast.remove(); onDone();},500); }, 3000);
+                cgToastInteract(toast, onDone, 3000);
             });
         }
 
@@ -2865,7 +2932,7 @@
             if (isElectron) {
                 window.ipcRenderer.send('quit-game');
             } else {
-                showToast('Du kannst den Tab einfach schließen.'); try { window.close(); } catch (e) {}
+                showToast(T('quitTab')); try { window.close(); } catch (e) {}
             }
         }
 
@@ -4341,17 +4408,13 @@
         }
 
         function showToast(msg) {
-            enqueueToast((onDone) => {
+            enqueueMsgToast((onDone) => {
                 const container = document.getElementById('toast-container');
                 const toast = document.createElement('div');
                 toast.className = 'toast';
-                toast.innerText = msg;
+                toast.textContent = msg;
                 container.appendChild(toast);
-                setTimeout(() => {
-                    toast.style.opacity = '0';
-                    toast.style.transition = 'opacity 0.5s ease';
-                    setTimeout(() => { toast.remove(); onDone(); }, 500);
-                }, 2500);
+                cgToastInteract(toast, onDone, 3000);
             });
         }
 
@@ -4608,7 +4671,6 @@
             wsTitle: "Workshop", wsTabBrowse: "Stöbern", wsTabCreate: "Erstellen", wsTabMine: "Meine", wsAll: "Alle", wsBalls: "Bälle", wsClubs: "Schläger", wsBall: "Ball", wsClub: "Schläger",
             wsName: "Name", wsColBall: "Ballfarbe", wsColHead: "Kopf-Farbe", wsColShaft: "Schaft-Farbe", wsGlow: "Leuchten", wsMetal: "Metall", wsPublish: "Veröffentlichen",
             wsCostLine: "Erstellen kostet {c} 🪙 · Andere kaufen es für {p} 🪙",
-            wsLocalNote: "Lokaler Modus: Items sind aktuell nur auf diesem Gerät sichtbar. Für einen gemeinsamen Workshop aller Spieler wird ein Server benötigt.",
             wsEmpty: "Noch keine Items", wsEmptyHint: "Erstelle das erste Item im Reiter „Erstellen“!", wsBy: "von {name}", wsYours: "Dein Item", wsBuy: "Kaufen · {p} 🪙",
             wsBoughtToast: "„{name}“ gekauft! Du findest es im Shop.", wsNameShort: "Gib dem Item einen Namen (mind. 2 Zeichen).", wsPublished: "„{name}“ veröffentlicht!",
             wsEarnings: "Einnahmen: {n} 🪙", wsClaim: "Abholen", wsMineEmpty: "Du hast noch nichts erstellt", wsMineEmptyHint: "Gestalte einen Ball oder Schläger und verkaufe ihn!", wsSales: "{n}× verkauft"
@@ -4622,11 +4684,15 @@
             wsTitle: "Workshop", wsTabBrowse: "Browse", wsTabCreate: "Create", wsTabMine: "Mine", wsAll: "All", wsBalls: "Balls", wsClubs: "Clubs", wsBall: "Ball", wsClub: "Club",
             wsName: "Name", wsColBall: "Ball color", wsColHead: "Head color", wsColShaft: "Shaft color", wsGlow: "Glow", wsMetal: "Metal", wsPublish: "Publish",
             wsCostLine: "Creating costs {c} 🪙 · Others buy it for {p} 🪙",
-            wsLocalNote: "Local mode: items are currently only visible on this device. A shared workshop for all players needs a server.",
             wsEmpty: "No items yet", wsEmptyHint: "Create the first item in the “Create” tab!", wsBy: "by {name}", wsYours: "Your item", wsBuy: "Buy · {p} 🪙",
             wsBoughtToast: "Bought “{name}”! Find it in the shop.", wsNameShort: "Give your item a name (min. 2 characters).", wsPublished: "“{name}” published!",
             wsEarnings: "Earnings: {n} 🪙", wsClaim: "Collect", wsMineEmpty: "You haven't created anything yet", wsMineEmptyHint: "Design a ball or club and sell it!", wsSales: "{n}× sold"
         });
+        // ===== Zusätzliche Übersetzungen: Einstellungen, Einzelspieler, Workshop, Map-Editor (alle 10 Sprachen) =====
+        (function () {
+            const D = {"de": {"spTitle": "Einzelspieler", "spLead": "Kampagne, zufällige Level oder deine Workshop-Maps – nach jedem Loch geht es automatisch weiter.", "spLevels": "Level", "spRandom": "Zufälliges Level", "spAllMaps": "Alle Workshop-Maps nacheinander", "spWorkshop": "Workshop & Map-Editor", "spMyMaps": "Meine Workshop-Maps", "spPlay": "Spielen", "spNoMaps": "Noch keine Maps. Baue im Workshop unter „Erstellen → Map“ deine erste.", "spNoMapsToast": "Noch keine Maps – baue zuerst eine im Workshop.", "spDone": "Geschafft in {n} Schlägen", "spTestDone": "Test geschafft!", "quitTab": "Du kannst den Tab einfach schließen.", "stStrike": "SCHLAGANIMATION", "stStrikeReal": "Realistisch (neu)", "stStrikeClassic": "Klassisch (alt)", "stStrikeNote": "Die neue Animation nutzt Ausholbewegung, Beschleunigung und einen kurzen Nachschwung. Du kannst jederzeit zurückwechseln.", "stStrikeOnReal": "Realistische Schlaganimation aktiviert", "stStrikeOnClassic": "Klassische Schlaganimation aktiviert", "meTitle": "Map-Editor", "meLead": "Tippe auf die Fläche, um Objekte zu setzen. Bis zu 3 Hügel, 40 Objekte. Start und Loch sind Pflicht.", "meName": "Name", "meNamePh": "Mapname", "mePar": "Par", "toolHill": "Hügel", "toolTree": "Baum", "toolRock": "Fels", "toolCrate": "Kiste", "toolMoving": "Beweglich", "toolStart": "Start", "toolHole": "Loch", "toolErase": "Löschen", "meUndo": "Zurück", "meClear": "Leeren", "meSave": "Speichern", "meTest": "Testen", "mePublish": "Veröffentlichen", "meDone": "Fertig", "meNothingUndo": "Nichts zum Rückgängigmachen.", "meConfirmClear": "Alle Hügel und Objekte entfernen?", "meNewMap": "Neue leere Map.", "meToolSel": "Werkzeug: {tool}", "meNothingErase": "Hier ist nichts zum Löschen.", "meDistance": "Start und Loch brauchen mehr Abstand.", "meKeepFree": "Start und Loch/Fahne müssen frei bleiben.", "meMaxHills": "Maximal 3 Hügel pro Karte.", "meMaxObjs": "Maximal 40 Objekte pro Karte.", "meNeedName": "Bitte zuerst einen Mapnamen eingeben.", "meNeedStartHole": "Karte benötigt Start, Loch und Fahne.", "meStorageFull": "Speichern nicht möglich (Speicher voll?).", "meSaved": "„{name}“ gespeichert. Du findest sie unter Level und im Workshop.", "meSavedToast": "Map gespeichert", "meDelConfirm": "Map „{name}“ wirklich löschen?", "meDelToast": "Map gelöscht", "meLogin": "Gespeichert. Zum Veröffentlichen melde dich in den Einstellungen mit Twitch an.", "mePublished": "Veröffentlicht! Alle Spieler sehen die Map jetzt im Workshop.", "mePubToast": "Map veröffentlicht", "mePubFail": "Veröffentlichen fehlgeschlagen.", "meServer": "Server nicht erreichbar. Die Map ist lokal gespeichert.", "wsMapsChip": "Maps", "wsMapChip": "Map", "wsMyMaps": "Meine Maps", "wsComm": "Community-Maps", "wsNewMap": "Neue Map bauen", "wsPlayAll": "Alle spielen", "wsNoOwnMaps": "Noch keine eigenen Maps. Tippe auf „Neue Map bauen“.", "wsNoComm": "Noch keine Community-Maps. Veröffentliche deine erste!", "wsMineMapsEmpty": "Noch keine Maps. Tippe bei „Erstellen“ auf „Map“.", "mapMeta": "Par {par} · {o} Objekte · {h} Hügel", "mapBy": "von {name}", "mapPreview": "Vorschau: {name}", "ws3dView": "{name} in 3D ansehen", "ws3dHint": "Ziehen zum Drehen · Zwei Finger oder Mausrad zum Zoomen", "wsClose": "Schließen", "wsStudio": "3D-Konstruktor", "wsStudioAria": "Erweiterter 3D-Konstruktor", "wsSize": "Größe", "wsWidth": "Breite", "wsShaftLen": "Schaftlänge", "wsGrip": "Griff", "wsSurface": "Oberfläche", "wsTextSize": "Textgröße", "wsMark": "Logo / Text auf Objekt", "wsMarkPh": "z. B. CG", "wsBrush": "Pinsel & Farbpalette", "wsBrushHint": "Farbe auswählen und auf Ball, Kopf oder Schaft anwenden.", "wsBrushAria": "Pinsel-Farbe", "wsStudioHint": "Die Vorschau reagiert live auf deine Regler. Größen, Griff, Markierung und Farben werden beim Veröffentlichen gespeichert.", "wsColorDef": "Farbe", "wsDelete": "Löschen", "wsDeleteConfirm": "Dieses Workshop-Item endgültig löschen? Alle Käufer bekommen ihre Münzen zurück.", "wsDeletedToast": "Item gelöscht. Erstattungen an Käufer: {n}", "wsOnlyOwn": "Du kannst nur deine eigenen Items löschen.", "wsServerFail": "Workshop-Server nicht erreichbar. Bitte später erneut versuchen.", "wsLoadFail": "Workshop konnte nicht geladen werden.", "wsRefundToast": "Rückerstattung: +{n} 🪙", "wsLoading": "Lade Workshop…", "toastClose": "Schließen"}, "en": {"spTitle": "Singleplayer", "spLead": "Campaign, random levels or your Workshop maps – the next hole starts automatically.", "spLevels": "Levels", "spRandom": "Random level", "spAllMaps": "All Workshop maps in a row", "spWorkshop": "Workshop & map editor", "spMyMaps": "My Workshop maps", "spPlay": "Play", "spNoMaps": "No maps yet. Build your first one in the Workshop under “Create → Map”.", "spNoMapsToast": "No maps yet – build one in the Workshop first.", "spDone": "Done in {n} strokes", "spTestDone": "Test passed!", "quitTab": "You can simply close the tab.", "stStrike": "SWING ANIMATION", "stStrikeReal": "Realistic (new)", "stStrikeClassic": "Classic (old)", "stStrikeNote": "The new animation uses a backswing, acceleration and a short follow-through. You can switch back any time.", "stStrikeOnReal": "Realistic swing animation enabled", "stStrikeOnClassic": "Classic swing animation enabled", "meTitle": "Map editor", "meLead": "Tap the area to place objects. Up to 3 hills and 40 objects. Start and hole are required.", "meName": "Name", "meNamePh": "Map name", "mePar": "Par", "toolHill": "Hill", "toolTree": "Tree", "toolRock": "Rock", "toolCrate": "Crate", "toolMoving": "Moving", "toolStart": "Start", "toolHole": "Hole", "toolErase": "Erase", "meUndo": "Undo", "meClear": "Clear", "meSave": "Save", "meTest": "Test", "mePublish": "Publish", "meDone": "Done", "meNothingUndo": "Nothing to undo.", "meConfirmClear": "Remove all hills and objects?", "meNewMap": "New empty map.", "meToolSel": "Tool: {tool}", "meNothingErase": "Nothing to erase here.", "meDistance": "Start and hole need more distance.", "meKeepFree": "Start and hole/flag must stay clear.", "meMaxHills": "Maximum 3 hills per map.", "meMaxObjs": "Maximum 40 objects per map.", "meNeedName": "Please enter a map name first.", "meNeedStartHole": "The map needs a start, a hole and a flag.", "meStorageFull": "Saving failed (storage full?).", "meSaved": "“{name}” saved. Find it under Levels and in the Workshop.", "meSavedToast": "Map saved", "meDelConfirm": "Really delete map “{name}”?", "meDelToast": "Map deleted", "meLogin": "Saved. To publish, sign in with Twitch in the settings.", "mePublished": "Published! All players can now see the map in the Workshop.", "mePubToast": "Map published", "mePubFail": "Publishing failed.", "meServer": "Server unreachable. The map is saved locally.", "wsMapsChip": "Maps", "wsMapChip": "Map", "wsMyMaps": "My maps", "wsComm": "Community maps", "wsNewMap": "Build new map", "wsPlayAll": "Play all", "wsNoOwnMaps": "No maps of your own yet. Tap “Build new map”.", "wsNoComm": "No community maps yet. Publish your first one!", "wsMineMapsEmpty": "No maps yet. Tap “Map” under “Create”.", "mapMeta": "Par {par} · {o} objects · {h} hills", "mapBy": "by {name}", "mapPreview": "Preview: {name}", "ws3dView": "View {name} in 3D", "ws3dHint": "Drag to rotate · Two fingers or mouse wheel to zoom", "wsClose": "Close", "wsStudio": "3D builder", "wsStudioAria": "Advanced 3D builder", "wsSize": "Size", "wsWidth": "Width", "wsShaftLen": "Shaft length", "wsGrip": "Grip", "wsSurface": "Surface", "wsTextSize": "Text size", "wsMark": "Logo / text on object", "wsMarkPh": "e.g. CG", "wsBrush": "Brush & palette", "wsBrushHint": "Pick a color and apply it to the ball, head or shaft.", "wsBrushAria": "Brush color", "wsStudioHint": "The preview reacts live to your sliders. Sizes, grip, mark and colors are saved when you publish.", "wsColorDef": "Color", "wsDelete": "Delete", "wsDeleteConfirm": "Delete this Workshop item for good? All buyers get their coins back.", "wsDeletedToast": "Item deleted. Buyers refunded: {n}", "wsOnlyOwn": "You can only delete your own items.", "wsServerFail": "Workshop server unreachable. Please try again later.", "wsLoadFail": "Could not load the Workshop.", "wsRefundToast": "Refund: +{n} 🪙", "wsLoading": "Loading Workshop…", "toastClose": "Close"}, "ru": {"acTitle": "АККАУНТ", "acNote": "Онлайн-комнаты и Мастерская доступны только с аккаунтом. Войдите через Twitch.", "acLoggedIn": "Вы вошли как {name}", "acLoggedOut": "Вход не выполнен", "acNeed": "Нужен аккаунт – войдите через Twitch в настройках.", "acLockTitle": "Нужен аккаунт", "acLockText": "Онлайн-режим и Мастерская доступны только с аккаунтом. Войдите через Twitch в настройках.", "acGoSettings": "К настройкам", "wsTitle": "Мастерская", "wsTabBrowse": "Обзор", "wsTabCreate": "Создать", "wsTabMine": "Мои", "wsAll": "Все", "wsBalls": "Мячи", "wsClubs": "Клюшки", "wsBall": "Мяч", "wsClub": "Клюшка", "wsName": "Название", "wsColBall": "Цвет мяча", "wsColHead": "Цвет головки", "wsColShaft": "Цвет рукояти", "wsGlow": "Свечение", "wsMetal": "Металл", "wsPublish": "Опубликовать", "wsCostLine": "Создание стоит {c} 🪙 · Другие покупают за {p} 🪙", "wsEmpty": "Пока нет предметов", "wsEmptyHint": "Создайте первый предмет во вкладке «Создать»!", "wsBy": "от {name}", "wsYours": "Ваш предмет", "wsBuy": "Купить · {p} 🪙", "wsBoughtToast": "«{name}» куплено! Ищите в магазине.", "wsNameShort": "Дайте предмету название (мин. 2 символа).", "wsPublished": "«{name}» опубликовано!", "wsEarnings": "Доход: {n} 🪙", "wsClaim": "Забрать", "wsMineEmpty": "Вы ещё ничего не создали", "wsMineEmptyHint": "Создайте мяч или клюшку и продавайте!", "wsSales": "продано: {n}×", "lbBack": "Назад", "spTitle": "Одиночная игра", "spLead": "Кампания, случайные уровни или ваши карты из Мастерской – после каждой лунки игра продолжается автоматически.", "spLevels": "Уровни", "spRandom": "Случайный уровень", "spAllMaps": "Все карты Мастерской подряд", "spWorkshop": "Мастерская и редактор карт", "spMyMaps": "Мои карты из Мастерской", "spPlay": "Играть", "spNoMaps": "Карт пока нет. Создайте первую в Мастерской: «Создать → Карта».", "spNoMapsToast": "Карт пока нет – сначала создайте её в Мастерской.", "spDone": "Пройдено за {n} ударов", "spTestDone": "Тест пройден!", "quitTab": "Просто закройте вкладку.", "stStrike": "АНИМАЦИЯ УДАРА", "stStrikeReal": "Реалистичная (новая)", "stStrikeClassic": "Классическая (старая)", "stStrikeNote": "Новая анимация включает замах, ускорение и короткое завершение. Можно вернуться в любой момент.", "stStrikeOnReal": "Реалистичная анимация удара включена", "stStrikeOnClassic": "Классическая анимация удара включена", "meTitle": "Редактор карт", "meLead": "Нажимайте на поле, чтобы ставить объекты. До 3 холмов и 40 объектов. Старт и лунка обязательны.", "meName": "Название", "meNamePh": "Название карты", "mePar": "Пар", "toolHill": "Холм", "toolTree": "Дерево", "toolRock": "Камень", "toolCrate": "Ящик", "toolMoving": "Движущийся", "toolStart": "Старт", "toolHole": "Лунка", "toolErase": "Стереть", "meUndo": "Отмена", "meClear": "Очистить", "meSave": "Сохранить", "meTest": "Тест", "mePublish": "Опубликовать", "meDone": "Готово", "meNothingUndo": "Нечего отменять.", "meConfirmClear": "Удалить все холмы и объекты?", "meNewMap": "Новая пустая карта.", "meToolSel": "Инструмент: {tool}", "meNothingErase": "Здесь нечего стирать.", "meDistance": "Старт и лунка должны быть дальше друг от друга.", "meKeepFree": "Старт и лунка/флаг должны оставаться свободными.", "meMaxHills": "Максимум 3 холма на карту.", "meMaxObjs": "Максимум 40 объектов на карту.", "meNeedName": "Сначала введите название карты.", "meNeedStartHole": "Карте нужны старт, лунка и флаг.", "meStorageFull": "Не удалось сохранить (память заполнена?).", "meSaved": "«{name}» сохранена. Её можно найти в уровнях и в Мастерской.", "meSavedToast": "Карта сохранена", "meDelConfirm": "Действительно удалить карту «{name}»?", "meDelToast": "Карта удалена", "meLogin": "Сохранено. Чтобы опубликовать, войдите через Twitch в настройках.", "mePublished": "Опубликовано! Теперь все игроки видят карту в Мастерской.", "mePubToast": "Карта опубликована", "mePubFail": "Не удалось опубликовать.", "meServer": "Сервер недоступен. Карта сохранена локально.", "wsMapsChip": "Карты", "wsMapChip": "Карта", "wsMyMaps": "Мои карты", "wsComm": "Карты сообщества", "wsNewMap": "Создать карту", "wsPlayAll": "Играть все", "wsNoOwnMaps": "У вас пока нет своих карт. Нажмите «Создать карту».", "wsNoComm": "Карт сообщества пока нет. Опубликуйте первую!", "wsMineMapsEmpty": "Карт пока нет. Нажмите «Карта» во вкладке «Создать».", "mapMeta": "Пар {par} · объектов: {o} · холмов: {h}", "mapBy": "от {name}", "mapPreview": "Предпросмотр: {name}", "ws3dView": "Смотреть {name} в 3D", "ws3dHint": "Перетащите для вращения · двумя пальцами или колесом мыши – масштаб", "wsClose": "Закрыть", "wsStudio": "3D-конструктор", "wsStudioAria": "Расширенный 3D-конструктор", "wsSize": "Размер", "wsWidth": "Ширина", "wsShaftLen": "Длина рукояти", "wsGrip": "Рукоять", "wsSurface": "Поверхность", "wsTextSize": "Размер текста", "wsMark": "Логотип / текст на предмете", "wsMarkPh": "напр. CG", "wsBrush": "Кисть и палитра", "wsBrushHint": "Выберите цвет и примените к мячу, головке или рукояти.", "wsBrushAria": "Цвет кисти", "wsStudioHint": "Предпросмотр меняется вместе с ползунками. Размеры, рукоять, метка и цвета сохраняются при публикации.", "wsColorDef": "Цвет", "wsDelete": "Удалить", "wsDeleteConfirm": "Удалить этот предмет навсегда? Все покупатели получат монеты обратно.", "wsDeletedToast": "Предмет удалён. Возвраты покупателям: {n}", "wsOnlyOwn": "Можно удалять только свои предметы.", "wsServerFail": "Сервер Мастерской недоступен. Попробуйте позже.", "wsLoadFail": "Не удалось загрузить Мастерскую.", "wsRefundToast": "Возврат: +{n} 🪙", "wsLoading": "Загрузка Мастерской…", "toastClose": "Закрыть"}, "es": {"acTitle": "CUENTA", "acNote": "Las salas online y el Taller requieren una cuenta. Inicia sesión con Twitch.", "acLoggedIn": "Sesión iniciada como {name}", "acLoggedOut": "Sin iniciar sesión", "acNeed": "Necesitas una cuenta: inicia sesión con Twitch en los ajustes.", "acLockTitle": "Se requiere cuenta", "acLockText": "El modo online y el Taller solo están disponibles con cuenta. Inicia sesión con Twitch en los ajustes.", "acGoSettings": "Ir a ajustes", "wsTitle": "Taller", "wsTabBrowse": "Explorar", "wsTabCreate": "Crear", "wsTabMine": "Mis cosas", "wsAll": "Todo", "wsBalls": "Bolas", "wsClubs": "Palos", "wsBall": "Bola", "wsClub": "Palo", "wsName": "Nombre", "wsColBall": "Color de la bola", "wsColHead": "Color de la cabeza", "wsColShaft": "Color del eje", "wsGlow": "Brillo", "wsMetal": "Metal", "wsPublish": "Publicar", "wsCostLine": "Crear cuesta {c} 🪙 · Otros lo compran por {p} 🪙", "wsEmpty": "Aún no hay objetos", "wsEmptyHint": "¡Crea el primer objeto en la pestaña «Crear»!", "wsBy": "de {name}", "wsYours": "Tu objeto", "wsBuy": "Comprar · {p} 🪙", "wsBoughtToast": "¡«{name}» comprado! Búscalo en la tienda.", "wsNameShort": "Ponle un nombre al objeto (mín. 2 caracteres).", "wsPublished": "¡«{name}» publicado!", "wsEarnings": "Ganancias: {n} 🪙", "wsClaim": "Cobrar", "wsMineEmpty": "Aún no has creado nada", "wsMineEmptyHint": "¡Diseña una bola o un palo y véndelo!", "wsSales": "{n}× vendido", "lbBack": "Volver", "spTitle": "Un jugador", "spLead": "Campaña, niveles aleatorios o tus mapas del Taller: tras cada hoyo se sigue automáticamente.", "spLevels": "Niveles", "spRandom": "Nivel aleatorio", "spAllMaps": "Todos los mapas del Taller seguidos", "spWorkshop": "Taller y editor de mapas", "spMyMaps": "Mis mapas del Taller", "spPlay": "Jugar", "spNoMaps": "Aún no hay mapas. Crea el primero en el Taller en «Crear → Mapa».", "spNoMapsToast": "Aún no hay mapas: crea uno primero en el Taller.", "spDone": "Completado en {n} golpes", "spTestDone": "¡Prueba superada!", "quitTab": "Puedes cerrar la pestaña.", "stStrike": "ANIMACIÓN DE GOLPE", "stStrikeReal": "Realista (nueva)", "stStrikeClassic": "Clásica (antigua)", "stStrikeNote": "La nueva animación usa balanceo, aceleración y un breve seguimiento. Puedes volver cuando quieras.", "stStrikeOnReal": "Animación de golpe realista activada", "stStrikeOnClassic": "Animación de golpe clásica activada", "meTitle": "Editor de mapas", "meLead": "Toca el área para colocar objetos. Hasta 3 colinas y 40 objetos. Salida y hoyo son obligatorios.", "meName": "Nombre", "meNamePh": "Nombre del mapa", "mePar": "Par", "toolHill": "Colina", "toolTree": "Árbol", "toolRock": "Roca", "toolCrate": "Caja", "toolMoving": "Móvil", "toolStart": "Salida", "toolHole": "Hoyo", "toolErase": "Borrar", "meUndo": "Deshacer", "meClear": "Vaciar", "meSave": "Guardar", "meTest": "Probar", "mePublish": "Publicar", "meDone": "Listo", "meNothingUndo": "Nada que deshacer.", "meConfirmClear": "¿Quitar todas las colinas y objetos?", "meNewMap": "Nuevo mapa vacío.", "meToolSel": "Herramienta: {tool}", "meNothingErase": "Aquí no hay nada que borrar.", "meDistance": "La salida y el hoyo necesitan más distancia.", "meKeepFree": "La salida y el hoyo/bandera deben quedar libres.", "meMaxHills": "Máximo 3 colinas por mapa.", "meMaxObjs": "Máximo 40 objetos por mapa.", "meNeedName": "Primero escribe un nombre para el mapa.", "meNeedStartHole": "El mapa necesita salida, hoyo y bandera.", "meStorageFull": "No se pudo guardar (¿almacenamiento lleno?).", "meSaved": "«{name}» guardado. Lo encontrarás en Niveles y en el Taller.", "meSavedToast": "Mapa guardado", "meDelConfirm": "¿Eliminar de verdad el mapa «{name}»?", "meDelToast": "Mapa eliminado", "meLogin": "Guardado. Para publicar, inicia sesión con Twitch en los ajustes.", "mePublished": "¡Publicado! Todos los jugadores ya ven el mapa en el Taller.", "mePubToast": "Mapa publicado", "mePubFail": "No se pudo publicar.", "meServer": "Servidor inaccesible. El mapa se guardó localmente.", "wsMapsChip": "Mapas", "wsMapChip": "Mapa", "wsMyMaps": "Mis mapas", "wsComm": "Mapas de la comunidad", "wsNewMap": "Crear mapa nuevo", "wsPlayAll": "Jugar todos", "wsNoOwnMaps": "Aún no tienes mapas propios. Toca «Crear mapa nuevo».", "wsNoComm": "Aún no hay mapas de la comunidad. ¡Publica el primero!", "wsMineMapsEmpty": "Aún no hay mapas. Toca «Mapa» en «Crear».", "mapMeta": "Par {par} · {o} objetos · {h} colinas", "mapBy": "de {name}", "mapPreview": "Vista previa: {name}", "ws3dView": "Ver {name} en 3D", "ws3dHint": "Arrastra para girar · Dos dedos o rueda del ratón para zoom", "wsClose": "Cerrar", "wsStudio": "Constructor 3D", "wsStudioAria": "Constructor 3D avanzado", "wsSize": "Tamaño", "wsWidth": "Ancho", "wsShaftLen": "Longitud del eje", "wsGrip": "Empuñadura", "wsSurface": "Superficie", "wsTextSize": "Tamaño del texto", "wsMark": "Logo / texto en el objeto", "wsMarkPh": "p. ej. CG", "wsBrush": "Pincel y paleta", "wsBrushHint": "Elige un color y aplícalo a la bola, la cabeza o el eje.", "wsBrushAria": "Color del pincel", "wsStudioHint": "La vista previa reacciona en vivo a los controles. Tamaños, empuñadura, marca y colores se guardan al publicar.", "wsColorDef": "Color", "wsDelete": "Eliminar", "wsDeleteConfirm": "¿Eliminar este objeto para siempre? Todos los compradores recuperan sus monedas.", "wsDeletedToast": "Objeto eliminado. Compradores reembolsados: {n}", "wsOnlyOwn": "Solo puedes eliminar tus propios objetos.", "wsServerFail": "Servidor del Taller inaccesible. Inténtalo más tarde.", "wsLoadFail": "No se pudo cargar el Taller.", "wsRefundToast": "Reembolso: +{n} 🪙", "wsLoading": "Cargando el Taller…", "toastClose": "Cerrar"}, "tr": {"acTitle": "HESAP", "acNote": "Çevrimiçi odalar ve Atölye için hesap gerekir. Twitch ile giriş yap.", "acLoggedIn": "{name} olarak giriş yapıldı", "acLoggedOut": "Giriş yapılmadı", "acNeed": "Bunun için hesap gerekir – ayarlardan Twitch ile giriş yap.", "acLockTitle": "Hesap gerekli", "acLockText": "Çevrimiçi mod ve Atölye yalnızca hesapla kullanılabilir. Ayarlardan Twitch ile giriş yap.", "acGoSettings": "Ayarlara git", "wsTitle": "Atölye", "wsTabBrowse": "Gözat", "wsTabCreate": "Oluştur", "wsTabMine": "Benimkiler", "wsAll": "Hepsi", "wsBalls": "Toplar", "wsClubs": "Sopalar", "wsBall": "Top", "wsClub": "Sopa", "wsName": "Ad", "wsColBall": "Top rengi", "wsColHead": "Baş rengi", "wsColShaft": "Sap rengi", "wsGlow": "Parlama", "wsMetal": "Metal", "wsPublish": "Yayınla", "wsCostLine": "Oluşturmak {c} 🪙 · Diğerleri {p} 🪙 ile alır", "wsEmpty": "Henüz öğe yok", "wsEmptyHint": "İlk öğeyi «Oluştur» sekmesinde yap!", "wsBy": "{name} tarafından", "wsYours": "Senin öğen", "wsBuy": "Satın al · {p} 🪙", "wsBoughtToast": "«{name}» satın alındı! Mağazada bul.", "wsNameShort": "Öğeye bir ad ver (en az 2 karakter).", "wsPublished": "«{name}» yayınlandı!", "wsEarnings": "Kazanç: {n} 🪙", "wsClaim": "Topla", "wsMineEmpty": "Henüz hiçbir şey oluşturmadın", "wsMineEmptyHint": "Bir top ya da sopa tasarla ve sat!", "wsSales": "{n}× satıldı", "lbBack": "Geri", "spTitle": "Tek Oyunculu", "spLead": "Kampanya, rastgele seviyeler veya Atölye haritaların – her delikten sonra otomatik devam eder.", "spLevels": "Seviyeler", "spRandom": "Rastgele seviye", "spAllMaps": "Tüm Atölye haritaları art arda", "spWorkshop": "Atölye ve harita editörü", "spMyMaps": "Atölye haritalarım", "spPlay": "Oyna", "spNoMaps": "Henüz harita yok. Atölyede «Oluştur → Harita» ile ilk haritanı yap.", "spNoMapsToast": "Henüz harita yok – önce Atölyede bir tane yap.", "spDone": "{n} vuruşta tamamlandı", "spTestDone": "Test başarılı!", "quitTab": "Sekmeyi kapatabilirsin.", "stStrike": "VURUŞ ANİMASYONU", "stStrikeReal": "Gerçekçi (yeni)", "stStrikeClassic": "Klasik (eski)", "stStrikeNote": "Yeni animasyon geri çekiş, hızlanma ve kısa bir takip hareketi kullanır. İstediğin zaman geri dönebilirsin.", "stStrikeOnReal": "Gerçekçi vuruş animasyonu etkin", "stStrikeOnClassic": "Klasik vuruş animasyonu etkin", "meTitle": "Harita editörü", "meLead": "Nesneleri yerleştirmek için alana dokun. En fazla 3 tepe ve 40 nesne. Başlangıç ve delik zorunlu.", "meName": "Ad", "meNamePh": "Harita adı", "mePar": "Par", "toolHill": "Tepe", "toolTree": "Ağaç", "toolRock": "Kaya", "toolCrate": "Sandık", "toolMoving": "Hareketli", "toolStart": "Başlangıç", "toolHole": "Delik", "toolErase": "Sil", "meUndo": "Geri al", "meClear": "Temizle", "meSave": "Kaydet", "meTest": "Test et", "mePublish": "Yayınla", "meDone": "Bitti", "meNothingUndo": "Geri alınacak bir şey yok.", "meConfirmClear": "Tüm tepeler ve nesneler silinsin mi?", "meNewMap": "Yeni boş harita.", "meToolSel": "Araç: {tool}", "meNothingErase": "Burada silinecek bir şey yok.", "meDistance": "Başlangıç ile delik arasında daha fazla mesafe olmalı.", "meKeepFree": "Başlangıç ve delik/bayrak boş kalmalı.", "meMaxHills": "Harita başına en fazla 3 tepe.", "meMaxObjs": "Harita başına en fazla 40 nesne.", "meNeedName": "Lütfen önce bir harita adı gir.", "meNeedStartHole": "Haritada başlangıç, delik ve bayrak olmalı.", "meStorageFull": "Kaydedilemedi (depolama dolu mu?).", "meSaved": "«{name}» kaydedildi. Seviyeler ve Atölyede bulabilirsin.", "meSavedToast": "Harita kaydedildi", "meDelConfirm": "«{name}» haritası gerçekten silinsin mi?", "meDelToast": "Harita silindi", "meLogin": "Kaydedildi. Yayınlamak için ayarlardan Twitch ile giriş yap.", "mePublished": "Yayınlandı! Tüm oyuncular haritayı artık Atölyede görebilir.", "mePubToast": "Harita yayınlandı", "mePubFail": "Yayınlama başarısız.", "meServer": "Sunucuya ulaşılamıyor. Harita yerel olarak kaydedildi.", "wsMapsChip": "Haritalar", "wsMapChip": "Harita", "wsMyMaps": "Haritalarım", "wsComm": "Topluluk haritaları", "wsNewMap": "Yeni harita yap", "wsPlayAll": "Hepsini oyna", "wsNoOwnMaps": "Henüz kendi haritan yok. «Yeni harita yap»a dokun.", "wsNoComm": "Henüz topluluk haritası yok. İlkini sen yayınla!", "wsMineMapsEmpty": "Henüz harita yok. «Oluştur» altında «Harita»ya dokun.", "mapMeta": "Par {par} · {o} nesne · {h} tepe", "mapBy": "{name} tarafından", "mapPreview": "Önizleme: {name}", "ws3dView": "{name} öğesini 3D gör", "ws3dHint": "Döndürmek için sürükle · Yakınlaştırmak için iki parmak veya fare tekerleği", "wsClose": "Kapat", "wsStudio": "3D oluşturucu", "wsStudioAria": "Gelişmiş 3D oluşturucu", "wsSize": "Boyut", "wsWidth": "Genişlik", "wsShaftLen": "Sap uzunluğu", "wsGrip": "Tutuş", "wsSurface": "Yüzey", "wsTextSize": "Metin boyutu", "wsMark": "Nesne üzerinde logo / metin", "wsMarkPh": "örn. CG", "wsBrush": "Fırça ve palet", "wsBrushHint": "Bir renk seç ve topa, başa ya da sapa uygula.", "wsBrushAria": "Fırça rengi", "wsStudioHint": "Önizleme kaydırıcılarına canlı tepki verir. Boyutlar, tutuş, işaret ve renkler yayınlarken kaydedilir.", "wsColorDef": "Renk", "wsDelete": "Sil", "wsDeleteConfirm": "Bu Atölye öğesi kalıcı olarak silinsin mi? Tüm alıcılar jetonlarını geri alır.", "wsDeletedToast": "Öğe silindi. İade edilen alıcı: {n}", "wsOnlyOwn": "Yalnızca kendi öğelerini silebilirsin.", "wsServerFail": "Atölye sunucusuna ulaşılamıyor. Lütfen sonra tekrar dene.", "wsLoadFail": "Atölye yüklenemedi.", "wsRefundToast": "İade: +{n} 🪙", "wsLoading": "Atölye yükleniyor…", "toastClose": "Kapat"}, "ar": {"acTitle": "الحساب", "acNote": "الغرف الأونلاين والورشة تتطلب حساباً. سجّل الدخول عبر Twitch.", "acLoggedIn": "تم تسجيل الدخول باسم {name}", "acLoggedOut": "لم يتم تسجيل الدخول", "acNeed": "تحتاج إلى حساب – سجّل الدخول عبر Twitch من الإعدادات.", "acLockTitle": "الحساب مطلوب", "acLockText": "الوضع الأونلاين والورشة متاحان مع الحساب فقط. سجّل الدخول عبر Twitch من الإعدادات.", "acGoSettings": "إلى الإعدادات", "wsTitle": "الورشة", "wsTabBrowse": "تصفّح", "wsTabCreate": "إنشاء", "wsTabMine": "أعمالي", "wsAll": "الكل", "wsBalls": "الكرات", "wsClubs": "العصي", "wsBall": "كرة", "wsClub": "عصا", "wsName": "الاسم", "wsColBall": "لون الكرة", "wsColHead": "لون الرأس", "wsColShaft": "لون العمود", "wsGlow": "توهّج", "wsMetal": "معدن", "wsPublish": "نشر", "wsCostLine": "الإنشاء يكلّف {c} 🪙 · يشتريه الآخرون بـ {p} 🪙", "wsEmpty": "لا توجد عناصر بعد", "wsEmptyHint": "أنشئ أول عنصر في تبويب «إنشاء»!", "wsBy": "من {name}", "wsYours": "عنصرك", "wsBuy": "شراء · {p} 🪙", "wsBoughtToast": "تم شراء «{name}»! ستجده في المتجر.", "wsNameShort": "أعطِ العنصر اسماً (حرفان على الأقل).", "wsPublished": "تم نشر «{name}»!", "wsEarnings": "الأرباح: {n} 🪙", "wsClaim": "استلام", "wsMineEmpty": "لم تنشئ شيئاً بعد", "wsMineEmptyHint": "صمّم كرة أو عصا وبعها!", "wsSales": "بيع {n}×", "lbBack": "رجوع", "spTitle": "لاعب واحد", "spLead": "الحملة أو مستويات عشوائية أو خرائط الورشة الخاصة بك – تستمر اللعبة تلقائياً بعد كل حفرة.", "spLevels": "المستويات", "spRandom": "مستوى عشوائي", "spAllMaps": "كل خرائط الورشة تباعاً", "spWorkshop": "الورشة ومحرر الخرائط", "spMyMaps": "خرائط الورشة الخاصة بي", "spPlay": "العب", "spNoMaps": "لا توجد خرائط بعد. أنشئ أول خريطة من الورشة عبر «إنشاء ← خريطة».", "spNoMapsToast": "لا توجد خرائط بعد – أنشئ واحدة في الورشة أولاً.", "spDone": "أُنجز في {n} ضربات", "spTestDone": "اجتزت الاختبار!", "quitTab": "يمكنك إغلاق التبويب ببساطة.", "stStrike": "حركة الضربة", "stStrikeReal": "واقعية (جديدة)", "stStrikeClassic": "كلاسيكية (قديمة)", "stStrikeNote": "تستخدم الحركة الجديدة تأرجحاً للخلف وتسارعاً وإكمالاً قصيراً للضربة. يمكنك العودة في أي وقت.", "stStrikeOnReal": "تم تفعيل حركة الضربة الواقعية", "stStrikeOnClassic": "تم تفعيل حركة الضربة الكلاسيكية", "meTitle": "محرر الخرائط", "meLead": "المس المساحة لوضع العناصر. حتى 3 تلال و40 عنصراً. البداية والحفرة إلزاميتان.", "meName": "الاسم", "meNamePh": "اسم الخريطة", "mePar": "بار", "toolHill": "تلة", "toolTree": "شجرة", "toolRock": "صخرة", "toolCrate": "صندوق", "toolMoving": "متحرك", "toolStart": "البداية", "toolHole": "الحفرة", "toolErase": "مسح", "meUndo": "تراجع", "meClear": "تفريغ", "meSave": "حفظ", "meTest": "اختبار", "mePublish": "نشر", "meDone": "تم", "meNothingUndo": "لا شيء للتراجع عنه.", "meConfirmClear": "إزالة كل التلال والعناصر؟", "meNewMap": "خريطة جديدة فارغة.", "meToolSel": "الأداة: {tool}", "meNothingErase": "لا شيء للمسح هنا.", "meDistance": "البداية والحفرة تحتاجان مسافة أكبر.", "meKeepFree": "يجب أن تبقى البداية والحفرة/العلم خالية.", "meMaxHills": "بحد أقصى 3 تلال لكل خريطة.", "meMaxObjs": "بحد أقصى 40 عنصراً لكل خريطة.", "meNeedName": "يرجى إدخال اسم الخريطة أولاً.", "meNeedStartHole": "تحتاج الخريطة إلى بداية وحفرة وعلم.", "meStorageFull": "تعذّر الحفظ (التخزين ممتلئ؟).", "meSaved": "تم حفظ «{name}». ستجدها في المستويات وفي الورشة.", "meSavedToast": "تم حفظ الخريطة", "meDelConfirm": "هل تريد حذف الخريطة «{name}» فعلاً؟", "meDelToast": "تم حذف الخريطة", "meLogin": "تم الحفظ. للنشر سجّل الدخول عبر Twitch من الإعدادات.", "mePublished": "تم النشر! يرى جميع اللاعبين الخريطة الآن في الورشة.", "mePubToast": "تم نشر الخريطة", "mePubFail": "فشل النشر.", "meServer": "تعذّر الوصول إلى الخادم. تم حفظ الخريطة محلياً.", "wsMapsChip": "الخرائط", "wsMapChip": "خريطة", "wsMyMaps": "خرائطي", "wsComm": "خرائط المجتمع", "wsNewMap": "إنشاء خريطة جديدة", "wsPlayAll": "العب الكل", "wsNoOwnMaps": "لا توجد خرائط خاصة بك بعد. المس «إنشاء خريطة جديدة».", "wsNoComm": "لا توجد خرائط مجتمع بعد. انشر أول خريطة!", "wsMineMapsEmpty": "لا توجد خرائط بعد. المس «خريطة» ضمن «إنشاء».", "mapMeta": "بار {par} · {o} عناصر · {h} تلال", "mapBy": "من {name}", "mapPreview": "معاينة: {name}", "ws3dView": "عرض {name} بالثلاثي الأبعاد", "ws3dHint": "اسحب للتدوير · إصبعان أو عجلة الفأرة للتكبير", "wsClose": "إغلاق", "wsStudio": "منشئ ثلاثي الأبعاد", "wsStudioAria": "منشئ ثلاثي الأبعاد متقدم", "wsSize": "الحجم", "wsWidth": "العرض", "wsShaftLen": "طول العمود", "wsGrip": "المقبض", "wsSurface": "السطح", "wsTextSize": "حجم النص", "wsMark": "شعار / نص على العنصر", "wsMarkPh": "مثال: CG", "wsBrush": "الفرشاة واللوحة", "wsBrushHint": "اختر لوناً وطبّقه على الكرة أو الرأس أو العمود.", "wsBrushAria": "لون الفرشاة", "wsStudioHint": "تتفاعل المعاينة مباشرة مع المنزلقات. تُحفظ الأحجام والمقبض والعلامة والألوان عند النشر.", "wsColorDef": "اللون", "wsDelete": "حذف", "wsDeleteConfirm": "حذف هذا العنصر نهائياً؟ سيستعيد كل المشترين عملاتهم.", "wsDeletedToast": "تم حذف العنصر. المشترون المستردّة أموالهم: {n}", "wsOnlyOwn": "يمكنك حذف عناصرك فقط.", "wsServerFail": "تعذّر الوصول إلى خادم الورشة. حاول لاحقاً.", "wsLoadFail": "تعذّر تحميل الورشة.", "wsRefundToast": "استرداد: +{n} 🪙", "wsLoading": "جارٍ تحميل الورشة…", "toastClose": "إغلاق"}, "fr": {"acTitle": "COMPTE", "acNote": "Les salons en ligne et l’atelier nécessitent un compte. Connecte-toi avec Twitch.", "acLoggedIn": "Connecté en tant que {name}", "acLoggedOut": "Non connecté", "acNeed": "Il faut un compte – connecte-toi avec Twitch dans les réglages.", "acLockTitle": "Compte requis", "acLockText": "Le mode en ligne et l’atelier ne sont disponibles qu’avec un compte. Connecte-toi avec Twitch dans les réglages.", "acGoSettings": "Aux réglages", "wsTitle": "Atelier", "wsTabBrowse": "Parcourir", "wsTabCreate": "Créer", "wsTabMine": "Les miens", "wsAll": "Tout", "wsBalls": "Balles", "wsClubs": "Clubs", "wsBall": "Balle", "wsClub": "Club", "wsName": "Nom", "wsColBall": "Couleur de la balle", "wsColHead": "Couleur de la tête", "wsColShaft": "Couleur du manche", "wsGlow": "Lueur", "wsMetal": "Métal", "wsPublish": "Publier", "wsCostLine": "Créer coûte {c} 🪙 · Les autres l’achètent {p} 🪙", "wsEmpty": "Aucun objet pour l’instant", "wsEmptyHint": "Crée le premier objet dans l’onglet « Créer » !", "wsBy": "par {name}", "wsYours": "Ton objet", "wsBuy": "Acheter · {p} 🪙", "wsBoughtToast": "« {name} » acheté ! Retrouve-le dans la boutique.", "wsNameShort": "Donne un nom à l’objet (2 caractères min.).", "wsPublished": "« {name} » publié !", "wsEarnings": "Gains : {n} 🪙", "wsClaim": "Récupérer", "wsMineEmpty": "Tu n’as encore rien créé", "wsMineEmptyHint": "Crée une balle ou un club et vends-le !", "wsSales": "{n}× vendu", "lbBack": "Retour", "spTitle": "Solo", "spLead": "Campagne, niveaux aléatoires ou tes cartes de l’atelier – on enchaîne automatiquement après chaque trou.", "spLevels": "Niveaux", "spRandom": "Niveau aléatoire", "spAllMaps": "Toutes les cartes de l’atelier à la suite", "spWorkshop": "Atelier et éditeur de cartes", "spMyMaps": "Mes cartes de l’atelier", "spPlay": "Jouer", "spNoMaps": "Pas encore de cartes. Crée la première dans l’atelier : « Créer → Carte ».", "spNoMapsToast": "Pas encore de cartes – crées-en une d’abord dans l’atelier.", "spDone": "Réussi en {n} coups", "spTestDone": "Test réussi !", "quitTab": "Tu peux simplement fermer l’onglet.", "stStrike": "ANIMATION DU COUP", "stStrikeReal": "Réaliste (nouveau)", "stStrikeClassic": "Classique (ancien)", "stStrikeNote": "La nouvelle animation utilise un élan, une accélération et un court accompagnement. Tu peux revenir en arrière à tout moment.", "stStrikeOnReal": "Animation de coup réaliste activée", "stStrikeOnClassic": "Animation de coup classique activée", "meTitle": "Éditeur de cartes", "meLead": "Touche la zone pour placer des objets. Jusqu’à 3 collines et 40 objets. Départ et trou obligatoires.", "meName": "Nom", "meNamePh": "Nom de la carte", "mePar": "Par", "toolHill": "Colline", "toolTree": "Arbre", "toolRock": "Rocher", "toolCrate": "Caisse", "toolMoving": "Mobile", "toolStart": "Départ", "toolHole": "Trou", "toolErase": "Effacer", "meUndo": "Annuler", "meClear": "Vider", "meSave": "Enregistrer", "meTest": "Tester", "mePublish": "Publier", "meDone": "Terminé", "meNothingUndo": "Rien à annuler.", "meConfirmClear": "Supprimer toutes les collines et tous les objets ?", "meNewMap": "Nouvelle carte vide.", "meToolSel": "Outil : {tool}", "meNothingErase": "Rien à effacer ici.", "meDistance": "Le départ et le trou doivent être plus éloignés.", "meKeepFree": "Le départ et le trou/drapeau doivent rester dégagés.", "meMaxHills": "3 collines maximum par carte.", "meMaxObjs": "40 objets maximum par carte.", "meNeedName": "Saisis d’abord un nom de carte.", "meNeedStartHole": "La carte doit avoir un départ, un trou et un drapeau.", "meStorageFull": "Enregistrement impossible (stockage plein ?).", "meSaved": "« {name} » enregistrée. Tu la trouveras dans Niveaux et dans l’atelier.", "meSavedToast": "Carte enregistrée", "meDelConfirm": "Supprimer vraiment la carte « {name} » ?", "meDelToast": "Carte supprimée", "meLogin": "Enregistré. Pour publier, connecte-toi avec Twitch dans les réglages.", "mePublished": "Publiée ! Tous les joueurs voient maintenant la carte dans l’atelier.", "mePubToast": "Carte publiée", "mePubFail": "Échec de la publication.", "meServer": "Serveur inaccessible. La carte est enregistrée localement.", "wsMapsChip": "Cartes", "wsMapChip": "Carte", "wsMyMaps": "Mes cartes", "wsComm": "Cartes de la communauté", "wsNewMap": "Créer une carte", "wsPlayAll": "Tout jouer", "wsNoOwnMaps": "Pas encore de cartes à toi. Touche « Créer une carte ».", "wsNoComm": "Pas encore de cartes de la communauté. Publie la première !", "wsMineMapsEmpty": "Pas encore de cartes. Touche « Carte » dans « Créer ».", "mapMeta": "Par {par} · {o} objets · {h} collines", "mapBy": "par {name}", "mapPreview": "Aperçu : {name}", "ws3dView": "Voir {name} en 3D", "ws3dHint": "Glisse pour tourner · Deux doigts ou molette pour zoomer", "wsClose": "Fermer", "wsStudio": "Concepteur 3D", "wsStudioAria": "Concepteur 3D avancé", "wsSize": "Taille", "wsWidth": "Largeur", "wsShaftLen": "Longueur du manche", "wsGrip": "Prise", "wsSurface": "Surface", "wsTextSize": "Taille du texte", "wsMark": "Logo / texte sur l’objet", "wsMarkPh": "p. ex. CG", "wsBrush": "Pinceau et palette", "wsBrushHint": "Choisis une couleur et applique-la à la balle, à la tête ou au manche.", "wsBrushAria": "Couleur du pinceau", "wsStudioHint": "L’aperçu réagit en direct aux curseurs. Tailles, prise, marque et couleurs sont enregistrées à la publication.", "wsColorDef": "Couleur", "wsDelete": "Supprimer", "wsDeleteConfirm": "Supprimer définitivement cet objet ? Tous les acheteurs récupèrent leurs pièces.", "wsDeletedToast": "Objet supprimé. Acheteurs remboursés : {n}", "wsOnlyOwn": "Tu ne peux supprimer que tes propres objets.", "wsServerFail": "Serveur de l’atelier inaccessible. Réessaie plus tard.", "wsLoadFail": "Impossible de charger l’atelier.", "wsRefundToast": "Remboursement : +{n} 🪙", "wsLoading": "Chargement de l’atelier…", "toastClose": "Fermer"}, "ja": {"acTitle": "アカウント", "acNote": "オンラインルームとワークショップにはアカウントが必要です。Twitchでログインしてください。", "acLoggedIn": "{name} としてログイン中", "acLoggedOut": "未ログイン", "acNeed": "アカウントが必要です。設定からTwitchでログインしてください。", "acLockTitle": "アカウントが必要", "acLockText": "オンラインモードとワークショップはアカウントが必要です。設定でTwitchにログインしてください。", "acGoSettings": "設定へ", "wsTitle": "ワークショップ", "wsTabBrowse": "探す", "wsTabCreate": "作成", "wsTabMine": "マイ", "wsAll": "すべて", "wsBalls": "ボール", "wsClubs": "クラブ", "wsBall": "ボール", "wsClub": "クラブ", "wsName": "名前", "wsColBall": "ボールの色", "wsColHead": "ヘッドの色", "wsColShaft": "シャフトの色", "wsGlow": "発光", "wsMetal": "メタル", "wsPublish": "公開", "wsCostLine": "作成に {c} 🪙 · 他のプレイヤーは {p} 🪙 で購入", "wsEmpty": "アイテムはまだありません", "wsEmptyHint": "「作成」タブで最初のアイテムを作ろう！", "wsBy": "作者: {name}", "wsYours": "あなたのアイテム", "wsBuy": "購入 · {p} 🪙", "wsBoughtToast": "「{name}」を購入しました！ショップで確認できます。", "wsNameShort": "アイテム名を入力してください（2文字以上）。", "wsPublished": "「{name}」を公開しました！", "wsEarnings": "収益: {n} 🪙", "wsClaim": "受け取る", "wsMineEmpty": "まだ何も作っていません", "wsMineEmptyHint": "ボールやクラブをデザインして売ろう！", "wsSales": "{n}回販売", "lbBack": "戻る", "spTitle": "シングルプレイ", "spLead": "キャンペーン、ランダムレベル、ワークショップのマップ – ホールごとに自動で次へ進みます。", "spLevels": "レベル", "spRandom": "ランダムレベル", "spAllMaps": "ワークショップのマップを連続プレイ", "spWorkshop": "ワークショップ＆マップエディタ", "spMyMaps": "マイ・ワークショップマップ", "spPlay": "プレイ", "spNoMaps": "マップはまだありません。ワークショップの「作成 → マップ」で作ろう。", "spNoMapsToast": "マップがありません。まずワークショップで作りましょう。", "spDone": "{n}打でクリア", "spTestDone": "テストクリア！", "quitTab": "タブを閉じてください。", "stStrike": "スイングアニメーション", "stStrikeReal": "リアル（新）", "stStrikeClassic": "クラシック（旧）", "stStrikeNote": "新しいアニメーションはバックスイング、加速、短いフォロースルーを使います。いつでも元に戻せます。", "stStrikeOnReal": "リアルなスイングを有効にしました", "stStrikeOnClassic": "クラシックスイングを有効にしました", "meTitle": "マップエディタ", "meLead": "エリアをタップして配置。丘は最大3、オブジェクトは最大40。スタートとホールは必須です。", "meName": "名前", "meNamePh": "マップ名", "mePar": "パー", "toolHill": "丘", "toolTree": "木", "toolRock": "岩", "toolCrate": "木箱", "toolMoving": "動く物", "toolStart": "スタート", "toolHole": "ホール", "toolErase": "消す", "meUndo": "元に戻す", "meClear": "クリア", "meSave": "保存", "meTest": "テスト", "mePublish": "公開", "meDone": "完了", "meNothingUndo": "元に戻す操作がありません。", "meConfirmClear": "すべての丘とオブジェクトを削除しますか？", "meNewMap": "新しい空のマップ。", "meToolSel": "ツール: {tool}", "meNothingErase": "ここには消すものがありません。", "meDistance": "スタートとホールをもっと離してください。", "meKeepFree": "スタートとホール/旗の周りは空けてください。", "meMaxHills": "丘は1マップにつき最大3つです。", "meMaxObjs": "オブジェクトは1マップにつき最大40個です。", "meNeedName": "先にマップ名を入力してください。", "meNeedStartHole": "マップにはスタート、ホール、旗が必要です。", "meStorageFull": "保存できません（容量不足？）。", "meSaved": "「{name}」を保存しました。レベルとワークショップにあります。", "meSavedToast": "マップを保存しました", "meDelConfirm": "マップ「{name}」を本当に削除しますか？", "meDelToast": "マップを削除しました", "meLogin": "保存しました。公開するには設定でTwitchにログインしてください。", "mePublished": "公開しました！全プレイヤーがワークショップでマップを見られます。", "mePubToast": "マップを公開しました", "mePubFail": "公開に失敗しました。", "meServer": "サーバーに接続できません。マップは端末に保存されています。", "wsMapsChip": "マップ", "wsMapChip": "マップ", "wsMyMaps": "マイマップ", "wsComm": "コミュニティマップ", "wsNewMap": "新しいマップを作る", "wsPlayAll": "すべてプレイ", "wsNoOwnMaps": "自分のマップはまだありません。「新しいマップを作る」をタップ。", "wsNoComm": "コミュニティマップはまだありません。最初に公開しよう！", "wsMineMapsEmpty": "マップはまだありません。「作成」の「マップ」をタップ。", "mapMeta": "パー{par} · オブジェクト{o} · 丘{h}", "mapBy": "作者: {name}", "mapPreview": "プレビュー: {name}", "ws3dView": "{name}を3Dで見る", "ws3dHint": "ドラッグで回転 · 2本指またはホイールでズーム", "wsClose": "閉じる", "wsStudio": "3Dビルダー", "wsStudioAria": "高度な3Dビルダー", "wsSize": "サイズ", "wsWidth": "幅", "wsShaftLen": "シャフトの長さ", "wsGrip": "グリップ", "wsSurface": "表面", "wsTextSize": "文字サイズ", "wsMark": "オブジェクトのロゴ/テキスト", "wsMarkPh": "例: CG", "wsBrush": "ブラシとパレット", "wsBrushHint": "色を選んで、ボール・ヘッド・シャフトに適用します。", "wsBrushAria": "ブラシの色", "wsStudioHint": "プレビューはスライダーに合わせて更新されます。サイズ・グリップ・マーク・色は公開時に保存されます。", "wsColorDef": "色", "wsDelete": "削除", "wsDeleteConfirm": "このアイテムを完全に削除しますか？購入者全員にコインが返金されます。", "wsDeletedToast": "アイテムを削除しました。返金した購入者: {n}", "wsOnlyOwn": "自分のアイテムだけ削除できます。", "wsServerFail": "ワークショップのサーバーに接続できません。後でもう一度お試しください。", "wsLoadFail": "ワークショップを読み込めませんでした。", "wsRefundToast": "返金: +{n} 🪙", "wsLoading": "ワークショップを読み込み中…", "toastClose": "閉じる"}, "zh": {"acTitle": "账号", "acNote": "在线房间和创意工坊需要账号。请使用 Twitch 登录。", "acLoggedIn": "已登录为 {name}", "acLoggedOut": "未登录", "acNeed": "需要账号——请在设置中使用 Twitch 登录。", "acLockTitle": "需要账号", "acLockText": "在线模式和创意工坊仅限账号使用。请在设置中使用 Twitch 登录。", "acGoSettings": "前往设置", "wsTitle": "创意工坊", "wsTabBrowse": "浏览", "wsTabCreate": "创建", "wsTabMine": "我的", "wsAll": "全部", "wsBalls": "球", "wsClubs": "球杆", "wsBall": "球", "wsClub": "球杆", "wsName": "名称", "wsColBall": "球的颜色", "wsColHead": "杆头颜色", "wsColShaft": "杆身颜色", "wsGlow": "发光", "wsMetal": "金属", "wsPublish": "发布", "wsCostLine": "创建需要 {c} 🪙 · 其他玩家以 {p} 🪙 购买", "wsEmpty": "暂无物品", "wsEmptyHint": "在“创建”标签页制作第一个物品吧！", "wsBy": "作者:{name}", "wsYours": "你的物品", "wsBuy": "购买 · {p} 🪙", "wsBoughtToast": "已购买“{name}”！可在商店中找到。", "wsNameShort": "请给物品起个名字（至少2个字符）。", "wsPublished": "已发布“{name}”！", "wsEarnings": "收益:{n} 🪙", "wsClaim": "领取", "wsMineEmpty": "你还没有创建任何东西", "wsMineEmptyHint": "设计一个球或球杆并出售吧！", "wsSales": "已售 {n} 次", "lbBack": "返回", "spTitle": "单人游戏", "spLead": "战役、随机关卡或你的创意工坊地图——每打完一洞自动继续。", "spLevels": "关卡", "spRandom": "随机关卡", "spAllMaps": "依次游玩所有创意工坊地图", "spWorkshop": "创意工坊与地图编辑器", "spMyMaps": "我的创意工坊地图", "spPlay": "开始", "spNoMaps": "还没有地图。在创意工坊的“创建 → 地图”中制作第一张吧。", "spNoMapsToast": "还没有地图——请先在创意工坊制作一张。", "spDone": "用 {n} 杆完成", "spTestDone": "测试通过！", "quitTab": "直接关闭标签页即可。", "stStrike": "击球动画", "stStrikeReal": "写实(新)", "stStrikeClassic": "经典(旧)", "stStrikeNote": "新动画包含后摆、加速和短暂的收杆。你可以随时切换回来。", "stStrikeOnReal": "已启用写实击球动画", "stStrikeOnClassic": "已启用经典击球动画", "meTitle": "地图编辑器", "meLead": "点击区域放置物体。最多3个山丘、40个物体。必须设置起点和球洞。", "meName": "名称", "meNamePh": "地图名称", "mePar": "标准杆", "toolHill": "山丘", "toolTree": "树", "toolRock": "岩石", "toolCrate": "箱子", "toolMoving": "移动物", "toolStart": "起点", "toolHole": "球洞", "toolErase": "擦除", "meUndo": "撤销", "meClear": "清空", "meSave": "保存", "meTest": "测试", "mePublish": "发布", "meDone": "完成", "meNothingUndo": "没有可撤销的操作。", "meConfirmClear": "移除所有山丘和物体？", "meNewMap": "新的空白地图。", "meToolSel": "工具:{tool}", "meNothingErase": "这里没有可擦除的内容。", "meDistance": "起点和球洞需要更大的距离。", "meKeepFree": "起点与球洞/旗帜周围必须留空。", "meMaxHills": "每张地图最多3个山丘。", "meMaxObjs": "每张地图最多40个物体。", "meNeedName": "请先输入地图名称。", "meNeedStartHole": "地图需要起点、球洞和旗帜。", "meStorageFull": "无法保存(存储已满?)。", "meSaved": "已保存“{name}”。可在关卡和创意工坊中找到。", "meSavedToast": "地图已保存", "meDelConfirm": "确定要删除地图“{name}”吗？", "meDelToast": "地图已删除", "meLogin": "已保存。发布前请在设置中使用 Twitch 登录。", "mePublished": "已发布!所有玩家现在都能在创意工坊看到这张地图。", "mePubToast": "地图已发布", "mePubFail": "发布失败。", "meServer": "无法连接服务器。地图已保存在本地。", "wsMapsChip": "地图", "wsMapChip": "地图", "wsMyMaps": "我的地图", "wsComm": "社区地图", "wsNewMap": "制作新地图", "wsPlayAll": "全部游玩", "wsNoOwnMaps": "你还没有自己的地图。点击“制作新地图”。", "wsNoComm": "还没有社区地图。发布第一张吧!", "wsMineMapsEmpty": "还没有地图。在“创建”中点击“地图”。", "mapMeta": "标准杆 {par} · {o} 个物体 · {h} 个山丘", "mapBy": "作者:{name}", "mapPreview": "预览:{name}", "ws3dView": "以3D查看 {name}", "ws3dHint": "拖动旋转 · 双指或滚轮缩放", "wsClose": "关闭", "wsStudio": "3D 构造器", "wsStudioAria": "高级 3D 构造器", "wsSize": "大小", "wsWidth": "宽度", "wsShaftLen": "杆身长度", "wsGrip": "握把", "wsSurface": "表面", "wsTextSize": "文字大小", "wsMark": "物体上的标志/文字", "wsMarkPh": "例如 CG", "wsBrush": "画笔与调色板", "wsBrushHint": "选择颜色并应用到球、杆头或杆身。", "wsBrushAria": "画笔颜色", "wsStudioHint": "预览会随滑块实时变化。尺寸、握把、标记和颜色在发布时保存。", "wsColorDef": "颜色", "wsDelete": "删除", "wsDeleteConfirm": "永久删除此物品?所有买家将收到退款金币。", "wsDeletedToast": "物品已删除。已退款买家:{n}", "wsOnlyOwn": "你只能删除自己的物品。", "wsServerFail": "无法连接创意工坊服务器,请稍后再试。", "wsLoadFail": "无法加载创意工坊。", "wsRefundToast": "退款:+{n} 🪙", "wsLoading": "正在加载创意工坊…", "toastClose": "关闭"}, "ko": {"acTitle": "계정", "acNote": "온라인 방과 워크숍은 계정이 필요합니다. Twitch로 로그인하세요.", "acLoggedIn": "{name}(으)로 로그인됨", "acLoggedOut": "로그인 안 됨", "acNeed": "계정이 필요합니다. 설정에서 Twitch로 로그인하세요.", "acLockTitle": "계정 필요", "acLockText": "온라인 모드와 워크숍은 계정이 있어야 합니다. 설정에서 Twitch로 로그인하세요.", "acGoSettings": "설정으로", "wsTitle": "워크숍", "wsTabBrowse": "둘러보기", "wsTabCreate": "만들기", "wsTabMine": "내 것", "wsAll": "전체", "wsBalls": "공", "wsClubs": "클럽", "wsBall": "공", "wsClub": "클럽", "wsName": "이름", "wsColBall": "공 색상", "wsColHead": "헤드 색상", "wsColShaft": "샤프트 색상", "wsGlow": "발광", "wsMetal": "금속", "wsPublish": "게시", "wsCostLine": "만들기 {c} 🪙 · 다른 사람은 {p} 🪙에 구매", "wsEmpty": "아직 아이템이 없습니다", "wsEmptyHint": "“만들기” 탭에서 첫 아이템을 만들어 보세요!", "wsBy": "제작: {name}", "wsYours": "내 아이템", "wsBuy": "구매 · {p} 🪙", "wsBoughtToast": "“{name}” 구매 완료! 상점에서 확인하세요.", "wsNameShort": "아이템 이름을 입력하세요 (2자 이상).", "wsPublished": "“{name}” 게시 완료!", "wsEarnings": "수익: {n} 🪙", "wsClaim": "받기", "wsMineEmpty": "아직 만든 것이 없습니다", "wsMineEmptyHint": "공이나 클럽을 디자인해서 판매해 보세요!", "wsSales": "{n}회 판매", "lbBack": "뒤로", "spTitle": "싱글 플레이", "spLead": "캠페인, 랜덤 레벨, 워크숍 맵 – 홀을 마칠 때마다 자동으로 이어집니다.", "spLevels": "레벨", "spRandom": "랜덤 레벨", "spAllMaps": "워크숍 맵 전부 연속 플레이", "spWorkshop": "워크숍 및 맵 에디터", "spMyMaps": "내 워크숍 맵", "spPlay": "플레이", "spNoMaps": "아직 맵이 없습니다. 워크숍의 “만들기 → 맵”에서 첫 맵을 만드세요.", "spNoMapsToast": "맵이 없습니다. 먼저 워크숍에서 만드세요.", "spDone": "{n}타로 클리어", "spTestDone": "테스트 성공!", "quitTab": "탭을 닫으시면 됩니다.", "stStrike": "스윙 애니메이션", "stStrikeReal": "사실적 (신규)", "stStrikeClassic": "클래식 (이전)", "stStrikeNote": "새 애니메이션은 백스윙, 가속, 짧은 팔로스루를 사용합니다. 언제든 되돌릴 수 있습니다.", "stStrikeOnReal": "사실적 스윙 애니메이션 켜짐", "stStrikeOnClassic": "클래식 스윙 애니메이션 켜짐", "meTitle": "맵 에디터", "meLead": "영역을 눌러 오브젝트를 배치하세요. 언덕 최대 3개, 오브젝트 최대 40개. 시작점과 홀은 필수입니다.", "meName": "이름", "meNamePh": "맵 이름", "mePar": "파", "toolHill": "언덕", "toolTree": "나무", "toolRock": "바위", "toolCrate": "상자", "toolMoving": "움직임", "toolStart": "시작", "toolHole": "홀", "toolErase": "지우기", "meUndo": "되돌리기", "meClear": "비우기", "meSave": "저장", "meTest": "테스트", "mePublish": "게시", "meDone": "완료", "meNothingUndo": "되돌릴 것이 없습니다.", "meConfirmClear": "모든 언덕과 오브젝트를 삭제할까요?", "meNewMap": "새 빈 맵.", "meToolSel": "도구: {tool}", "meNothingErase": "여기엔 지울 것이 없습니다.", "meDistance": "시작점과 홀의 거리가 더 필요합니다.", "meKeepFree": "시작점과 홀/깃발 주변은 비워 두세요.", "meMaxHills": "맵당 언덕은 최대 3개입니다.", "meMaxObjs": "맵당 오브젝트는 최대 40개입니다.", "meNeedName": "먼저 맵 이름을 입력하세요.", "meNeedStartHole": "맵에는 시작점, 홀, 깃발이 필요합니다.", "meStorageFull": "저장할 수 없습니다 (저장 공간 부족?).", "meSaved": "“{name}” 저장됨. 레벨과 워크숍에서 찾을 수 있습니다.", "meSavedToast": "맵 저장됨", "meDelConfirm": "맵 “{name}”을(를) 정말 삭제할까요?", "meDelToast": "맵 삭제됨", "meLogin": "저장됨. 게시하려면 설정에서 Twitch로 로그인하세요.", "mePublished": "게시 완료! 이제 모든 플레이어가 워크숍에서 맵을 볼 수 있습니다.", "mePubToast": "맵 게시됨", "mePubFail": "게시에 실패했습니다.", "meServer": "서버에 연결할 수 없습니다. 맵은 기기에 저장되었습니다.", "wsMapsChip": "맵", "wsMapChip": "맵", "wsMyMaps": "내 맵", "wsComm": "커뮤니티 맵", "wsNewMap": "새 맵 만들기", "wsPlayAll": "모두 플레이", "wsNoOwnMaps": "내 맵이 아직 없습니다. “새 맵 만들기”를 누르세요.", "wsNoComm": "커뮤니티 맵이 아직 없습니다. 첫 맵을 게시해 보세요!", "wsMineMapsEmpty": "맵이 아직 없습니다. “만들기”에서 “맵”을 누르세요.", "mapMeta": "파 {par} · 오브젝트 {o} · 언덕 {h}", "mapBy": "제작: {name}", "mapPreview": "미리보기: {name}", "ws3dView": "{name} 3D로 보기", "ws3dHint": "드래그로 회전 · 두 손가락 또는 휠로 확대", "wsClose": "닫기", "wsStudio": "3D 빌더", "wsStudioAria": "고급 3D 빌더", "wsSize": "크기", "wsWidth": "너비", "wsShaftLen": "샤프트 길이", "wsGrip": "그립", "wsSurface": "표면", "wsTextSize": "글자 크기", "wsMark": "오브젝트의 로고/텍스트", "wsMarkPh": "예: CG", "wsBrush": "브러시 및 팔레트", "wsBrushHint": "색상을 골라 공, 헤드 또는 샤프트에 적용하세요.", "wsBrushAria": "브러시 색상", "wsStudioHint": "미리보기는 슬라이더에 맞춰 실시간으로 바뀝니다. 크기, 그립, 마크, 색상은 게시할 때 저장됩니다.", "wsColorDef": "색상", "wsDelete": "삭제", "wsDeleteConfirm": "이 워크숍 아이템을 영구 삭제할까요? 모든 구매자에게 코인이 환불됩니다.", "wsDeletedToast": "아이템 삭제됨. 환불된 구매자: {n}", "wsOnlyOwn": "내 아이템만 삭제할 수 있습니다.", "wsServerFail": "워크숍 서버에 연결할 수 없습니다. 나중에 다시 시도하세요.", "wsLoadFail": "워크숍을 불러오지 못했습니다.", "wsRefundToast": "환불: +{n} 🪙", "wsLoading": "워크숍 불러오는 중…", "toastClose": "닫기"}};
+            Object.keys(D).forEach(l => { if (translations[l]) Object.assign(translations[l], D[l]); });
+        })();
         // Übersetzungs-Update um die neuen Texte erweitern
         (function () {
             const _origUT = updateTranslations;
@@ -4649,7 +4715,7 @@
             document.getElementById('t-subtitle').innerText = t.sub;
             document.getElementById('btn-continue').innerText = t.cont;
             document.getElementById('btn-play').innerText = t.play;
-            document.getElementById('btn-levels-nav').innerText = '🏌️ ' + (lang === 'de' ? 'Einzelspieler' : t.levels);
+            document.getElementById('btn-levels-nav').innerText = '🏌️ ' + T('spTitle');
             document.getElementById('btn-end-game').innerText = t.endGame;
             document.getElementById('btn-shop-nav').innerText = t.shop;
             document.getElementById('btn-settings-nav').innerText = t.sett;
@@ -4842,9 +4908,9 @@
         let mapHistory = [];
         function mapEditorMsg(t){ const el=document.getElementById('map-editor-status'); if(el) el.textContent=t; }
         function mapPushHistory(){ try { mapHistory.push(JSON.stringify(mapEditorData)); if(mapHistory.length>40) mapHistory.shift(); } catch(e) {} }
-        function mapEditorUndo(){ const s=mapHistory.pop(); if(!s){ mapEditorMsg('Nichts zum Rückgängigmachen.'); return; } try { mapEditorData=JSON.parse(s); } catch(e) {} const n=document.getElementById('map-name'); if(n) n.value=mapEditorData.name||''; mapEditorDraw(); persistMapEditorDraft(); }
-        function mapEditorClear(){ if(!confirm('Alle Hügel und Objekte entfernen?')) return; mapPushHistory(); mapEditorData.hills=[]; mapEditorData.assets=[]; mapEditorDraw(); persistMapEditorDraft(); }
-        function mapEditorNew(){ mapHistory=[]; mapEditorData={ version:1, name:'', par:3, start:{x:90,y:270}, hole:{x:810,y:270}, hills:[], assets:[] }; try { localStorage.setItem('cgMapEditorDraft', JSON.stringify(mapEditorData)); } catch(e) {} mapEditorInit(); mapEditorMsg('Neue leere Map.'); }
+        function mapEditorUndo(){ const s=mapHistory.pop(); if(!s){ mapEditorMsg(T('meNothingUndo')); return; } try { mapEditorData=JSON.parse(s); } catch(e) {} const n=document.getElementById('map-name'); if(n) n.value=mapEditorData.name||''; mapEditorDraw(); persistMapEditorDraft(); }
+        function mapEditorClear(){ if(!confirm(T('meConfirmClear'))) return; mapPushHistory(); mapEditorData.hills=[]; mapEditorData.assets=[]; mapEditorDraw(); persistMapEditorDraft(); }
+        function mapEditorNew(){ mapHistory=[]; mapEditorData={ version:1, name:'', par:3, start:{x:90,y:270}, hole:{x:810,y:270}, hills:[], assets:[] }; try { localStorage.setItem('cgMapEditorDraft', JSON.stringify(mapEditorData)); } catch(e) {} mapEditorInit(); mapEditorMsg(T('meNewMap')); }
         function mapEditorInit() {
             try { const savedDraft = localStorage.getItem('cgMapEditorDraft'); if (savedDraft) mapEditorData = JSON.parse(savedDraft); } catch(e) {}
             if (!mapEditorData.hills) mapEditorData.hills=[]; if (!mapEditorData.assets) mapEditorData.assets=[];
@@ -4859,7 +4925,7 @@
         function setMapTool(tool, silent){
             mapEditorTool=tool;
             document.querySelectorAll('#map-tools .ws-tool').forEach(b=>b.classList.toggle('active', b.dataset.tool===tool));
-            if(!silent) mapEditorMsg('Werkzeug: '+({hill:'Hügel',tree:'Baum',rock:'Fels',crate:'Kiste',moving:'Bewegliches Objekt',start:'Start setzen',hole:'Loch setzen',erase:'Löschen'}[tool]||tool));
+            if(!silent) mapEditorMsg(T('meToolSel').replace('{tool}', T('tool'+tool.charAt(0).toUpperCase()+tool.slice(1))));
         }
         function mapEditorPlace(ev){
             const canvas=document.getElementById('map-editor-canvas'), r=canvas.getBoundingClientRect();
@@ -4868,17 +4934,17 @@
             if(mapEditorTool==='erase'){
                 let nearest=-1,dist=42; mapEditorData.assets.forEach((a,i)=>{const d=Math.hypot(a.x-x,a.y-y);if(d<dist){dist=d;nearest=i;}});
                 let nh=-1,hd=60; mapEditorData.hills.forEach((h,i)=>{const d=Math.hypot(h.x-x,h.y-y);if(d<hd){hd=d;nh=i;}});
-                if(nearest>=0){ mapPushHistory(); mapEditorData.assets.splice(nearest,1); } else if(nh>=0){ mapPushHistory(); mapEditorData.hills.splice(nh,1); } else { mapEditorMsg('Hier ist nichts zum Löschen.'); return; }
+                if(nearest>=0){ mapPushHistory(); mapEditorData.assets.splice(nearest,1); } else if(nh>=0){ mapPushHistory(); mapEditorData.hills.splice(nh,1); } else { mapEditorMsg(T('meNothingErase')); return; }
             } else if(mapEditorTool==='start'){
-                if(Math.hypot(x-H.x,y-H.y)<150){ mapEditorMsg('Start und Loch brauchen mehr Abstand.'); return; }
+                if(Math.hypot(x-H.x,y-H.y)<150){ mapEditorMsg(T('meDistance')); return; }
                 mapPushHistory(); S.x=x; S.y=y; mapEditorData.assets=mapEditorData.assets.filter(a=>Math.hypot(a.x-x,a.y-y)>=48); mapEditorData.hills=mapEditorData.hills.filter(h=>Math.hypot(h.x-x,h.y-y)>=h.r);
             } else if(mapEditorTool==='hole'){
-                if(Math.hypot(x-S.x,y-S.y)<150){ mapEditorMsg('Start und Loch brauchen mehr Abstand.'); return; }
+                if(Math.hypot(x-S.x,y-S.y)<150){ mapEditorMsg(T('meDistance')); return; }
                 mapPushHistory(); H.x=x; H.y=y; mapEditorData.assets=mapEditorData.assets.filter(a=>Math.hypot(a.x-x,a.y-y)>=55); mapEditorData.hills=mapEditorData.hills.filter(h=>Math.hypot(h.x-x,h.y-y)>=h.r);
             } else {
-                if(Math.hypot(x-S.x,y-S.y)<48 || Math.hypot(x-H.x,y-H.y)<55){ mapEditorMsg('Start und Loch/Fahne müssen frei bleiben.'); return; }
-                if(mapEditorTool==='hill'){ if(mapEditorData.hills.length>=3){ mapEditorMsg('Maximal 3 Hügel pro Karte.'); return; } mapPushHistory(); mapEditorData.hills.push({x,y,r:38+Math.random()*18}); }
-                else { if(mapEditorData.assets.length>=40){ mapEditorMsg('Maximal 40 Objekte pro Karte.'); return; } mapPushHistory(); mapEditorData.assets.push({type:mapEditorTool,x,y,moving:mapEditorTool==='moving',size:mapEditorTool==='tree'?28:mapEditorTool==='rock'?24:22}); }
+                if(Math.hypot(x-S.x,y-S.y)<48 || Math.hypot(x-H.x,y-H.y)<55){ mapEditorMsg(T('meKeepFree')); return; }
+                if(mapEditorTool==='hill'){ if(mapEditorData.hills.length>=3){ mapEditorMsg(T('meMaxHills')); return; } mapPushHistory(); mapEditorData.hills.push({x,y,r:38+Math.random()*18}); }
+                else { if(mapEditorData.assets.length>=40){ mapEditorMsg(T('meMaxObjs')); return; } mapPushHistory(); mapEditorData.assets.push({type:mapEditorTool,x,y,moving:mapEditorTool==='moving',size:mapEditorTool==='tree'?28:mapEditorTool==='rock'?24:22}); }
             }
             mapEditorData.name=((document.getElementById('map-name')||{}).value||'').trim(); mapEditorDraw(); persistMapEditorDraft();
         }
@@ -4907,85 +4973,217 @@
         function saveWorkshopMap(){
             const field=document.getElementById('map-name');
             const name=(field&&field.value||'').trim().slice(0,32);
-            if(!name){ mapEditorMsg('Bitte zuerst einen Mapnamen eingeben.'); if(field){ field.focus(); field.setAttribute('aria-invalid','true'); } return false; }
+            if(!name){ mapEditorMsg(T('meNeedName')); if(field){ field.focus(); field.setAttribute('aria-invalid','true'); } return false; }
             if(field) field.removeAttribute('aria-invalid');
-            if(!mapEditorData.hole || !mapEditorData.start){ mapEditorMsg('Karte benötigt Start, Loch und Fahne.'); return false; }
-            if((mapEditorData.hills||[]).length>3){ mapEditorMsg('Maximal 3 Hügel pro Karte.'); return false; }
+            if(!mapEditorData.hole || !mapEditorData.start){ mapEditorMsg(T('meNeedStartHole')); return false; }
+            if((mapEditorData.hills||[]).length>3){ mapEditorMsg(T('meMaxHills')); return false; }
             mapEditorData.name=name;
             mapEditorData.par=Math.max(1,Math.min(9,parseInt(mapEditorData.par,10)||3));
             mapEditorData.id=mapEditorData.id||'map-'+Date.now();
             mapEditorData.createdAt=mapEditorData.createdAt||new Date().toISOString();
             const maps=getSavedWorkshopMaps(); const existing=maps.findIndex(m=>m.id===mapEditorData.id);
             const copy=JSON.parse(JSON.stringify(mapEditorData)); if(existing>=0) maps[existing]=copy; else maps.unshift(copy);
-            try { localStorage.setItem('cgSavedWorkshopMaps',JSON.stringify(maps.slice(0,100))); localStorage.setItem('cgMapEditorDraft',JSON.stringify(mapEditorData)); } catch(e) { mapEditorMsg('Speichern nicht möglich (Speicher voll?).'); return false; }
-            mapEditorMsg('„'+name+'“ gespeichert. Du findest sie unter Level und im Workshop.'); showToast('Map gespeichert'); showSavedMaps(); renderWorkshopMaps(); return true;
+            try { localStorage.setItem('cgSavedWorkshopMaps',JSON.stringify(maps.slice(0,100))); localStorage.setItem('cgMapEditorDraft',JSON.stringify(mapEditorData)); } catch(e) { mapEditorMsg(T('meStorageFull')); return false; }
+            mapEditorMsg(T('meSaved').replace('{name}',name)); showToast(T('meSavedToast')); showSavedMaps(); renderWorkshopMaps(); return true;
         }
         function editWorkshopMap(id){ const m=getSavedWorkshopMaps().find(x=>x.id===id); if(!m) return; mapHistory=[]; mapEditorData=JSON.parse(JSON.stringify(m)); try { localStorage.setItem('cgMapEditorDraft',JSON.stringify(mapEditorData)); } catch(e) {} toggleWorkshopMapEditor(true); }
         function deleteWorkshopMap(id){
             const maps=getSavedWorkshopMaps(); const map=maps.find(m=>m.id===id); if(!map) return;
-            if(!confirm('Map „'+map.name+'“ wirklich löschen?')) return;
+            if(!confirm(T('meDelConfirm').replace('{name}',map.name))) return;
             try { localStorage.setItem('cgSavedWorkshopMaps',JSON.stringify(maps.filter(m=>m.id!==id))); } catch(e) {}
             if(mapEditorData&&mapEditorData.id===id){ mapEditorData={version:1,name:'',par:3,start:{x:90,y:270},hole:{x:810,y:270},hills:[],assets:[]}; try { localStorage.setItem('cgMapEditorDraft',JSON.stringify(mapEditorData)); } catch(e) {} }
-            showSavedMaps(); renderWorkshopMaps(); showToast('Map gelöscht');
+            showSavedMaps(); renderWorkshopMaps(); showToast(T('meDelToast'));
+        }
+        // ---- Map-Vorschau (Draufsicht) ----
+        function cgSafeMap(m){
+            if(!m||typeof m!=='object'||!m.start||!m.hole) return null;
+            const n=(v,lo,hi,d)=>{ const f=Number(v); return Number.isFinite(f)?Math.max(lo,Math.min(hi,f)):d; };
+            const types=['tree','rock','crate','moving'];
+            return { id:String(m.id||''), name:String(m.name||'Map').replace(/[<>"'`\\]/g,'').slice(0,32), par:Math.round(n(m.par,1,9,3)), creatorName:String(m.creatorName||'').replace(/[<>"'`\\]/g,'').slice(0,16),
+                start:{x:n(m.start.x,30,870,90),y:n(m.start.y,30,510,270)}, hole:{x:n(m.hole.x,30,870,810),y:n(m.hole.y,30,510,270)},
+                assets:(Array.isArray(m.assets)?m.assets:[]).slice(0,40).filter(a=>a&&types.includes(a.type)).map(a=>({type:a.type,x:n(a.x,30,870,450),y:n(a.y,30,510,270),moving:a.type==='moving',size:n(a.size,10,40,22)})),
+                hills:(Array.isArray(m.hills)?m.hills:[]).slice(0,3).map(h=>({x:n(h&&h.x,30,870,450),y:n(h&&h.y,30,510,270),r:n(h&&h.r,20,70,45)})) };
+        }
+        function cgDrawMapPreview(cv,raw){
+            const m=cgSafeMap(raw); const ctx=cv.getContext('2d'); if(!ctx) return; const W=cv.width,H=cv.height,k=W/900;
+            ctx.clearRect(0,0,W,H); ctx.fillStyle='#6d4c41'; ctx.fillRect(0,0,W,H);
+            if(!m){ return; }
+            const g=ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,'#8bc34a'); g.addColorStop(1,'#4c8a3a'); ctx.fillStyle=g; ctx.fillRect(6,6,W-12,H-12);
+            ctx.fillStyle='rgba(255,255,255,.06)'; for(let x=6;x<W-6;x+=26) ctx.fillRect(x,6,13,H-12);
+            m.hills.forEach(h=>{ const r=h.r*k*1.3, x=h.x*k, y=h.y*k; const rg=ctx.createRadialGradient(x-r*.25,y-r*.3,r*.1,x,y,r); rg.addColorStop(0,'rgba(220,255,160,.95)'); rg.addColorStop(1,'rgba(40,90,30,.85)'); ctx.fillStyle=rg; ctx.beginPath(); ctx.arc(x,y,r,0,7); ctx.fill(); });
+            m.assets.forEach(a=>{ const x=a.x*k,y=a.y*k,r=Math.max(6,a.size*k*1.5);
+                ctx.fillStyle='rgba(0,0,0,.28)'; ctx.beginPath(); ctx.ellipse(x+r*.25,y+r*.35,r,r*.8,0,0,7); ctx.fill();
+                if(a.type==='tree'){ ctx.fillStyle='#2e7d32'; ctx.beginPath(); ctx.arc(x,y,r,0,7); ctx.fill(); ctx.fillStyle='#66bb6a'; ctx.beginPath(); ctx.arc(x-r*.25,y-r*.25,r*.5,0,7); ctx.fill(); }
+                else if(a.type==='rock'){ ctx.fillStyle='#8d8d8d'; ctx.beginPath(); ctx.moveTo(x-r,y); ctx.lineTo(x-r*.4,y-r*.9); ctx.lineTo(x+r*.7,y-r*.7); ctx.lineTo(x+r,y+r*.3); ctx.lineTo(x,y+r*.9); ctx.closePath(); ctx.fill(); ctx.fillStyle='rgba(255,255,255,.35)'; ctx.fillRect(x-r*.3,y-r*.5,r*.5,r*.25); }
+                else if(a.type==='crate'){ ctx.fillStyle='#a1662f'; ctx.fillRect(x-r,y-r,r*2,r*2); ctx.strokeStyle='#5d3a14'; ctx.lineWidth=Math.max(1,r*.18); ctx.strokeRect(x-r,y-r,r*2,r*2); ctx.beginPath(); ctx.moveTo(x-r,y-r); ctx.lineTo(x+r,y+r); ctx.moveTo(x+r,y-r); ctx.lineTo(x-r,y+r); ctx.stroke(); }
+                else { ctx.fillStyle='#ff9800'; ctx.fillRect(x-r,y-r*.7,r*2,r*1.4); ctx.fillStyle='#fff'; ctx.font='bold '+Math.max(8,r*1.5)+'px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('↕',x,y+1); }
+            });
+            const hx=m.hole.x*k, hy=m.hole.y*k; ctx.fillStyle='#111'; ctx.beginPath(); ctx.arc(hx,hy,Math.max(6,W*.026),0,7); ctx.fill();
+            ctx.strokeStyle='#eee'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(hx,hy); ctx.lineTo(hx,hy-W*.09); ctx.stroke(); ctx.fillStyle='#e53935'; ctx.beginPath(); ctx.moveTo(hx,hy-W*.09); ctx.lineTo(hx+W*.05,hy-W*.07); ctx.lineTo(hx,hy-W*.05); ctx.fill();
+            const sx=m.start.x*k, sy=m.start.y*k; ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(sx,sy,Math.max(6,W*.028),0,7); ctx.fill(); ctx.strokeStyle='#ffd54f'; ctx.lineWidth=2; ctx.stroke();
         }
         // ---- Karten-Karten (gemeinsam für Level-Menü und Workshop) ----
         function cgMapCard(m, opts){
             const card=document.createElement('div'); card.className='cg-map-card';
+            const pv=document.createElement('canvas'); pv.width=300; pv.height=180; pv.className='cg-map-prev'; pv.setAttribute('role','img'); pv.setAttribute('aria-label',T('mapPreview').replace('{name}',m.name)); cgDrawMapPreview(pv,m);
+            const info=document.createElement('div'); info.className='cg-map-info';
             const t=document.createElement('div'); t.className='cg-map-title'; t.textContent='🗺️ '+m.name;
-            const meta=document.createElement('div'); meta.className='cg-map-meta'; meta.textContent='Par '+(m.par||3)+' · '+(m.assets||[]).length+' Objekte · '+(m.hills||[]).length+' Hügel'+(m.creatorName?' · von '+m.creatorName:'');
+            const meta=document.createElement('div'); meta.className='cg-map-meta'; meta.textContent=T('mapMeta').replace('{par}',m.par||3).replace('{o}',(m.assets||[]).length).replace('{h}',(m.hills||[]).length)+(m.creatorName?' · '+T('mapBy').replace('{name}',m.creatorName):'');
             const row=document.createElement('div'); row.className='cg-map-actions';
-            (opts.actions||[]).forEach(a=>{ const b=document.createElement('button'); b.className='btn '+(a.cls||''); b.textContent=a.label; b.onclick=a.fn; row.appendChild(b); });
-            card.append(t,meta,row); return card;
+            (opts.actions||[]).forEach(a=>{ const b=document.createElement('button'); b.type='button'; b.className='btn '+(a.cls||''); b.textContent=a.label; b.onclick=a.fn; row.appendChild(b); });
+            info.append(t,meta,row); card.append(pv,info); return card;
         }
+        function cgOwnMapActions(maps,i){ const m=maps[i]; return [
+            {label:'▶',cls:'btn-green',fn:()=>cgStartSession('workshop',maps,i)},
+            {label:'✏️',cls:'btn-gold',fn:()=>editWorkshopMap(m.id)},
+            {label:'🗑️',cls:'btn-red',fn:()=>deleteWorkshopMap(m.id)}]; }
         function showSavedMaps(){
             const box=document.getElementById('saved-map-list'); if(!box) return; const maps=getSavedWorkshopMaps(); box.innerHTML='';
-            if(!maps.length){ const p=document.createElement('p'); p.className='cg-note'; p.style.gridColumn='1/-1'; p.textContent='Noch keine Maps. Baue im Workshop deine erste Map.'; box.appendChild(p); return; }
-            maps.forEach((m,i)=>box.appendChild(cgMapCard(m,{actions:[{label:'▶ Spielen',cls:'btn-green',fn:()=>cgStartSession('workshop',maps,i)}]})));
+            if(!maps.length){ const p=document.createElement('p'); p.className='cg-note'; p.style.gridColumn='1/-1'; p.textContent=T('spNoMaps'); box.appendChild(p); return; }
+            maps.forEach((m,i)=>box.appendChild(cgMapCard(m,{actions:[{label:'▶ '+T('spPlay'),cls:'btn-green',fn:()=>cgStartSession('workshop',maps,i)}]})));
         }
-        function renderWorkshopMaps(){
-            const box=document.getElementById('ws-saved-maps'); if(!box) return; const maps=getSavedWorkshopMaps(); box.innerHTML='';
-            if(!maps.length){ const p=document.createElement('p'); p.className='cg-note'; p.style.gridColumn='1/-1'; p.textContent='Noch keine eigenen Maps. Tippe auf „Neue Map bauen“.'; box.appendChild(p); }
-            maps.forEach((m,i)=>box.appendChild(cgMapCard(m,{actions:[
-                {label:'▶',cls:'btn-green',fn:()=>cgStartSession('workshop',maps,i)},
-                {label:'✏️',cls:'btn-gold',fn:()=>editWorkshopMap(m.id)},
-                {label:'🗑️',cls:'btn-red',fn:()=>deleteWorkshopMap(m.id)}]})));
-            cgLoadCommunityMaps();
+        function renderWorkshopMaps(){ if(wsTab==='browse') wsRenderBrowse(); else if(wsTab==='mine') wsRenderMine(); }
+        function cgRenderMineMaps(box){
+            const maps=getSavedWorkshopMaps(); const h=document.createElement('h3'); h.className='cg-h3'; h.textContent='🗺️ '+T('wsMyMaps'); box.appendChild(h);
+            const grid=document.createElement('div'); grid.className='ws-grid'; box.appendChild(grid);
+            if(!maps.length){ const p=document.createElement('p'); p.className='cg-note'; p.style.gridColumn='1/-1'; p.textContent=T('wsMineMapsEmpty'); grid.appendChild(p); return; }
+            maps.forEach((m,i)=>grid.appendChild(cgMapCard(m,{actions:cgOwnMapActions(maps,i)})));
         }
-        // ---- Community-Maps über die Netlify-Funktion ----
-        const CG_WS_API='/.netlify/functions/workshop';
-        let cgCommunityMaps=[];
-        async function cgLoadCommunityMaps(){
-            const box=document.getElementById('ws-community-maps'), note=document.getElementById('ws-community-note'); if(!box) return;
-            box.innerHTML=''; if(note) note.textContent='Lade …';
+        // ---- Community-Maps (Netlify-Funktion) ----
+        const CG_WS_API=/^https?:/.test(location.protocol)?'/.netlify/functions/workshop':'https://cardgolf.netlify.app/.netlify/functions/workshop';
+        let cgCommunityCache={t:0,maps:null};
+        async function cgGetCommunityMaps(){
+            if(cgCommunityCache.maps && Date.now()-cgCommunityCache.t<20000) return cgCommunityCache.maps;
             try {
-                if(!/^https?:/.test(location.protocol)) throw new Error('offline');
                 const r=await fetch(CG_WS_API,{cache:'no-store'}); const d=await r.json();
-                cgCommunityMaps=(d&&d.maps)||[];
-                if(note) note.textContent=cgCommunityMaps.length?'':'Noch keine Community-Maps. Veröffentliche deine erste!';
-                cgCommunityMaps.forEach((m,i)=>box.appendChild(cgMapCard(m,{actions:[
-                    {label:'▶',cls:'btn-green',fn:()=>cgStartSession('workshop',cgCommunityMaps,i)},
-                    {label:'⬇️ Speichern',cls:'btn-gold',fn:()=>cgSaveCommunityMap(m)}]})));
-            } catch(e) { if(note) note.textContent='Community-Maps sind nur auf der Netlify-Webseite verfügbar.'; }
+                cgCommunityCache={t:Date.now(),maps:Array.isArray(d&&d.maps)?d.maps:[]}; return cgCommunityCache.maps;
+            } catch(e) { return null; }
         }
+        // ---- 3D-Vorschau für Bälle und Schläger (three.js) ----
+        let cgSnapR=null; const cgSnapCache=new Map();
+        function cgHex(n){ return '#'+((n>>>0)&0xffffff).toString(16).padStart(6,'0'); }
+        function cgItemModel(it){
+            const g=new THREE.Group(), shp=it.shape||{}, size=(shp.size||100)/100;
+            if(it.type==='club'){
+                const wd=(shp.width||100)/100*size, sl=(shp.shaftLength||145)/145*1.25, gl=(shp.grip||46)/100*0.55;
+                const headMat=new THREE.MeshStandardMaterial({color:it.color,metalness:.55,roughness:.35});
+                const shaftMat=new THREE.MeshStandardMaterial({color:it.shaft,metalness:.85,roughness:.28});
+                const head=new THREE.Group();
+                const body=new THREE.Mesh(new THREE.BoxGeometry(1.25*wd,.4*size,.55*size),headMat);
+                const capL=new THREE.Mesh(new THREE.SphereGeometry(.27*size,20,14),headMat); capL.scale.set(.8,.76,1); capL.position.x=-.625*wd;
+                const capR=capL.clone(); capR.position.x=.625*wd;
+                head.add(body,capL,capR);
+                const hx=-.45*wd;
+                const shaft=new THREE.Mesh(new THREE.CylinderGeometry(.05,.05,sl,14),shaftMat); shaft.position.set(hx,.2*size+sl/2,0);
+                const grip=new THREE.Mesh(new THREE.CylinderGeometry(.078,.078,gl,14),new THREE.MeshStandardMaterial({color:0x1f1f1f,roughness:.9})); grip.position.set(hx,.2*size+sl-gl/2,0);
+                g.add(head,shaft,grip); g.rotation.z=-.75;
+            } else {
+                const cv=document.createElement('canvas'); cv.width=512; cv.height=256; const c=cv.getContext('2d');
+                c.fillStyle=cgHex(it.color); c.fillRect(0,0,512,256);
+                const lum=((it.color>>16&255)*.3+(it.color>>8&255)*.59+(it.color&255)*.11);
+                c.fillStyle=lum>140?'rgba(0,0,0,.75)':'rgba(255,255,255,.9)'; c.font='bold 52px sans-serif'; c.textAlign='center'; c.textBaseline='middle';
+                for(let x=64;x<512;x+=128) c.fillText(String(shp.mark||'CG').slice(0,5),x,128);
+                const tex=new THREE.CanvasTexture(cv);
+                const rough=Math.max(.12,Math.min(1,(shp.roughness==null?50:shp.roughness)/100));
+                const mat=new THREE.MeshStandardMaterial({map:tex,metalness:it.metal?.85:.08,roughness:it.metal?Math.min(rough,.3):rough});
+                if(it.glow){ mat.emissive=new THREE.Color(it.color); mat.emissiveIntensity=.45; }
+                const ball=new THREE.Mesh(new THREE.SphereGeometry(.6*size,48,32),mat); ball.rotation.y=-.9; g.add(ball);
+            }
+            return g;
+        }
+        function cgEnv(rd){
+            if(rd.__cgEnv!==undefined) return rd.__cgEnv;
+            rd.__cgEnv=null;
+            try {
+                const es=new THREE.Scene(), geo=new THREE.SphereGeometry(10,32,16), pos=geo.attributes.position, cols=[], lo=new THREE.Color(0x3b2a22), mid=new THREE.Color(0xffd9a0), hi=new THREE.Color(0xffffff), c=new THREE.Color();
+                for(let i=0;i<pos.count;i++){ const t=(pos.getY(i)/10+1)/2; if(t<.5) c.copy(lo).lerp(mid,t*2); else c.copy(mid).lerp(hi,(t-.5)*2); cols.push(c.r,c.g,c.b); }
+                geo.setAttribute('color',new THREE.Float32BufferAttribute(cols,3));
+                es.add(new THREE.Mesh(geo,new THREE.MeshBasicMaterial({vertexColors:true,side:THREE.BackSide})));
+                [[0,6,6],[7,3,-3],[-7,2,3]].forEach(q=>{ const m=new THREE.Mesh(new THREE.BoxGeometry(6,3,.3),new THREE.MeshBasicMaterial({color:0xffffff})); m.position.set(q[0],q[1],q[2]); m.lookAt(0,0,0); es.add(m); });
+                const pm=new THREE.PMREMGenerator(rd); rd.__cgEnv=pm.fromScene(es).texture; pm.dispose(); geo.dispose();
+            } catch(e) { rd.__cgEnv=null; }
+            return rd.__cgEnv;
+        }
+        function cgSetupScene(rd){
+            const sc=new THREE.Scene(); const ev=cgEnv(rd); if(ev) sc.environment=ev;
+            sc.add(new THREE.HemisphereLight(0xffffff,0x6d4c41,ev?.45:.85));
+            const d=new THREE.DirectionalLight(0xffffff,.9); d.position.set(2.5,3.5,4); sc.add(d);
+            const r=new THREE.DirectionalLight(0xffe0b2,.45); r.position.set(-3,1,-3); sc.add(r);
+            return sc;
+        }
+        function cgFrame(model,cam){
+            const box=new THREE.Box3().setFromObject(model), c=box.getCenter(new THREE.Vector3()), sz=box.getSize(new THREE.Vector3());
+            model.position.sub(c); const rad=Math.max(sz.x,sz.y,sz.z)*.62;
+            const dist=rad/Math.sin(cam.fov*Math.PI/360)*1.05; cam.position.set(0,rad*.12,dist); cam.lookAt(0,0,0); cam.near=.05; cam.far=dist*4; cam.updateProjectionMatrix();
+        }
+        function cgDispose(o){ o.traverse(n=>{ if(n.geometry) n.geometry.dispose(); if(n.material){ if(n.material.map) n.material.map.dispose(); n.material.dispose(); } }); }
+        function cgSnapshot(it){
+            if(typeof THREE==='undefined') return null;
+            const key=[it.id,it.type,it.color,it.shaft,it.glow,it.metal,JSON.stringify(it.shape||{})].join('|');
+            if(cgSnapCache.has(key)) return cgSnapCache.get(key);
+            try {
+                if(cgSnapR===null){ const cv=document.createElement('canvas'); cgSnapR=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true,preserveDrawingBuffer:true}); cgSnapR.setPixelRatio(1); cgSnapR.setSize(220,220,false); }
+                if(!cgSnapR) return null;
+                const sc=cgSetupScene(cgSnapR), cam=new THREE.PerspectiveCamera(32,1,.1,50), model=cgItemModel(it);
+                if(it.type==='club'){ model.rotation.y=-.6; }
+                sc.add(model); cgFrame(model,cam); cgSnapR.render(sc,cam);
+                const url=cgSnapR.domElement.toDataURL('image/png'); cgDispose(model); cgSnapCache.set(key,url); return url;
+            } catch(e) { cgSnapR=false; return null; }
+        }
+        function wsPreviewEl(it){
+            const url=cgSnapshot(it); if(!url) return wsPreviewElFallback(it);
+            const box=document.createElement('div'); box.className='ws-prev ws-prev3d'; box.setAttribute('role','button'); box.tabIndex=0; box.setAttribute('aria-label',T('ws3dView').replace('{name}',it.name));
+            const img=document.createElement('img'); img.src=url; img.alt=''; img.draggable=false; box.appendChild(img);
+            const open=()=>cgOpen3D(it); box.onclick=open; box.onkeydown=e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); } };
+            return box;
+        }
+        let cgViewer=null;
+        function cgClose3D(){ if(!cgViewer) return; cancelAnimationFrame(cgViewer.raf); try { cgDispose(cgViewer.model); cgViewer.renderer.dispose(); cgViewer.renderer.forceContextLoss(); } catch(e) {} cgViewer.el.remove(); document.removeEventListener('keydown',cgViewer.key); cgViewer=null; }
+        function cgOpen3D(it){
+            if(cgViewer||typeof THREE==='undefined') return;
+            const el=document.createElement('div'); el.id='cg-3d-viewer'; el.setAttribute('role','dialog'); el.setAttribute('aria-modal','true');
+            const h=document.createElement('div'); h.className='cg-3d-title'; h.textContent=(it.type==='club'?'🏌️ ':'⚪ ')+it.name;
+            const cv=document.createElement('canvas'); cv.width=640; cv.height=640;
+            const hint=document.createElement('div'); hint.className='cg-note'; hint.textContent=T('ws3dHint');
+            const close=document.createElement('button'); close.type='button'; close.className='btn btn-red'; close.textContent='✕ '+T('wsClose'); close.onclick=cgClose3D;
+            el.append(h,cv,hint,close); document.body.appendChild(el);
+            let renderer; try { renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true}); } catch(e) { el.remove(); return; }
+            renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1)); renderer.setSize(640,640,false);
+            const sc=cgSetupScene(renderer), cam=new THREE.PerspectiveCamera(32,1,.1,50), model=cgItemModel(it), pivot=new THREE.Group(); pivot.add(model); sc.add(pivot); cgFrame(model,cam);
+            const baseZ=cam.position.z; let zoom=1, drag=false, lx=0, ly=0, auto=true; pivot.rotation.x=.15;
+            const pts=new Map();
+            cv.addEventListener('pointerdown',e=>{ cv.setPointerCapture(e.pointerId); pts.set(e.pointerId,{x:e.clientX,y:e.clientY}); drag=true; auto=false; lx=e.clientX; ly=e.clientY; });
+            cv.addEventListener('pointermove',e=>{ if(!pts.has(e.pointerId)) return;
+                if(pts.size===2){ const prev=[...pts.values()]; const d0=Math.hypot(prev[0].x-prev[1].x,prev[0].y-prev[1].y); pts.set(e.pointerId,{x:e.clientX,y:e.clientY}); const cur=[...pts.values()]; const d1=Math.hypot(cur[0].x-cur[1].x,cur[0].y-cur[1].y); if(d0>0) zoom=Math.max(.5,Math.min(2.2,zoom*d1/d0)); return; }
+                pts.set(e.pointerId,{x:e.clientX,y:e.clientY}); pivot.rotation.y+=(e.clientX-lx)*.01; pivot.rotation.x=Math.max(-1.2,Math.min(1.2,pivot.rotation.x+(e.clientY-ly)*.01)); lx=e.clientX; ly=e.clientY; });
+            const up=e=>{ pts.delete(e.pointerId); if(!pts.size) drag=false; };
+            cv.addEventListener('pointerup',up); cv.addEventListener('pointercancel',up);
+            cv.addEventListener('wheel',e=>{ e.preventDefault(); zoom=Math.max(.5,Math.min(2.2,zoom*(e.deltaY<0?1.08:.93))); },{passive:false});
+            const key=e=>{ if(e.key==='Escape') cgClose3D(); }; document.addEventListener('keydown',key);
+            cgViewer={el,renderer,model,key,raf:0};
+            const loop=()=>{ if(!cgViewer) return; if(auto&&!drag) pivot.rotation.y+=.012; cam.position.z=baseZ/zoom; renderer.render(sc,cam); cgViewer.raf=requestAnimationFrame(loop); }; loop();
+            close.focus();
+        }
+
+        // ---- Community-Maps über die Netlify-Funktion ----
         function cgSaveCommunityMap(m){
             const maps=getSavedWorkshopMaps(); const copy=JSON.parse(JSON.stringify(m)); copy.id='map-'+Date.now(); copy.name=String(m.name).slice(0,32);
             maps.unshift(copy); try { localStorage.setItem('cgSavedWorkshopMaps',JSON.stringify(maps.slice(0,100))); } catch(e) {}
-            showToast('Map gespeichert'); renderWorkshopMaps(); showSavedMaps();
+            showToast(T('meSavedToast')); renderWorkshopMaps(); showSavedMaps();
         }
         async function uploadWorkshopMap(){
             if(!saveWorkshopMap()) return;
             let tok=null; try { tok=localStorage.getItem('cgTwTok'); } catch(e) {}
-            if(!tok){ mapEditorMsg('Gespeichert. Zum Veröffentlichen melde dich in den Einstellungen mit Twitch an.'); return; }
-            if(!/^https?:/.test(location.protocol)){ mapEditorMsg('Gespeichert. Veröffentlichen geht nur auf der Netlify-Webseite.'); return; }
+            if(!tok){ mapEditorMsg(T('meLogin')); return; }
             try {
                 const r=await fetch(CG_WS_API,{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify({action:'publishMap',map:mapEditorData})});
                 const d=await r.json();
-                if(d.ok){ mapEditorMsg('🌍 Veröffentlicht! Alle Spieler sehen die Map jetzt im Workshop.'); showToast('Map veröffentlicht'); }
-                else mapEditorMsg(d.error||'Veröffentlichen fehlgeschlagen.');
-            } catch(e) { mapEditorMsg('Server nicht erreichbar. Die Map ist lokal gespeichert.'); }
+                if(d.ok){ cgCommunityCache.t=0; mapEditorMsg('🌍 '+T('mePublished')); showToast(T('mePubToast')); }
+                else mapEditorMsg(d.error||T('mePubFail'));
+            } catch(e) { mapEditorMsg(T('meServer')); }
         }
         // ---- Level-Ablauf: Workshop-Maps nacheinander, danach zufällige Level ----
-        function cgMapToLevel(m){
+        function cgMapToLevel(m){ m = cgSafeMap(m); if (!m) return null;
             const cx=x=>(x-450)/10, cz=y=>(y-270)/10;
             const nTypes=(typeof OBSTACLE_TYPES!=='undefined'&&OBSTACLE_TYPES.length)||1;
             const obs=(m.assets||[]).map((a,i)=>{ const s=(a.size||22)/8; return [cx(a.x),cz(a.y),s,s,a.moving?0.3:0,(i*7+3)%nTypes]; });
@@ -4998,26 +5196,26 @@
             finally { levels.length=0; backup.forEach(l=>levels.push(l)); }
             const c=JSON.parse(JSON.stringify(pick));
             c.obs=c.obs.filter(o=>![c.start,c.hole].some(pt=>Math.abs(o[0]-pt.x)<o[2]/2+3&&Math.abs(o[1]-pt.z)<(o[4]>0?10:0)+o[3]/2+3));
-            c.customName='Zufälliges Level'; c.randomLevel=true; return c;
+            c.customName=T('spRandom'); c.randomLevel=true; return c;
         }
         function cgPlaySessionLevel(){
-            let lvl;
-            if(spSession.mode!=='random' && spSession.pos<spSession.queue.length){ lvl=cgMapToLevel(spSession.queue[spSession.pos]); }
-            else { spSession.mode='random'; lvl=cgRandomLevel(); }
+            let lvl=null;
+            while(spSession.mode!=='random' && spSession.pos<spSession.queue.length && !(lvl=cgMapToLevel(spSession.queue[spSession.pos]))) spSession.pos++;
+            if(!lvl){ spSession.mode='random'; lvl=cgRandomLevel(); }
             spSession.current=lvl; initLevel(lvl);
             showToast((lvl.randomLevel?'🎲 ':'🗺️ ')+lvl.customName);
         }
         function cgStartSession(mode,queue,pos){ AudioEngine.init(); MusicEngine.init(); spSession={mode,queue:queue||[],pos:pos||0,current:null}; cgPlaySessionLevel(); }
         function startRandomSingleplayer(){ cgStartSession('random',[],0); }
-        function startAllWorkshopMaps(){ const maps=getSavedWorkshopMaps(); if(!maps.length){ showToast('Noch keine Maps – baue zuerst eine im Workshop.'); return; } cgStartSession('workshop',maps,0); }
+        function startAllWorkshopMaps(){ const maps=getSavedWorkshopMaps(); if(!maps.length){ showToast(T('spNoMapsToast')); return; } cgStartSession('workshop',maps,0); }
         function testWorkshopMap(){ if(!saveWorkshopMap()) return; const m=getSavedWorkshopMaps().find(x=>x.id===mapEditorData.id); if(m) cgStartSession('test',[m],0); }
         function playWorkshopMap(m){ cgStartSession('workshop',[m],0); }
         function cgSessionRestart(){ if(spSession&&spSession.current) initLevel(spSession.current); else initLevel(Math.max(0,currentLevelIdx)); }
         function cgSessionLevelDone(){
             const s=spSession; AudioEngine.success();
-            if(s.mode==='test'){ showToast('✅ Test geschafft!'); spSession=null; endGameAndReturnToMain(); showMenu('workshop'); toggleWorkshopMapEditor(true); return; }
+            if(s.mode==='test'){ showToast('✅ '+T('spTestDone')); spSession=null; endGameAndReturnToMain(); showMenu('workshop'); toggleWorkshopMapEditor(true); return; }
             if(s.current&&s.current.randomLevel){ savePath.coins+=20; savePath.totalCoins+=20; showRewardPopup('+20 🪙'); saveProgress(); updateUI(); }
-            else showToast('✅ Geschafft in '+strokes+' Schlägen');
+            else showToast('✅ '+T('spDone').replace('{n}',strokes));
             if(s.mode==='workshop') s.pos++;
             cgPlaySessionLevel();
         }
@@ -6052,6 +6250,8 @@
 
         function applyLobbyTexts() {
             document.querySelectorAll('[data-lb]').forEach(e => { e.textContent = T(e.dataset.lb); });
+            document.querySelectorAll('[data-lb-ph]').forEach(e => { e.placeholder = T(e.dataset.lbPh); });
+            document.querySelectorAll('[data-lb-aria]').forEach(e => { e.setAttribute('aria-label', T(e.dataset.lbAria)); });
             const jt = $lb('t-mp-tab-join'); if (jt) jt.textContent = T('lbTabCode');
             const ht = $lb('t-mp-tab-host'); if (ht) ht.textContent = T('lbTabCreate');
             renderRoomSetup();
@@ -7116,19 +7316,63 @@
         }
 
         // ---------- Workshop ----------
-        // Speicher-Schicht: aktuell LOKAL (nur dieses Gerät). Für einen gemeinsamen Workshop
-        // aller Spieler muss diese Schicht gegen einen Server getauscht werden (gleiche 4 Methoden).
-        const WS_KEY = 'cgWorkshopDB_v1';
+        // Speicher-Schicht: Netlify Functions + Netlify Blobs (gemeinsamer Workshop aller Spieler).
+        // Items, Käufe, Einnahmen und Rückerstattungen liegen serverseitig; der Twitch-Token wird dort geprüft.
         const WorkshopStore = {
-            mode: 'local',
-            _db() { try { const d = JSON.parse(localStorage.getItem(WS_KEY)); if (d && Array.isArray(d.items)) return d; } catch (e) {} return { items: [], earnings: {} }; },
-            _save(db) { try { localStorage.setItem(WS_KEY, JSON.stringify(db)); } catch (e) {} },
-            async list() { return this._db().items.map(wsSanitize).filter(Boolean); },
-            async publish(item) { const db = this._db(); db.items.unshift(item); this._save(db); return item; },
-            async recordSale(itemId) { const db = this._db(); const it = db.items.find(x => x.id === itemId); if (!it) return; it.sales = (it.sales || 0) + 1; db.earnings[it.creatorId] = (db.earnings[it.creatorId] || 0) + WS_CREATOR_CUT; this._save(db); },
-            async earnings(creatorId) { return (this._db().earnings[creatorId] || 0); },
-            async claim(creatorId) { const db = this._db(); const v = db.earnings[creatorId] || 0; db.earnings[creatorId] = 0; this._save(db); return v; }
+            mode: 'netlify',
+            _cache: null,
+            async _call(method, body) {
+                const h = { 'content-type': 'application/json' };
+                let tok = null; try { tok = localStorage.getItem('cgTwTok'); } catch (e) {}
+                if (tok) h.authorization = 'Bearer ' + tok;
+                const r = await fetch(CG_WS_API, { method, headers: h, cache: 'no-store', body: body ? JSON.stringify(body) : undefined });
+                const d = await r.json();
+                if (!d || !d.ok) throw new Error((d && d.error) || 'error');
+                return d;
+            },
+            async _load(force) {
+                if (!force && this._cache && Date.now() - this._cache.t < 6000) return this._cache.d;
+                const d = await this._call('GET'); this._cache = { t: Date.now(), d }; return d;
+            },
+            async list() { const d = await this._load(); return (d.items || []).map(wsSanitize).filter(Boolean); },
+            async publish(item) { const d = await this._call('POST', { action: 'publish', item }); this._cache = null; return d.item; },
+            async recordSale(itemId) { await this._call('POST', { action: 'purchase', itemId }); this._cache = null; },
+            async earnings() { const d = await this._load(); return d.myEarnings || 0; },
+            async claim() { const d = await this._call('POST', { action: 'claim' }); this._cache = null; return d.paid || 0; },
+            async remove(itemId) { const d = await this._call('POST', { action: 'delete', itemId }); this._cache = null; return d; },
+            // Gleicht Käufe/Rückerstattungen mit dem Server ab (auch geräteübergreifend). Gibt true zurück, wenn sich etwas geändert hat.
+            async sync() {
+                const d = await this._load(true); let changed = false;
+                const items = (d.items || []).map(wsSanitize).filter(Boolean);
+                const pending = (d.myRefunds || []).filter(r => r.status === 'pending-wallet-integration');
+                if (pending.length) {
+                    const res = await this._call('POST', { action: 'claimRefunds' });
+                    (res.itemIds || []).forEach(wsDropLocal);
+                    if ((res.paid || 0) > 0) { savePath.coins += res.paid; savePath.totalCoins = (savePath.totalCoins || 0); changed = true; showToast(T('wsRefundToast').replace('{n}', res.paid)); }
+                }
+                (d.myPurchases || []).filter(p => !p.refunded).forEach(p => {
+                    const it = items.find(x => x.id === p.itemId);
+                    if (it && !wsIsOwned(it)) {
+                        if (!savePath.workshopOwned) savePath.workshopOwned = {};
+                        savePath.workshopOwned[it.id] = it; wsRegister(it);
+                        const arr = it.type === 'club' ? savePath.purchasedClubs : savePath.purchasedSkins;
+                        if (!arr.includes(it.id)) arr.push(it.id);
+                        changed = true;
+                    }
+                });
+                if (changed) { saveProgress(); updateUI(); }
+                return changed;
+            }
         };
+        // Entfernt ein Workshop-Item komplett aus dem lokalen Spielstand (nach Löschung/Rückerstattung).
+        function wsDropLocal(itemId) {
+            if (savePath.workshopOwned) delete savePath.workshopOwned[itemId];
+            savePath.purchasedSkins = (savePath.purchasedSkins || []).filter(id => id !== itemId);
+            savePath.purchasedClubs = (savePath.purchasedClubs || []).filter(id => id !== itemId);
+            if (savePath.currentSkin === itemId) savePath.currentSkin = 'white';
+            if (savePath.currentClub === itemId) savePath.currentClub = 'wood';
+            [ballSkins, clubSkins].forEach(arr => { const i = arr.findIndex(x => x.id === itemId); if (i >= 0) arr.splice(i, 1); });
+        }
         function wsCleanName(s, max) { return String(s || '').replace(/[<>&"'`\\]/g, '').replace(/\s+/g, ' ').trim().slice(0, max || 20); }
         function wsSanitize(it) {
             if (!it || typeof it !== 'object') return null;
@@ -7151,7 +7395,7 @@
             Object.values(savePath.workshopOwned).forEach(wsRegister);
         }
         const wsHex = n => '#' + (n >>> 0).toString(16).padStart(6, '0');
-        function wsPreviewEl(it) {
+        function wsPreviewElFallback(it) {
             const box = document.createElement('div'); box.className = 'ws-prev';
             if (it.type === 'club') {
                 box.innerHTML = '<svg viewBox="0 0 60 60" width="100%" height="100%"><g transform="rotate(-28 30 32)"><rect x="28" y="2" width="4" height="40" rx="2" fill="' + wsHex(it.shaft) + '"/><rect x="19" y="40" width="24" height="11" rx="3" fill="' + wsHex(it.color) + '" stroke="rgba(0,0,0,.35)"/></g></svg>';
@@ -7180,10 +7424,8 @@
             $lb('ws-body').style.display = ok ? 'flex' : 'none';
             if (!ok) return;
             $lb('ws-coins').textContent = savePath.coins;
-            $lb('ws-mode-note').textContent = WorkshopStore.mode === 'local' ? T('wsLocalNote') : '';
-            $lb('ws-mode-note').style.display = WorkshopStore.mode === 'local' ? '' : 'none';
             wsShowTab(wsTab);
-            renderWorkshopMaps();
+            WorkshopStore.sync().then(ch => { if (ch) { $lb('ws-coins').textContent = savePath.coins; wsShowTab(wsTab); try { updateShopUI(); } catch (e) {} } }).catch(() => {});
         }
         function wsShowTab(tab) {
             wsTab = tab;
@@ -7195,11 +7437,29 @@
             if (tab === 'browse') wsRenderBrowse(); else if (tab === 'create') wsRenderCreate(); else wsRenderMine();
         }
         function wsSetFilter(f) { wsFilter = f; wsRenderBrowse(); }
+        let wsBrowseTok = 0;
         async function wsRenderBrowse() {
+            const tok = ++wsBrowseTok;
             document.querySelectorAll('#ws-filters .ws-chip').forEach(c => c.classList.toggle('active', c.dataset.f === wsFilter));
-            const grid = $lb('ws-grid'); grid.innerHTML = '';
-            const items = (await WorkshopStore.list()).filter(i => wsFilter === 'all' || i.type === wsFilter);
-            if (!items.length) { const d = document.createElement('div'); d.className = 'sl-msg'; d.style.gridColumn = '1/-1'; d.innerHTML = '<b></b>'; d.firstChild.textContent = '🛠️ ' + T('wsEmpty'); d.appendChild(document.createTextNode(T('wsEmptyHint'))); grid.appendChild(d); return; }
+            const grid = $lb('ws-grid');
+            const showMaps = wsFilter === 'all' || wsFilter === 'map';
+            let items = [], loadFail = false;
+            if (wsFilter !== 'map') { try { items = (await WorkshopStore.list()).filter(i => wsFilter === 'all' || i.type === wsFilter); } catch (e) { loadFail = true; } }
+            const own = showMaps ? getSavedWorkshopMaps() : [];
+            const comm = showMaps ? await cgGetCommunityMaps() : null;
+            if (tok !== wsBrowseTok) return;
+            grid.innerHTML = '';
+            const head = txt => { const h = document.createElement('div'); h.className = 'cg-h3'; h.style.gridColumn = '1/-1'; h.textContent = txt; grid.appendChild(h); };
+            if (wsFilter === 'map') {
+                const bar = document.createElement('div'); bar.className = 'cg-toolbar'; bar.style.gridColumn = '1/-1';
+                const nb = document.createElement('button'); nb.type = 'button'; nb.className = 'btn btn-gold'; nb.textContent = '＋ ' + T('wsNewMap'); nb.onclick = () => { mapEditorNew(); toggleWorkshopMapEditor(true); };
+                const pb = document.createElement('button'); pb.type = 'button'; pb.className = 'btn btn-green'; pb.textContent = '▶ ' + T('wsPlayAll'); pb.onclick = startAllWorkshopMaps;
+                bar.append(nb, pb); grid.appendChild(bar);
+            }
+            if (loadFail) { const fd = document.createElement('div'); fd.className = 'sl-msg'; fd.style.gridColumn = '1/-1'; fd.textContent = '⚠️ ' + T('wsLoadFail'); grid.appendChild(fd); }
+            if (!loadFail && !items.length && !own.length && !(comm && comm.length) && wsFilter !== 'map') {
+                const d = document.createElement('div'); d.className = 'sl-msg'; d.style.gridColumn = '1/-1'; d.innerHTML = '<b></b>'; d.firstChild.textContent = '🛠️ ' + T('wsEmpty'); d.appendChild(document.createTextNode(T('wsEmptyHint'))); grid.appendChild(d); return;
+            }
             items.forEach(it => {
                 const mine = it.creatorId && String(it.creatorId) === String(savePath.twitchId);
                 const owned = wsIsOwned(it);
@@ -7212,16 +7472,27 @@
                 else { btn.textContent = T('wsBuy').replace('{p}', WS_BUY_PRICE); btn.onclick = () => wsBuy(it); }
                 card.appendChild(nm); card.appendChild(by); card.appendChild(btn); grid.appendChild(card);
             });
+            if (showMaps) {
+                if (own.length) { head('🗺️ ' + T('wsMyMaps')); own.forEach((m, i) => grid.appendChild(cgMapCard(m, { actions: cgOwnMapActions(own, i) }))); }
+                else if (wsFilter === 'map') { const p = document.createElement('p'); p.className = 'cg-note'; p.style.gridColumn = '1/-1'; p.textContent = T('wsNoOwnMaps'); grid.appendChild(p); }
+                head('🌍 ' + T('wsComm'));
+                if (comm === null) { const p = document.createElement('p'); p.className = 'cg-note'; p.style.gridColumn = '1/-1'; p.textContent = '⚠️ ' + T('wsLoadFail'); grid.appendChild(p); }
+                else if (!comm.length) { const p = document.createElement('p'); p.className = 'cg-note'; p.style.gridColumn = '1/-1'; p.textContent = T('wsNoComm'); grid.appendChild(p); }
+                else comm.forEach((m, i) => grid.appendChild(cgMapCard(m, { actions: [
+                    { label: '▶', cls: 'btn-green', fn: () => cgStartSession('workshop', comm, i) },
+                    { label: '⬇️ ' + T('meSave'), cls: 'btn-gold', fn: () => cgSaveCommunityMap(m) }] })));
+            }
         }
+
         async function wsBuy(it) {
             if (!requireAccount()) return;
             if (wsIsOwned(it)) return;
             if (savePath.coins < WS_BUY_PRICE) { AudioEngine.error(); return showToast(T('notEnoughCoins')); }
+            try { await WorkshopStore.recordSale(it.id); } catch (e) { AudioEngine.error(); return showToast(T('wsServerFail')); }
             savePath.coins -= WS_BUY_PRICE;
             if (!savePath.workshopOwned) savePath.workshopOwned = {};
             savePath.workshopOwned[it.id] = it; wsRegister(it);
             (it.type === 'club' ? savePath.purchasedClubs : savePath.purchasedSkins).push(it.id);
-            await WorkshopStore.recordSale(it.id);
             saveProgress(); updateUI(); AudioEngine.notify();
             showToast(T('wsBoughtToast').replace('{name}', it.name));
             wsShowTab(wsTab);
@@ -7268,7 +7539,7 @@
             savePath.strikeAnimation = mode === 'classic' ? 'classic' : 'realistic';
             document.querySelectorAll('input[name="strike-animation"]').forEach(r=>r.checked=r.value===savePath.strikeAnimation);
             try { localStorage.setItem('cgStrikeAnimation', savePath.strikeAnimation); } catch(e) {}
-            showToast(savePath.strikeAnimation==='realistic'?'✨ Realistische Schlaganimation aktiviert':'↩️ Klassische Schlaganimation aktiviert');
+            showToast(savePath.strikeAnimation==='realistic'?'✨ '+T('stStrikeOnReal'):'↩️ '+T('stStrikeOnClassic'));
         }
         function getStrikeAnimation() {
             try { return localStorage.getItem('cgStrikeAnimation') || savePath.strikeAnimation || 'realistic'; } catch(e) { return 'realistic'; }
@@ -7281,7 +7552,7 @@
             const pv = $lb('ws-preview'); pv.innerHTML = ''; pv.appendChild(wsPreviewEl(wsDraft));
             if (typeof wsStudioChanged === 'function') wsStudioChanged();
         }
-        function wsSetType(t) { wsDraft.type = t; wsRenderCreate(); }
+        function wsSetType(t) { if (t === 'map') { mapEditorNew(); toggleWorkshopMapEditor(true); return; } wsDraft.type = t; wsRenderCreate(); }
         async function wsPublish() {
             if (!requireAccount()) return;
             wsDraftChanged();
@@ -7291,49 +7562,45 @@
             const rnd = Math.random().toString(36).slice(2, 8);
             const item = { id: 'ws_' + Date.now().toString(36) + rnd, type: wsDraft.type, name: wsDraft.name, creatorId: String(savePath.twitchId), creatorName: wsCleanName(savePath.twitchName, 16),
                 color: wsDraft.color, shaft: wsDraft.shaft, glow: wsDraft.glow, metal: wsDraft.type === 'ball' && wsDraft.metal, shape: { size: +($lb('ws-size')?.value || 100), width: +($lb('ws-width')?.value || 100), shaftLength: +($lb('ws-shaft-length')?.value || 145), grip: +($lb('ws-grip')?.value || 46), roughness: +($lb('ws-rough')?.value || 50), mark: wsCleanName($lb('ws-mark')?.value || 'CG', 5) }, sales: 0, created: Date.now() };
+            try { await WorkshopStore.publish(item); } catch (e) { $lb('ws-publish').disabled = false; AudioEngine.error(); return showToast(T('wsServerFail')); }
             savePath.coins -= WS_CREATE_COST;
             if (!savePath.workshopOwned) savePath.workshopOwned = {};
             savePath.workshopOwned[item.id] = item; wsRegister(item);
             (item.type === 'club' ? savePath.purchasedClubs : savePath.purchasedSkins).push(item.id);
-            await WorkshopStore.publish(item);
             saveProgress(); updateUI(); AudioEngine.success();
             showToast(T('wsPublished').replace('{name}', item.name));
             wsDraft.name = ''; wsShowTab('mine');
         }
 
-        async function wsDeleteOwnItem(itemId){
-            if(!confirm('Dieses Workshop-Item endgültig aus deinem lokalen Workshop löschen? Eine automatische Rückerstattung an Käufer auf anderen Geräten benötigt einen gemeinsamen Server. Fortfahren?'))return;
-            const myId=String(savePath.twitchId||''); const db=WorkshopStore._db(); const item=db.items.find(x=>x.id===itemId);
-            if(!item || String(item.creatorId)!==myId){showToast('Du kannst nur deine eigenen Items löschen.');return;}
-            const price=WS_BUY_PRICE;
-            // Remove this creator's local item; never refund the creator as if they were a buyer.
-            if(savePath.workshopOwned) delete savePath.workshopOwned[itemId];
-            savePath.purchasedSkins=(savePath.purchasedSkins||[]).filter(id=>id!==itemId);
-            savePath.purchasedClubs=(savePath.purchasedClubs||[]).filter(id=>id!==itemId);
-            if(savePath.currentSkin===itemId)savePath.currentSkin='white';
-            if(savePath.currentClub===itemId)savePath.currentClub='wood';
-            db.items=db.items.filter(x=>x.id!==itemId); WorkshopStore._save(db);
-            const arr=item.type==='club'?clubSkins:ballSkins; const idx=arr.findIndex(x=>x.id===itemId);if(idx>=0)arr.splice(idx,1);
-            saveProgress();updateUI();updateShopUI();showToast('Item gelöscht. Globale Käufer-Rückerstattungen benötigen einen Server.');wsShowTab('mine');
+        async function wsDeleteOwnItem(itemId) {
+            if (!confirm(T('wsDeleteConfirm'))) return;
+            let res;
+            try { res = await WorkshopStore.remove(itemId); }
+            catch (e) { AudioEngine.error(); return showToast(/nur der Ersteller|nicht gefunden/i.test(e.message || '') ? T('wsOnlyOwn') : T('wsServerFail')); }
+            wsDropLocal(itemId);
+            saveProgress(); updateUI(); try { updateShopUI(); } catch (e) {}
+            showToast(T('wsDeletedToast').replace('{n}', res.refundedBuyers || 0)); wsShowTab('mine');
         }
         async function wsRenderMine() {
             const box = $lb('ws-mine'); box.innerHTML = '';
             const myId = String(savePath.twitchId);
-            const items = (await WorkshopStore.list()).filter(i => String(i.creatorId) === myId);
-            const earn = await WorkshopStore.earnings(myId);
+            let items = [], earn = 0;
+            try { items = (await WorkshopStore.list()).filter(i => String(i.creatorId) === myId); earn = await WorkshopStore.earnings(); }
+            catch (e) { const fd = document.createElement('div'); fd.className = 'sl-msg'; fd.textContent = '⚠️ ' + T('wsLoadFail'); box.appendChild(fd); cgRenderMineMaps(box); return; }
             const head = document.createElement('div'); head.className = 'ws-earn';
             const t = document.createElement('span'); t.textContent = '💰 ' + T('wsEarnings').replace('{n}', earn); head.appendChild(t);
             const cb = document.createElement('button'); cb.type = 'button'; cb.className = 'ws-buy'; cb.textContent = T('wsClaim'); cb.disabled = earn <= 0;
-            cb.onclick = async () => { const v = await WorkshopStore.claim(myId); if (v > 0) { savePath.coins += v; saveProgress(); updateUI(); showToast('+' + v + ' 🪙'); AudioEngine.success(); } wsShowTab('mine'); };
+            cb.onclick = async () => { try { const v = await WorkshopStore.claim(); if (v > 0) { savePath.coins += v; saveProgress(); updateUI(); showToast('+' + v + ' 🪙'); AudioEngine.success(); } } catch (e) { showToast(T('wsServerFail')); } wsShowTab('mine'); };
             head.appendChild(cb); box.appendChild(head);
             const grid = document.createElement('div'); grid.className = 'ws-grid'; box.appendChild(grid);
+            cgRenderMineMaps(box);
             if (!items.length) { const d = document.createElement('div'); d.className = 'sl-msg'; d.style.gridColumn = '1/-1'; d.innerHTML = '<b></b>'; d.firstChild.textContent = '🎨 ' + T('wsMineEmpty'); d.appendChild(document.createTextNode(T('wsMineEmptyHint'))); grid.appendChild(d); return; }
             items.forEach(it => {
                 const card = document.createElement('div'); card.className = 'ws-card';
                 card.appendChild(wsPreviewEl(it));
                 const nm = document.createElement('div'); nm.className = 'ws-name'; nm.textContent = it.name;
                 const by = document.createElement('div'); by.className = 'ws-by'; by.textContent = '🛒 ' + T('wsSales').replace('{n}', it.sales || 0);
-                card.appendChild(nm); card.appendChild(by); const del=document.createElement('button');del.type='button';del.className='ws-buy';del.textContent='🗑️ Löschen';del.style.background='#b94a48';del.onclick=()=>wsDeleteOwnItem(it.id);card.appendChild(del); grid.appendChild(card);
+                card.appendChild(nm); card.appendChild(by); const del=document.createElement('button');del.type='button';del.className='ws-buy';del.textContent='🗑️ '+T('wsDelete');del.style.background='#b94a48';del.onclick=()=>wsDeleteOwnItem(it.id);card.appendChild(del); grid.appendChild(card);
             });
         }
 

@@ -2,6 +2,8 @@ import { getStore } from '@netlify/blobs';
 
 const store = () => getStore({ name: 'cardgolf3d-workshop', consistency: 'strong' });
 const json = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', 'access-control-allow-origin': '*' } });
+// Muss zu WS_BUY_PRICE / WS_CREATOR_CUT in index.html passen.
+const PRICE = 1500, CREATOR_CUT = 1000;
 const fail = (message, status = 400) => json({ ok: false, error: message }, status);
 
 async function identity(req) {
@@ -60,7 +62,7 @@ export default async (req) => {
   const url = new URL(req.url);
   if (req.method === 'GET') {
     const db = await readDB();
-    return json({ ok: true, items: db.items, maps: db.maps.map(({ creatorId, ...m }) => m), myPurchases: user ? db.purchases.filter(p => p.buyerId === user.id) : [], myRefunds: user ? db.refunds.filter(r => r.buyerId === user.id) : [] });
+    return json({ ok: true, items: db.items, maps: db.maps.map(({ creatorId, ...m }) => m), myPurchases: user ? db.purchases.filter(p => p.buyerId === user.id) : [], myRefunds: user ? db.refunds.filter(r => r.buyerId === user.id) : [], myEarnings: user ? (db.earnings[user.id] || 0) : 0 });
   }
   if (!user) return fail('Bitte mit Twitch anmelden; Anmeldung konnte nicht geprüft werden.', 401);
   let body;
@@ -92,10 +94,10 @@ export default async (req) => {
     if (item.creatorId === user.id) return fail('Eigene Items können nicht gekauft werden.');
     if (db.purchases.some(p => p.itemId === item.id && p.buyerId === user.id)) return fail('Item wurde bereits gekauft.', 409);
     // This endpoint records purchase ownership only. A production coin ledger must debit server-authoritative earned coins.
-    db.purchases.push({ id: `${item.id}:${user.id}`, itemId: item.id, buyerId: user.id, creatorId: item.creatorId, price: 100, at: Date.now(), refunded: false });
+    db.purchases.push({ id: `${item.id}:${user.id}`, itemId: item.id, buyerId: user.id, creatorId: item.creatorId, price: PRICE, at: Date.now(), refunded: false });
     item.sales = (item.sales || 0) + 1;
-    db.earnings[item.creatorId] = (db.earnings[item.creatorId] || 0) + 70;
-    await writeDB(db); return json({ ok: true, item, note: 'Kauf registriert; Münzabbuchung muss noch an den serverseitigen Spielstand angebunden werden.' });
+    db.earnings[item.creatorId] = (db.earnings[item.creatorId] || 0) + CREATOR_CUT;
+    await writeDB(db); return json({ ok: true, item, price: PRICE });
   }
   if (body.action === 'delete') {
     const itemId = String(body.itemId || '');
@@ -110,12 +112,20 @@ export default async (req) => {
     }
     db.items = db.items.filter(i => i.id !== itemId);
     await writeDB(db);
-    return json({ ok: true, refundedBuyers: eligible.length, refundCoins: eligible.reduce((n, p) => n + p.price, 0), note: 'Rückerstattungen sind erfasst; die Auszahlung in den echten Spielstand erfordert noch die zentrale Münz-Wallet.' });
+    return json({ ok: true, refundedBuyers: eligible.length, refundCoins: eligible.reduce((n, p) => n + p.price, 0) });
   }
   if (body.action === 'claim') {
     const amount = db.earnings[user.id] || 0;
-    // Intentionally do not clear earnings here: local-only coins are not a secure payout target.
-    return json({ ok: true, earnings: amount, note: 'Auszahlung bleibt deaktiviert, bis die serverseitige Münz-Wallet angebunden ist.' });
+    db.earnings[user.id] = 0;
+    if (amount > 0) await writeDB(db);
+    return json({ ok: true, paid: amount });
+  }
+  if (body.action === 'claimRefunds') {
+    const mine = db.refunds.filter(r => r.buyerId === user.id && r.status === 'pending-wallet-integration');
+    let paid = 0; const itemIds = [];
+    for (const r of mine) { r.status = 'paid'; r.paidAt = Date.now(); paid += r.amount; itemIds.push(r.itemId); }
+    if (mine.length) await writeDB(db);
+    return json({ ok: true, paid, itemIds });
   }
   return fail('Unbekannte Aktion.');
 };
